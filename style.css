@@ -298,10 +298,11 @@
   font-weight: 500;
   color: var(--color-text);
   background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
   min-height: 48px;
   line-height: 1.4;
+  box-shadow: var(--shadow-sm);
 }
 
 .option-btn:hover {
