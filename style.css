@@ -442,11 +442,13 @@
   line-height: 1.4;
 }
 
-.option-btn:hover {
-  border-color: var(--color-primary);
-  background: var(--color-surface-hover);
-  transform: translateX(4px);
-  box-shadow: var(--shadow-glow);
+@media (hover: hover) {
+  .option-btn:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface-hover);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-glow);
+  }
 }
 
 .option-btn:active {
@@ -454,6 +456,227 @@
   background: var(--color-primary);
   color: var(--color-text-inverse);
   border-color: var(--color-primary);
+}
+
+/* Prevent focus ring from persisting between questions */
+.option-btn:focus {
+  outline: none;
+}
+
+/* Prevent hover highlight from persisting during question transitions */
+.no-hover .option-btn,
+.no-hover .option-btn:hover {
+  pointer-events: none;
+  border-color: var(--color-border) !important;
+  background: var(--color-surface) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.option-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Option wrapper for info button layout */
+.option-wrapper {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.option-wrapper .option-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== INFO / CLARIFICATION BUTTONS ===== */
+.info-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-offset);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition-interactive);
+}
+
+.info-btn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-glow);
+}
+
+.option-info-btn {
+  align-self: center;
+}
+
+.question-info-btn {
+  flex-shrink: 0;
+  margin-top: var(--space-1);
+}
+
+.question-with-info {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.question-with-info .question-text {
+  flex: 1;
+}
+
+/* Tooltips */
+.info-tooltip {
+  display: none;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  line-height: 1.5;
+  animation: tooltipIn 0.2s ease;
+}
+
+.info-tooltip.open {
+  display: block;
+}
+
+.question-tooltip {
+  margin-top: calc(-1 * var(--space-2));
+  margin-bottom: var(--space-1);
+}
+
+.option-tooltip {
+  width: 100%;
+  margin-top: 0;
+}
+
+@keyframes tooltipIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== BACK QUESTION BUTTON ===== */
+.back-question-btn {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-interactive);
+}
+
+.back-question-btn:hover:not(:disabled) {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.back-question-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ===== NAME ENTRY ===== */
+.name-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.name-input {
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color var(--transition-interactive);
+}
+
+.name-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
+}
+
+.name-input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.name-hint {
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  min-height: 1.2em;
+}
+
+/* ===== COMMUNITY SCREEN ===== */
+.community-compass-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+.community-compass-wrapper canvas {
+  width: 100%; height: 100%;
+}
+
+.community-list {
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+.community-list-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.community-entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.community-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.community-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.community-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
 }
 
 /* ===== MODAL ===== */
@@ -705,9 +928,11 @@ details[open] .topic-toggle::before { content: '▾ '; }
   .mode-grid { grid-template-columns: 1fr; }
   .mode-card { min-height: auto; }
   .compass-wrapper { max-width: 320px; }
+  .community-compass-wrapper { max-width: 320px; }
   .axis-label { font-size: 0.6rem; }
   .result-actions { flex-direction: column; width: 100%; }
   .result-actions .btn-primary,
   .result-actions .btn-secondary { width: 100%; }
   .profile-card { padding: var(--space-4); }
+  .info-btn { width: 28px; height: 28px; min-width: 28px; }
 }
