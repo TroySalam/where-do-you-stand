@@ -51,7 +51,7 @@ function showModeSelect() {
 
 function selectMode(mode) {
   currentMode = mode;
-  startQuiz();
+  startQuiz(mode);
 }
 
 // ===== SETTINGS =====
@@ -73,8 +73,11 @@ function readSettings() {
 }
 
 // ===== QUIZ =====
-function startQuiz() {
+function startQuiz(explicitMode) {
   readSettings();
+  // If a mode was explicitly chosen from the mode-select screen, use it
+  // (readSettings may have overwritten currentMode with the dropdown default)
+  if (explicitMode) currentMode = explicitMode;
   currentQ = 0;
   answers = [];
   topicScores = {};

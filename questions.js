@@ -1,1535 +1,2127 @@
 const QUESTION_BANKS = {
 
   // ============================================================
-  // TEEN MODE — 35 questions for Australian high schoolers
+  // TEEN MODE — 35 easy, casual questions for Australian teens
   // ============================================================
   teen: [
 
-    // --- ECONOMY (4 questions) ---
-    {
-      topic: "Economy",
-      text: "Your friend works 20 hours a week at a fast-food place and can barely afford petrol. What's the real fix?",
-      options: [
-        { label: "Raise the minimum wage so workers can actually live on it", x: -0.8, y: 0.6 },
-        { label: "It's on them to find better work or cut costs", x: 0.8, y: -0.7 },
-        { label: "Government should subsidise transport and cost-of-living for young workers", x: -0.6, y: 0.8 },
-        { label: "Businesses should pay more voluntarily — the market will sort it out", x: 0.5, y: -0.4 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "A massive tech company pays almost zero tax in Australia. What should happen?",
-      options: [
-        { label: "Close the loopholes — they should pay tax here like everyone else", x: -0.7, y: 0.7 },
-        { label: "Low taxes attract big companies and create jobs — leave them alone", x: 0.7, y: -0.6 },
-        { label: "Create a special digital services tax on their Australian revenue", x: -0.4, y: 0.6 },
-        { label: "Tackle it internationally — Australia can't solve this alone", x: 0.1, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Should the government give every Australian aged 18–25 a $10,000 payment to help them get started in life?",
-      options: [
-        { label: "Yes — it levels the playing field for people without wealthy parents", x: -0.7, y: 0.7 },
-        { label: "No — that's not fair on taxpayers and creates dependency", x: 0.7, y: -0.6 },
-        { label: "Maybe — but only for lower-income families, not everyone", x: -0.3, y: 0.4 },
-        { label: "Better to invest that money in schools and services instead", x: -0.5, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Petrol prices just hit $2.50 a litre. Your family is really struggling with the cost. What should the government do?",
-      options: [
-        { label: "Cut the fuel excise tax temporarily to give families relief", x: 0.3, y: -0.3 },
-        { label: "Invest in public transport so people don't need cars as much", x: -0.6, y: 0.6 },
-        { label: "Nothing — prices rise and fall, the market handles it", x: 0.8, y: -0.8 },
-        { label: "Subsidise fuel for low-income households only", x: -0.4, y: 0.5 },
-      ]
-    },
+// Economy (5 questions)
+{
+  topic: "Economy",
+  text: "Your school cafeteria starts charging more for junk food to make kids eat healthier. Fair?",
+  options: [
+    { label: "Yes — bad food should cost more to put people off", x: -0.3, y: 0.7 },
+    { label: "No — let people choose what they buy with their own money", x: 0.2, y: -0.7 },
+    { label: "Only if the healthy food gets cheaper too", x: -0.5, y: 0.3 },
+    { label: "Schools shouldn't control what students eat at all", x: 0.5, y: -0.5 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "Should rich kids and poor kids go to the same schools?",
+  options: [
+    { label: "Yes — everyone deserves the same quality education", x: -0.8, y: 0.5 },
+    { label: "No — private schools should be allowed for those who pay", x: 0.8, y: -0.3 },
+    { label: "Fine as long as public schools get more funding", x: -0.5, y: 0.4 },
+    { label: "Parents should be able to choose, but make it fair", x: 0.3, y: -0.2 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "Your part-time job pays minimum wage. Should the government force businesses to pay workers more?",
+  options: [
+    { label: "Yes — no one should work and still be broke", x: -0.7, y: 0.6 },
+    { label: "No — businesses should set their own wages", x: 0.7, y: -0.6 },
+    { label: "Yes, but only big companies, not small local ones", x: -0.4, y: 0.3 },
+    { label: "Let the market sort it out — good workers earn more", x: 0.5, y: -0.4 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "A classmate's family is struggling to pay rent. Should the government step in and help?",
+  options: [
+    { label: "Yes — the government should make sure everyone has a home", x: -0.7, y: 0.8 },
+    { label: "That's what charities and community are for, not government", x: 0.5, y: -0.5 },
+    { label: "Government should help but only temporarily", x: -0.2, y: 0.4 },
+    { label: "People should sort out their own finances", x: 0.7, y: -0.7 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "Billionaires exist while some people can't afford food. What should happen?",
+  options: [
+    { label: "Tax the ultra-rich way more and spread the wealth", x: -0.9, y: 0.6 },
+    { label: "People earned their money — leave them alone", x: 0.8, y: -0.5 },
+    { label: "Some extra tax on the mega-rich seems reasonable", x: -0.4, y: 0.3 },
+    { label: "Focus on growing the economy so everyone benefits", x: 0.4, y: -0.2 },
+  ]
+},
 
-    // --- ENVIRONMENT (3 questions) ---
-    {
-      topic: "Environment",
-      text: "The government wants to ban all new petrol cars by 2035. Good idea?",
-      options: [
-        { label: "Yes — we have to act on climate change and EVs are the future", x: -0.7, y: 0.7 },
-        { label: "No — people should choose what car they buy", x: 0.7, y: -0.7 },
-        { label: "Only if they make EVs affordable and build enough charging stations first", x: -0.2, y: 0.3 },
-        { label: "Set strong incentives for EVs but don't force people off petrol", x: 0.3, y: -0.2 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "Your school wants to go fully solar but it means higher fees for a couple of years. Worth it?",
-      options: [
-        { label: "Yes — schools should lead the way on renewable energy", x: -0.6, y: 0.5 },
-        { label: "No — it's not fair to make families pay more right now", x: 0.5, y: -0.4 },
-        { label: "The government should fund it instead of passing costs to families", x: -0.5, y: 0.7 },
-        { label: "Only if the school votes on it and most families agree", x: 0.1, y: -0.1 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "A new coal mine is approved near your town. It'll create jobs but adds to carbon emissions. What do you think?",
-      options: [
-        { label: "Block it — climate change is too serious, we can't build more coal infrastructure", x: -0.8, y: 0.5 },
-        { label: "Allow it — local jobs matter and Australia needs the exports", x: 0.8, y: -0.3 },
-        { label: "Allow it temporarily but fast-track a transition plan for workers", x: 0.2, y: 0.1 },
-        { label: "Invest in renewable energy projects that create just as many jobs instead", x: -0.6, y: 0.4 },
-      ]
-    },
+// Environment (3 questions)
+{
+  topic: "Environment",
+  text: "Should your school ban single-use plastic bottles even if it's inconvenient?",
+  options: [
+    { label: "Yes — the planet is more important than convenience", x: -0.6, y: 0.7 },
+    { label: "No — it's up to each person to make green choices", x: 0.4, y: -0.6 },
+    { label: "Yes, but only if there are free refill stations everywhere", x: -0.3, y: 0.4 },
+    { label: "No — bans go too far, just educate people instead", x: 0.5, y: -0.3 },
+  ]
+},
+{
+  topic: "Environment",
+  text: "Petrol cars are bad for the environment. Should the government ban them?",
+  options: [
+    { label: "Yes — we have to force the change to save the planet", x: -0.6, y: 0.8 },
+    { label: "No — let people choose what car they drive", x: 0.6, y: -0.7 },
+    { label: "Offer incentives to go electric instead of banning", x: -0.3, y: 0.2 },
+    { label: "Ban new petrol cars but let existing ones stay", x: -0.2, y: 0.5 },
+  ]
+},
+{
+  topic: "Environment",
+  text: "A big company is polluting a local river but also employs half the town. What should happen?",
+  options: [
+    { label: "Shut it down — jobs aren't worth destroying the environment", x: -0.7, y: 0.5 },
+    { label: "Keep it open — those families need the income", x: 0.7, y: -0.4 },
+    { label: "Force them to clean up their act or face huge fines", x: -0.4, y: 0.6 },
+    { label: "Let the community decide — it's their town", x: 0.2, y: -0.3 },
+  ]
+},
 
-    // --- SOCIAL (3 questions) ---
-    {
-      topic: "Social",
-      text: "A student at your school gets suspended for a social media post made outside of school hours. Fair?",
-      options: [
-        { label: "No — schools shouldn't control what you do in your own time", x: -0.3, y: -0.7 },
-        { label: "Yes — if it affects the school community, they have a right to act", x: 0.4, y: 0.7 },
-        { label: "Only if it was targeting another student or was seriously harmful", x: 0.1, y: 0.2 },
-        { label: "Schools should educate students about online behaviour, not punish them", x: -0.4, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "Should schools have gender-neutral bathrooms available for students who want them?",
-      options: [
-        { label: "Yes — every student deserves to feel safe and included", x: -0.7, y: 0.3 },
-        { label: "No — bathrooms should stay as boys and girls only", x: 0.8, y: 0.4 },
-        { label: "Yes, but only as an additional option — keep the existing ones too", x: -0.3, y: 0.1 },
-        { label: "Schools should decide this themselves based on their community", x: 0.4, y: -0.3 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "A homeless person sets up outside your local shopping centre. What's the best response?",
-      options: [
-        { label: "Move them on — they affect the businesses and customers there", x: 0.6, y: 0.4 },
-        { label: "Connect them with housing and support services", x: -0.7, y: 0.6 },
-        { label: "Leave them alone — it's their right to be in public spaces", x: -0.5, y: -0.6 },
-        { label: "It's a complex issue — needs both immediate support and long-term housing solutions", x: -0.3, y: 0.4 },
-      ]
-    },
+// Social (3 questions)
+{
+  topic: "Social",
+  text: "Two of your male friends want to get married one day. Should gay marriage be legal?",
+  options: [
+    { label: "Yes — love is love, everyone deserves equal rights", x: -0.8, y: -0.2 },
+    { label: "No — marriage should be between a man and a woman", x: 0.8, y: 0.5 },
+    { label: "Yes, but religious groups shouldn't be forced to host it", x: 0.2, y: -0.1 },
+    { label: "The government shouldn't be involved in marriage at all", x: -0.1, y: -0.8 },
+  ]
+},
+{
+  topic: "Social",
+  text: "Your school wants to celebrate more Indigenous Australian culture. How do you feel?",
+  options: [
+    { label: "Great — we should learn and celebrate it properly", x: -0.7, y: 0.3 },
+    { label: "It's okay but shouldn't take over other subjects", x: 0.4, y: 0.1 },
+    { label: "It should be compulsory in every school", x: -0.8, y: 0.6 },
+    { label: "Schools should focus on core subjects instead", x: 0.6, y: 0.2 },
+  ]
+},
+{
+  topic: "Social",
+  text: "A transgender girl wants to play on your school's girls sports team. Should she be allowed?",
+  options: [
+    { label: "Yes — she's a girl and should be treated like one", x: -0.8, y: -0.1 },
+    { label: "No — it's about biology, not identity, in sport", x: 0.8, y: 0.3 },
+    { label: "Depends on age — younger kids, yes; older competing, maybe not", x: 0.2, y: 0.1 },
+    { label: "Let the school and students decide together", x: -0.1, y: -0.4 },
+  ]
+},
 
-    // --- EDUCATION (3 questions) ---
-    {
-      topic: "Education",
-      text: "University should be completely free for everyone. Agree?",
-      options: [
-        { label: "Yes — education is a right, not something you should go into debt for", x: -0.8, y: 0.7 },
-        { label: "No — people who benefit from uni should contribute to its cost", x: 0.6, y: -0.4 },
-        { label: "Free for high-demand fields like nursing and teaching, but not everything", x: -0.3, y: 0.4 },
-        { label: "Keep HECS but wipe the debt after 10 years of work", x: -0.2, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Education",
-      text: "Should students get to choose what they study from Year 9 instead of a set curriculum?",
-      options: [
-        { label: "Yes — let us study what we're actually interested in and good at", x: -0.5, y: -0.6 },
-        { label: "No — the core curriculum exists for a reason and everyone needs those basics", x: 0.5, y: 0.5 },
-        { label: "Offer more electives but keep the core subjects as compulsory", x: 0.2, y: 0.2 },
-        { label: "Students should co-design the curriculum with teachers", x: -0.4, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Education",
-      text: "Should schools ban mobile phones during the entire school day?",
-      options: [
-        { label: "Yes — phones are a massive distraction and hurt everyone's learning", x: 0.5, y: 0.8 },
-        { label: "No — students should learn to manage their own distractions", x: -0.4, y: -0.7 },
-        { label: "Ban them during class but allow them at lunch and recess", x: 0.2, y: 0.3 },
-        { label: "Leave it up to individual teachers to decide in their classes", x: 0.3, y: -0.2 },
-      ]
-    },
+// Education (3 questions)
+{
+  topic: "Education",
+  text: "Should university be free for everyone in Australia?",
+  options: [
+    { label: "Yes — education is a right, not something you pay for", x: -0.8, y: 0.6 },
+    { label: "No — people who benefit from a degree should help pay for it", x: 0.7, y: -0.4 },
+    { label: "Free for low-income students but not everyone", x: -0.3, y: 0.5 },
+    { label: "Make it cheaper but not completely free", x: 0.1, y: 0.2 },
+  ]
+},
+{
+  topic: "Education",
+  text: "Your school wants to bring back school uniforms after years without them. Good idea?",
+  options: [
+    { label: "Yes — it reduces judgment and keeps things equal", x: 0.5, y: 0.6 },
+    { label: "No — let students express themselves through what they wear", x: -0.6, y: -0.5 },
+    { label: "Only if students get a say in designing them", x: -0.2, y: 0.1 },
+    { label: "It's a distraction — focus on actual teaching", x: -0.1, y: -0.3 },
+  ]
+},
+{
+  topic: "Education",
+  text: "Should schools teach kids about sex ed, even if some parents disagree?",
+  options: [
+    { label: "Yes — teens need accurate info to stay safe", x: -0.7, y: 0.2 },
+    { label: "No — parents should decide what their kids learn about this", x: 0.7, y: 0.5 },
+    { label: "Yes, but parents should be able to opt their kids out", x: 0.2, y: 0.1 },
+    { label: "Teach the basics but let families fill in the rest", x: 0.4, y: -0.1 },
+  ]
+},
 
-    // --- TECHNOLOGY (3 questions) ---
-    {
-      topic: "Technology",
-      text: "AI is starting to replace jobs like graphic design and customer service. What should happen?",
-      options: [
-        { label: "Tax companies that replace workers with AI and use the money for retraining", x: -0.6, y: 0.7 },
-        { label: "Nothing — technology always creates new jobs in the long run", x: 0.7, y: -0.7 },
-        { label: "Slow down AI adoption so workers have time to adapt", x: 0.0, y: 0.5 },
-        { label: "Guarantee everyone a basic income as AI takes over more work", x: -0.8, y: 0.6 },
-      ]
-    },
-    {
-      topic: "Technology",
-      text: "A company creates an app that tracks your location 24/7 to give you personalised deals. You in?",
-      options: [
-        { label: "No way — that's creepy and my data is private", x: -0.5, y: -0.6 },
-        { label: "Sure, if the deals are good enough it's worth it", x: 0.6, y: -0.7 },
-        { label: "The government should ban this kind of constant tracking", x: -0.6, y: 0.7 },
-        { label: "It should be opt-in only, with full transparency about how data is used", x: -0.3, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Technology",
-      text: "TikTok might be banned in Australia over national security concerns. What do you think?",
-      options: [
-        { label: "Ban it — protecting national security is more important than one app", x: 0.6, y: 0.7 },
-        { label: "Don't ban it — millions of Australians use it and it's not proven dangerous", x: -0.3, y: -0.6 },
-        { label: "Force TikTok to store Australian data locally and audit the algorithm", x: -0.1, y: 0.5 },
-        { label: "Let individuals decide what apps they use — government shouldn't choose for us", x: -0.2, y: -0.8 },
-      ]
-    },
+// Technology (3 questions)
+{
+  topic: "Technology",
+  text: "Australia just banned social media for under-16s. Was that the right call?",
+  options: [
+    { label: "Yes — young people need protection from social media harms", x: 0.3, y: 0.8 },
+    { label: "No — teens should have the right to access the internet", x: -0.5, y: -0.7 },
+    { label: "Better to teach digital literacy than ban it outright", x: -0.3, y: -0.2 },
+    { label: "Parents should decide, not the government", x: 0.5, y: -0.5 },
+  ]
+},
+{
+  topic: "Technology",
+  text: "AI is starting to write essays for students. Should schools punish kids who use it?",
+  options: [
+    { label: "Yes — using AI to cheat is still cheating", x: 0.5, y: 0.6 },
+    { label: "No — AI is a tool everyone will use, schools should adapt", x: -0.5, y: -0.4 },
+    { label: "Only if they pretend it's their own work", x: -0.1, y: 0.3 },
+    { label: "Schools should teach how to use AI properly instead", x: -0.4, y: -0.1 },
+  ]
+},
+{
+  topic: "Technology",
+  text: "Should the government be allowed to turn off the internet during major protests?",
+  options: [
+    { label: "No way — that's censorship and takes away our rights", x: -0.7, y: -0.8 },
+    { label: "Yes — if it stops violence and keeps people safe", x: 0.4, y: 0.8 },
+    { label: "Only for a short time in extreme emergencies", x: 0.2, y: 0.4 },
+    { label: "Never — freedom of information is too important", x: -0.6, y: -0.6 },
+  ]
+},
 
-    // --- DIGITAL RIGHTS (3 questions) ---
-    {
-      topic: "Digital Rights",
-      text: "The government wants to require ID verification to use social media (so no anonymous accounts). Good idea?",
-      options: [
-        { label: "Yes — anonymous accounts are used for bullying and spreading lies", x: 0.5, y: 0.8 },
-        { label: "No — privacy and anonymous speech are important rights", x: -0.6, y: -0.7 },
-        { label: "Only for people under 18 — adults should be able to stay anonymous", x: 0.3, y: 0.3 },
-        { label: "Platforms should handle this themselves, not the government", x: 0.4, y: -0.5 },
-      ]
-    },
-    {
-      topic: "Digital Rights",
-      text: "Should the government be able to read encrypted messages (like on Signal or iMessage) to catch criminals?",
-      options: [
-        { label: "Yes — if you've got nothing to hide, you've got nothing to fear", x: 0.6, y: 0.8 },
-        { label: "No — breaking encryption makes everyone less safe, including us", x: -0.7, y: -0.7 },
-        { label: "Only with a court order and proper oversight", x: 0.2, y: 0.4 },
-        { label: "Governments can't be trusted with that kind of access — absolutely not", x: -0.8, y: -0.8 },
-      ]
-    },
-    {
-      topic: "Digital Rights",
-      text: "Should under-16s be completely banned from social media platforms like Instagram and TikTok?",
-      options: [
-        { label: "Yes — social media is genuinely harmful for young teenagers", x: 0.6, y: 0.8 },
-        { label: "No — teens have the right to communicate how they choose", x: -0.5, y: -0.7 },
-        { label: "Restrict it to age-appropriate features rather than a full ban", x: 0.2, y: 0.4 },
-        { label: "Better digital literacy education, not bans", x: -0.3, y: 0.1 },
-      ]
-    },
+// Digital Rights (3 questions)
+{
+  topic: "Digital Rights",
+  text: "Should apps like TikTok be allowed to track your location and habits without asking you?",
+  options: [
+    { label: "No — companies shouldn't track us without clear permission", x: -0.6, y: 0.5 },
+    { label: "If you use a free app, that's the deal — your data pays for it", x: 0.5, y: -0.4 },
+    { label: "They should ask first and explain what they collect", x: -0.3, y: 0.3 },
+    { label: "The government should force all apps to stop tracking", x: -0.5, y: 0.8 },
+  ]
+},
+{
+  topic: "Digital Rights",
+  text: "Your school wants to monitor students' personal phones for cyberbullying. Should they?",
+  options: [
+    { label: "No — that's a total invasion of privacy", x: -0.5, y: -0.7 },
+    { label: "Yes — bullying is serious and schools need to stop it", x: 0.3, y: 0.8 },
+    { label: "Only school devices, not personal phones", x: 0.1, y: 0.3 },
+    { label: "Teach kids about online behaviour instead of spying on them", x: -0.3, y: -0.2 },
+  ]
+},
+{
+  topic: "Digital Rights",
+  text: "Should the government be able to see your private messages to stop crime?",
+  options: [
+    { label: "No — private messages should stay private, always", x: -0.6, y: -0.8 },
+    { label: "Yes — if it stops serious crimes it's worth it", x: 0.5, y: 0.7 },
+    { label: "Only with a warrant and judge approval", x: 0.1, y: 0.3 },
+    { label: "Only for terrorism cases, nothing less serious", x: 0.3, y: 0.5 },
+  ]
+},
 
-    // --- HEALTHCARE (3 questions) ---
-    {
-      topic: "Healthcare",
-      text: "Mental health sessions (psychologist/counsellor) should be completely free for under-25s. Agree?",
-      options: [
-        { label: "Absolutely — mental health is as important as physical health", x: -0.7, y: 0.8 },
-        { label: "No — Medicare already covers some sessions, that's enough", x: 0.5, y: -0.3 },
-        { label: "Yes, but only for those who can't afford it — means-test it", x: 0.1, y: 0.4 },
-        { label: "Fund more school counsellors instead of individual sessions", x: -0.4, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "Vaping and e-cigarettes are popular among young people. Should they be banned entirely?",
-      options: [
-        { label: "Yes — they're addictive and we shouldn't let companies target teens", x: 0.4, y: 0.8 },
-        { label: "No — adults should be able to make their own choices", x: 0.3, y: -0.8 },
-        { label: "Ban flavoured vapes that appeal to teens but allow plain ones for adult smokers", x: 0.2, y: 0.4 },
-        { label: "Focus on education and health campaigns, not bans", x: -0.2, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "Should junk food companies be banned from advertising to people under 18?",
-      options: [
-        { label: "Yes — companies shouldn't be able to target kids with unhealthy food", x: -0.5, y: 0.7 },
-        { label: "No — parents and kids can make their own choices", x: 0.6, y: -0.7 },
-        { label: "Ban it on social media and during kids' TV, but not everywhere", x: -0.2, y: 0.4 },
-        { label: "Food companies should self-regulate rather than face government bans", x: 0.5, y: -0.3 },
-      ]
-    },
+// Healthcare (3 questions)
+{
+  topic: "Healthcare",
+  text: "Should mental health days be treated the same as sick days at school?",
+  options: [
+    { label: "Yes — mental health is just as real as physical health", x: -0.6, y: 0.3 },
+    { label: "No — kids will just use it to skip school", x: 0.6, y: 0.4 },
+    { label: "Yes, but with a limit on how many per term", x: 0.1, y: 0.5 },
+    { label: "Yes — and schools should also provide more support", x: -0.7, y: 0.6 },
+  ]
+},
+{
+  topic: "Healthcare",
+  text: "Should the government pay for everyone's dental care like it does with Medicare?",
+  options: [
+    { label: "Yes — teeth are part of health, why should it be separate", x: -0.7, y: 0.7 },
+    { label: "No — people should pay for their own dental bills", x: 0.7, y: -0.5 },
+    { label: "Only for kids and low-income families", x: -0.3, y: 0.4 },
+    { label: "Subsidise it but don't make it fully free", x: 0.2, y: 0.2 },
+  ]
+},
+{
+  topic: "Healthcare",
+  text: "Should vaccines be compulsory for kids, even if parents object?",
+  options: [
+    { label: "Yes — protecting everyone is more important than one family's choice", x: -0.5, y: 0.8 },
+    { label: "No — parents have the right to make medical choices for their kids", x: 0.7, y: -0.4 },
+    { label: "Not compulsory, but unvaccinated kids can't attend school", x: 0.1, y: 0.5 },
+    { label: "Only for the most serious diseases", x: 0.3, y: 0.3 },
+  ]
+},
 
-    // --- JUSTICE (3 questions) ---
-    {
-      topic: "Justice",
-      text: "A 16-year-old steals a car. What's the best outcome?",
-      options: [
-        { label: "Rehabilitation program — focus on why they did it and address root causes", x: -0.7, y: 0.3 },
-        { label: "Juvenile detention — there have to be real consequences", x: 0.6, y: 0.7 },
-        { label: "Community service and mandatory counselling", x: -0.3, y: 0.4 },
-        { label: "Make them meet the victim and make amends — restorative justice", x: -0.5, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "Should drug use (not dealing) be decriminalised and treated as a health issue?",
-      options: [
-        { label: "Yes — locking people up for drug use doesn't help anyone", x: -0.8, y: -0.5 },
-        { label: "No — drugs are illegal for a reason and should stay that way", x: 0.7, y: 0.6 },
-        { label: "Decriminalise personal use but keep strong penalties for dealing", x: -0.4, y: -0.1 },
-        { label: "Only for softer drugs like cannabis — harder drugs need strict penalties", x: 0.1, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "Police are given power to use facial recognition cameras in shopping centres. Good idea?",
-      options: [
-        { label: "Yes — if it stops crime and catches criminals, I'm for it", x: 0.6, y: 0.8 },
-        { label: "No — mass surveillance of innocent people is wrong", x: -0.7, y: -0.7 },
-        { label: "Only if there are strict rules about how the data is stored and used", x: -0.1, y: 0.3 },
-        { label: "No — facial recognition technology is too inaccurate and biased", x: -0.5, y: -0.4 },
-      ]
-    },
+// Justice (3 questions)
+{
+  topic: "Justice",
+  text: "Your friend got caught shoplifting from a big chain store. What should happen?",
+  options: [
+    { label: "Community service — punishment should help not just hurt", x: -0.5, y: 0.2 },
+    { label: "Pay a fine and get a criminal record as a warning", x: 0.6, y: 0.5 },
+    { label: "Just return the stuff and apologise — it's a first offence", x: -0.6, y: -0.3 },
+    { label: "Same consequence as any adult who did it", x: 0.7, y: 0.3 },
+  ]
+},
+{
+  topic: "Justice",
+  text: "Should 16-year-olds who commit serious crimes be tried as adults?",
+  options: [
+    { label: "No — teens are still developing and deserve different treatment", x: -0.7, y: -0.3 },
+    { label: "Yes — if the crime is serious enough, age shouldn't matter", x: 0.7, y: 0.6 },
+    { label: "Only for the most violent crimes", x: 0.3, y: 0.4 },
+    { label: "Focus on rehab, not tougher sentences", x: -0.6, y: -0.1 },
+  ]
+},
+{
+  topic: "Justice",
+  text: "Police want to use facial recognition cameras in shopping centres. Good idea?",
+  options: [
+    { label: "No — it's creepy and a massive invasion of privacy", x: -0.6, y: -0.7 },
+    { label: "Yes — if it stops crime and makes people safer", x: 0.5, y: 0.7 },
+    { label: "Only if there are strict rules on how the data is used", x: -0.1, y: 0.3 },
+    { label: "No — the government already has too much surveillance power", x: -0.5, y: -0.6 },
+  ]
+},
 
-    // --- IMMIGRATION (2 questions) ---
-    {
-      topic: "Immigration",
-      text: "Australia gets a big wave of refugees. What should happen?",
-      options: [
-        { label: "Welcome them — Australia has a proud history of helping people in need", x: -0.8, y: 0.3 },
-        { label: "Strict limits — we don't have unlimited capacity", x: 0.7, y: 0.4 },
-        { label: "Accept them but with thorough processing and support programs", x: -0.2, y: 0.4 },
-        { label: "Work with the UN to share the responsibility globally", x: -0.5, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Immigration",
-      text: "Should international students pay the same uni fees as Australian students?",
-      options: [
-        { label: "Yes — it's unfair that international students pay so much more", x: -0.6, y: 0.5 },
-        { label: "No — overseas students choosing to study here should pay the market rate", x: 0.7, y: -0.5 },
-        { label: "Reduce the gap but don't make them equal — universities need the revenue", x: 0.2, y: 0.0 },
-        { label: "Only for students from developing countries — give them a discount", x: -0.4, y: 0.3 },
-      ]
-    },
+// Immigration (2 questions)
+{
+  topic: "Immigration",
+  text: "A family from another country is seeking asylum in Australia. Should they be allowed to stay?",
+  options: [
+    { label: "Yes — if they're fleeing danger we have a duty to help", x: -0.8, y: 0.3 },
+    { label: "Only after strict background and security checks", x: 0.5, y: 0.5 },
+    { label: "Yes — and we should take in way more refugees than we do now", x: -0.9, y: 0.1 },
+    { label: "Australia can't take everyone — we have to have limits", x: 0.7, y: 0.3 },
+  ]
+},
+{
+  topic: "Immigration",
+  text: "Should new people moving to Australia have to learn English before they can get a visa?",
+  options: [
+    { label: "Yes — speaking the language helps people fit in and find work", x: 0.7, y: 0.4 },
+    { label: "No — people should be able to learn English after they arrive", x: -0.6, y: -0.2 },
+    { label: "Encourage it but don't make it a strict requirement", x: -0.2, y: 0.1 },
+    { label: "Only for people applying for citizenship, not all visas", x: 0.3, y: 0.2 },
+  ]
+},
 
-    // --- CULTURE (2 questions) ---
-    {
-      topic: "Culture",
-      text: "Should Australia Day be moved to a different date?",
-      options: [
-        { label: "Yes — January 26 is a painful date for First Nations Australians", x: -0.7, y: 0.2 },
-        { label: "No — it's our national day and we shouldn't change it to appease a minority", x: 0.8, y: 0.3 },
-        { label: "Yes, but First Nations people should lead the decision on the new date", x: -0.8, y: 0.1 },
-        { label: "Keep the date but change the name and focus of celebrations", x: 0.1, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Culture",
-      text: "Should school uniforms be compulsory in Australian public schools?",
-      options: [
-        { label: "Yes — uniforms reduce bullying about clothes and create equality", x: 0.5, y: 0.7 },
-        { label: "No — students should be free to express themselves through what they wear", x: -0.5, y: -0.7 },
-        { label: "Uniforms should be optional — let each school decide", x: 0.2, y: -0.2 },
-        { label: "Keep uniforms but allow more flexibility in style and accessories", x: 0.3, y: 0.3 },
-      ]
-    },
+// Culture (2 questions)
+{
+  topic: "Culture",
+  text: "Should Australia Day be moved from January 26th?",
+  options: [
+    { label: "Yes — that date is painful for Indigenous Australians", x: -0.8, y: 0.1 },
+    { label: "No — it's our national day and shouldn't be changed", x: 0.8, y: 0.3 },
+    { label: "Move it to a date that all Australians can celebrate", x: -0.4, y: 0.2 },
+    { label: "It's just a public holiday — the date doesn't really matter", x: 0.1, y: -0.3 },
+  ]
+},
+{
+  topic: "Culture",
+  text: "Should schools put more focus on Australian history, even the dark parts?",
+  options: [
+    { label: "Yes — we can't understand the present without knowing the full past", x: -0.6, y: 0.4 },
+    { label: "No — we should focus on what makes Australia great, not guilt", x: 0.7, y: 0.2 },
+    { label: "Teach it all but don't make kids feel personally responsible", x: 0.1, y: 0.3 },
+    { label: "Yes — and it should be compulsory, not optional", x: -0.7, y: 0.6 },
+  ]
+},
 
-    // --- WORK (2 questions) ---
-    {
-      topic: "Work",
-      text: "Companies should be forced to pay women and men equally for the same job. Agree?",
-      options: [
-        { label: "Yes — equal pay for equal work, full stop", x: -0.7, y: 0.6 },
-        { label: "No — the market determines wages and discrimination is already illegal", x: 0.7, y: -0.6 },
-        { label: "Yes — and companies should publish their pay gap data", x: -0.8, y: 0.7 },
-        { label: "It's complicated — ensure equal opportunity but wages naturally vary", x: 0.3, y: -0.1 },
-      ]
-    },
-    {
-      topic: "Work",
-      text: "Should the minimum wage for under-18s be the same as adults?",
-      options: [
-        { label: "Yes — age shouldn't determine what your time is worth", x: -0.7, y: 0.5 },
-        { label: "No — lower youth wages mean more businesses are willing to hire teens", x: 0.7, y: -0.6 },
-        { label: "Phase it in — increase youth wages gradually until they reach adult rates", x: -0.2, y: 0.3 },
-        { label: "Only once you finish school — students doing VCE need easier job access", x: 0.3, y: -0.1 },
-      ]
-    },
+// Work (2 questions)
+{
+  topic: "Work",
+  text: "You work weekends at a café. Should workers be paid extra for weekend shifts?",
+  options: [
+    { label: "Yes — working on weekends is a sacrifice and should be rewarded", x: -0.6, y: 0.5 },
+    { label: "No — the wage should be the same no matter what day it is", x: 0.7, y: -0.5 },
+    { label: "Yes, but only if the worker doesn't want to do weekends", x: -0.2, y: 0.2 },
+    { label: "Let the worker and employer agree between themselves", x: 0.5, y: -0.4 },
+  ]
+},
+{
+  topic: "Work",
+  text: "Should 15-year-olds be allowed to work more hours during school holidays?",
+  options: [
+    { label: "Yes — it's their holidays and their choice", x: 0.2, y: -0.6 },
+    { label: "No — young workers need protection even during holidays", x: -0.2, y: 0.6 },
+    { label: "Yes, but only with parent permission", x: 0.4, y: 0.3 },
+    { label: "The current rules are fine as they are", x: 0.5, y: 0.1 },
+  ]
+},
 
-    // --- HOUSING (2 questions) ---
-    {
-      topic: "Housing",
-      text: "Young people can't afford to buy homes. Best fix?",
-      options: [
-        { label: "Build way more public housing and rent it cheaply to people who need it", x: -0.8, y: 0.8 },
-        { label: "Get out of the way — less regulation means more homes built faster", x: 0.7, y: -0.7 },
-        { label: "First home buyer grants and shared equity schemes for young people", x: -0.1, y: 0.4 },
-        { label: "Tax negative gearing and capital gains on investment properties more heavily", x: -0.6, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Housing",
-      text: "Rents in capital cities have skyrocketed. Should the government cap how much rent can increase each year?",
-      options: [
-        { label: "Yes — renters need protection from landlords making housing unaffordable", x: -0.7, y: 0.8 },
-        { label: "No — rent controls reduce housing supply and make things worse long-term", x: 0.7, y: -0.6 },
-        { label: "Cap increases at inflation plus a small margin — fairness for both sides", x: -0.2, y: 0.5 },
-        { label: "Build more homes to fix supply — that'll bring rents down naturally", x: 0.3, y: -0.2 },
-      ]
-    },
-
-    // --- additional teen questions ---
-    {
-      topic: "Work",
-      text: "Your boss texts you late at night asking you to come in tomorrow morning even though you're already rostered off. You need the money but you also have plans. What rule should apply?",
-      options: [
-        { label: "Employees should have a legal right to say no without fear of losing shifts", x: -0.7, y: 0.5 },
-        { label: "It's your choice — if you need the money, pick up the shift", x: 0.5, y: -0.6 },
-        { label: "Bosses should give at least 24 hours notice for any roster changes", x: -0.4, y: 0.4 },
-        { label: "The market sorts it out — good employers treat workers well or lose them", x: 0.6, y: -0.6 },
-      ]
-    },
-    {
-      topic: "Housing",
-      text: "Your older sibling is 24 and still living at home because they can't afford rent. They earn $55,000 a year. What's the best way for the government to help them?",
-      options: [
-        { label: "Build more government-owned affordable housing they can rent at low cost", x: -0.7, y: 0.8 },
-        { label: "Give tax breaks to landlords so they lower rents — market solutions are better", x: 0.6, y: -0.5 },
-        { label: "Give first-home buyers a direct cash grant to help with a deposit", x: 0.1, y: 0.3 },
-        { label: "Increase Commonwealth Rent Assistance so people aren't priced out of the market", x: -0.4, y: 0.6 },
-      ]
-    },
-
+// Housing (3 questions)
+{
+  topic: "Housing",
+  text: "Houses in Australia are super expensive. Should the government build more public housing?",
+  options: [
+    { label: "Yes — everyone deserves somewhere safe and affordable to live", x: -0.7, y: 0.7 },
+    { label: "No — let the private market build more homes instead", x: 0.7, y: -0.5 },
+    { label: "Yes, but only for people who really can't afford anything else", x: -0.2, y: 0.5 },
+    { label: "Change the rules to make it cheaper to build homes", x: 0.3, y: -0.2 },
+  ]
+},
+{
+  topic: "Housing",
+  text: "Should landlords be allowed to raise rent by as much as they want?",
+  options: [
+    { label: "No — the government should cap how much rent can go up each year", x: -0.7, y: 0.7 },
+    { label: "Yes — it's their property and their choice", x: 0.8, y: -0.5 },
+    { label: "There should be a reasonable limit to protect renters", x: -0.4, y: 0.5 },
+    { label: "Market competition will sort it out without government rules", x: 0.6, y: -0.4 },
+  ]
+},
+{
+  topic: "Housing",
+  text: "Your mate's family got evicted with two weeks notice. Should renters have more protection?",
+  options: [
+    { label: "Yes — renters deserve stability and proper notice periods", x: -0.7, y: 0.6 },
+    { label: "No — landlords should be able to manage their own property", x: 0.7, y: -0.4 },
+    { label: "At least 60 days notice should be the law", x: -0.5, y: 0.5 },
+    { label: "Let the tenant and landlord sort it out between them", x: 0.4, y: -0.3 },
+  ]
+},
   ],
 
   // ============================================================
-  // ADULT MODE — 35 questions for working Australians
+  // ADULT MODE — 35 regular, real-world policy questions
   // ============================================================
   adult: [
 
-    // --- ECONOMY (4 questions) ---
-    {
-      topic: "Economy",
-      text: "The Stage 3 tax cuts disproportionately benefited high-income earners. Should Australia restructure its income tax brackets to be more progressive, even if it means higher rates for those earning over $200,000?",
-      options: [
-        { label: "Yes — those who earn more should contribute more to fund services", x: -0.8, y: 0.7 },
-        { label: "No — high earners already pay most of the tax, further hikes drive talent away", x: 0.8, y: -0.5 },
-        { label: "Only add a new top bracket above $300k — leave the Stage 3 cuts in place", x: 0.3, y: 0.1 },
-        { label: "Focus on closing corporate and trust loopholes rather than raising personal rates", x: -0.4, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "The RBA has kept interest rates high to fight inflation, but it's crushing mortgage holders. Should the government step in to cap interest rate rises or pressure the RBA to cut rates sooner?",
-      options: [
-        { label: "Yes — housing affordability is a crisis and the government must act", x: -0.6, y: 0.8 },
-        { label: "No — the RBA must remain independent; political interference makes things worse", x: 0.6, y: -0.5 },
-        { label: "Government should provide direct mortgage relief for struggling households", x: -0.5, y: 0.7 },
-        { label: "Focus on reducing government spending to take pressure off inflation instead", x: 0.7, y: -0.3 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Small business owners face mounting compliance costs — payroll tax, WorkCover, GST reporting. Should the government cut red tape and reduce these obligations, even if it means less worker protection?",
-      options: [
-        { label: "Yes — overregulation stifles small business and hurts the whole economy", x: 0.7, y: -0.7 },
-        { label: "No — worker protections exist for good reason and shouldn't be traded for business savings", x: -0.7, y: 0.7 },
-        { label: "Reduce reporting burden through digital streamlining, not by cutting protections", x: -0.1, y: 0.3 },
-        { label: "Raise the payroll tax threshold so only larger businesses pay it", x: 0.3, y: -0.2 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Australia's superannuation system gives large tax advantages to high-income earners who can salary-sacrifice the most. Should super tax concessions be reformed to favour lower and middle earners?",
-      options: [
-        { label: "Yes — the concessions overwhelmingly benefit the wealthy and need rebalancing", x: -0.7, y: 0.6 },
-        { label: "No — everyone benefits from saving for retirement and incentives should stay", x: 0.6, y: -0.4 },
-        { label: "Cap the tax concession benefit at a set dollar amount, not a percentage", x: -0.3, y: 0.4 },
-        { label: "Reduce concessions at the top and reinvest savings into aged pension adequacy", x: -0.5, y: 0.5 },
-      ]
-    },
+// Economy (5 questions)
+{
+  topic: "Economy",
+  text: "Big multinationals like tech giants operating in Australia often pay very little tax by shifting profits overseas. Should the government close these loopholes and force them to pay their fair share?",
+  options: [
+    { label: "Yes — corporations must pay full tax on Australian profits, no exceptions", x: -0.8, y: 0.7 },
+    { label: "Close the worst loopholes, but keep some incentives to attract foreign investment", x: -0.3, y: 0.2 },
+    { label: "Leave it to international agreements — unilateral action could scare off investment", x: 0.5, y: -0.3 },
+    { label: "Lower the corporate tax rate for everyone so avoidance becomes less worthwhile", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "The government is running a budget deficit. It needs to either raise taxes or cut spending on public services. Which approach do you prefer?",
+  options: [
+    { label: "Raise taxes on high earners and big business to protect services", x: -0.8, y: 0.6 },
+    { label: "A balanced mix — modest tax rises and targeted spending cuts", x: -0.2, y: 0.2 },
+    { label: "Mostly cut government spending and find efficiencies in the public sector", x: 0.6, y: -0.4 },
+    { label: "Cut taxes to grow the economy and let revenue catch up naturally", x: 0.9, y: -0.7 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "The minimum wage in Australia is set to be reviewed. Workers say it hasn't kept up with the cost of living. Small business owners say a big rise will force them to cut jobs. What should happen?",
+  options: [
+    { label: "Raise the minimum wage significantly — workers need a living wage now", x: -0.8, y: 0.5 },
+    { label: "Raise it gradually in line with inflation to balance workers and businesses", x: -0.3, y: 0.2 },
+    { label: "Keep increases small and let market wages rise naturally in a strong economy", x: 0.5, y: -0.3 },
+    { label: "Remove the minimum wage — let employers and workers negotiate freely", x: 0.8, y: -0.8 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "Australia's top income tax rate kicks in at $190,000. Some argue this threshold should be lower, taxing more from high earners to fund services. Others say it punishes success. What do you think?",
+  options: [
+    { label: "Lower the threshold and raise the rate — the wealthy should contribute more", x: -0.8, y: 0.7 },
+    { label: "Leave the threshold but add a small levy on earnings above $500,000", x: -0.3, y: 0.3 },
+    { label: "Keep tax rates as they are — high earners already pay most of the tax", x: 0.5, y: -0.2 },
+    { label: "Cut the top rate to reward ambition and encourage investment in Australia", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "The Reserve Bank raises interest rates to fight inflation, but this makes mortgage repayments much harder for millions of homeowners. Should the government step in to protect struggling borrowers?",
+  options: [
+    { label: "Yes — the government should offer relief payments or rate caps for owner-occupiers", x: -0.7, y: 0.8 },
+    { label: "Offer targeted help for those at genuine risk of losing their home", x: -0.2, y: 0.4 },
+    { label: "No — interfering with monetary policy creates worse problems long term", x: 0.5, y: -0.3 },
+    { label: "Let the market correct itself — government intervention caused inflation in the first place", x: 0.8, y: -0.7 },
+  ]
+},
 
-    // --- ENVIRONMENT (3 questions) ---
-    {
-      topic: "Environment",
-      text: "Australia's large resource export sector — iron ore, coal, LNG — is central to our prosperity. Should the government phase out fossil fuel export subsidies, even at the cost of regional jobs and export revenue?",
-      options: [
-        { label: "Yes — public money shouldn't subsidise an industry driving climate change", x: -0.8, y: 0.5 },
-        { label: "No — these industries are vital to the economy and regional communities", x: 0.8, y: -0.3 },
-        { label: "Phase them out slowly over 10 years with a managed transition fund", x: -0.3, y: 0.3 },
-        { label: "Redirect subsidies to clean energy projects in the same regions", x: -0.5, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "Many Australians are installing rooftop solar, but the grid wasn't designed for it. Should the government mandate battery storage for new solar installations, adding roughly $10,000 to the cost?",
-      options: [
-        { label: "Yes — batteries make solar genuinely useful and reduce grid instability", x: -0.4, y: 0.7 },
-        { label: "No — it prices out the families who benefit most from cheap solar", x: 0.4, y: -0.5 },
-        { label: "Subsidise batteries heavily instead of making them mandatory", x: -0.3, y: 0.4 },
-        { label: "Leave it to the market — if batteries make sense, people will buy them", x: 0.7, y: -0.7 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "The Murray-Darling Basin Plan requires farmers to return significant water to the environment. Many farming families say it's destroying their livelihoods. Should the buyback targets be wound back?",
-      options: [
-        { label: "No — the river system is dying and the environmental targets must hold", x: -0.7, y: 0.5 },
-        { label: "Yes — the plan has been too hard on farming communities, a rebalance is needed", x: 0.7, y: -0.2 },
-        { label: "Keep the targets but greatly increase compensation for affected farmers", x: -0.1, y: 0.5 },
-        { label: "Achieve the targets through efficiency upgrades, not just buybacks", x: 0.2, y: 0.2 },
-      ]
-    },
+// Housing (2 questions)
+{
+  topic: "Housing",
+  text: "Your landlord wants to raise rent by 15% this year, citing higher mortgage costs. Renters say they can barely afford it. Should the government limit how much rents can rise each year?",
+  options: [
+    { label: "Yes — cap rent increases at inflation, and enforce it strictly", x: -0.8, y: 0.8 },
+    { label: "Allow moderate caps but with exemptions for genuinely rising costs", x: -0.3, y: 0.4 },
+    { label: "No caps — but invest more in public housing so renters have alternatives", x: -0.5, y: 0.2 },
+    { label: "No — rent controls reduce supply and make housing shortages worse over time", x: 0.7, y: -0.5 },
+  ]
+},
+{
+  topic: "Housing",
+  text: "Housing is unaffordable in most Australian cities. One proposed fix is to allow much denser development — more apartments and townhouses — in suburban areas currently zoned for houses only. Do you support this?",
+  options: [
+    { label: "Yes — we need far more housing and zoning rules should be scrapped or loosened", x: -0.4, y: -0.6 },
+    { label: "Allow denser housing near transport hubs, but protect established neighbourhoods", x: 0.1, y: 0.1 },
+    { label: "Leave zoning decisions to local councils who know their communities best", x: 0.5, y: -0.3 },
+    { label: "Preserve neighbourhood character — dense development damages communities and liveability", x: 0.8, y: 0.5 },
+  ]
+},
 
-    // --- SOCIAL (3 questions) ---
-    {
-      topic: "Social",
-      text: "Access to affordable childcare is a significant barrier for many parents — particularly mothers — returning to work. Should the government make childcare fully free for all families, funded through general taxation?",
-      options: [
-        { label: "Yes — universal free childcare is an investment in workforce participation and gender equality", x: -0.7, y: 0.8 },
-        { label: "No — families who choose to have children should bear more of that cost", x: 0.6, y: -0.5 },
-        { label: "Free only for low-income families — means-test it to keep costs manageable", x: 0.1, y: 0.4 },
-        { label: "Heavily subsidise it but not make it free — retain a small co-payment", x: -0.2, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "Religious organisations receive significant government funding while maintaining the right to hire and fire based on religious grounds, sometimes affecting LGBTQ+ workers. Should religious exemptions from discrimination laws be removed?",
-      options: [
-        { label: "Yes — if you take public money, you must follow the same rules as everyone else", x: -0.7, y: 0.6 },
-        { label: "No — religious organisations have the right to staff their institutions according to their values", x: 0.8, y: 0.4 },
-        { label: "Remove exemptions only for government-funded roles, not internal religious roles", x: -0.2, y: 0.5 },
-        { label: "The government shouldn't fund organisations that discriminate", x: -0.6, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "Australia's aged care system is chronically underfunded. Many facilities are understaffed and provide poor quality care. Should the government nationalise aged care, taking it out of private hands?",
-      options: [
-        { label: "Yes — profit motive has no place in the care of vulnerable elderly people", x: -0.8, y: 0.8 },
-        { label: "No — competition and private management lead to better outcomes than government run services", x: 0.7, y: -0.5 },
-        { label: "Keep private providers but set mandatory staffing ratios and quality standards", x: -0.3, y: 0.6 },
-        { label: "Create a strong public option that competes with private providers", x: -0.5, y: 0.6 },
-      ]
-    },
+// Healthcare (3 questions)
+{
+  topic: "Healthcare",
+  text: "GP visits now cost $50–$80 out of pocket at most clinics because bulk billing has dropped. Should the government fund Medicare so that all GP visits are genuinely free again?",
+  options: [
+    { label: "Yes — free GP care for everyone, funded by increasing the Medicare levy", x: -0.8, y: 0.8 },
+    { label: "Make GP visits free for low-income earners, concession cardholders, and children", x: -0.4, y: 0.5 },
+    { label: "Increase bulk billing incentives but leave it to doctors to decide", x: 0.2, y: 0.1 },
+    { label: "Let the market set fees — competition between clinics will keep costs down", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Healthcare",
+  text: "Public hospital waiting lists are blowing out — people wait months for elective surgery. Should the government increase hospital funding significantly, even if it means higher taxes?",
+  options: [
+    { label: "Yes — a well-funded public system is a right; raise taxes if needed", x: -0.8, y: 0.7 },
+    { label: "Fund hospitals better but also incentivise private health to take pressure off", x: -0.1, y: 0.3 },
+    { label: "Focus on efficiency and administration cuts before spending more", x: 0.5, y: -0.1 },
+    { label: "Expand private healthcare options and let competition drive better outcomes", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Healthcare",
+  text: "Should adults be allowed to legally access assisted dying if they have a terminal illness and are experiencing unbearable suffering, with proper safeguards in place?",
+  options: [
+    { label: "Yes — it is a fundamental right to choose how and when you die", x: -0.7, y: -0.8 },
+    { label: "Yes, but with very strict criteria, specialist approval, and a waiting period", x: -0.2, y: 0.3 },
+    { label: "Only in extreme cases with unanimous medical and judicial sign-off", x: 0.3, y: 0.6 },
+    { label: "No — the state should protect life; better palliative care is the answer", x: 0.8, y: 0.8 },
+  ]
+},
 
-    // --- EDUCATION (3 questions) ---
-    {
-      topic: "Education",
-      text: "Catholic and independent schools receive substantial public funding but are not fully bound by the national curriculum. Should all government-funded schools be required to follow the same curriculum and accountability standards?",
-      options: [
-        { label: "Yes — public money means public accountability and consistent standards", x: -0.6, y: 0.7 },
-        { label: "No — school diversity and parental choice require curriculum flexibility", x: 0.7, y: -0.4 },
-        { label: "Common standards for core literacy and numeracy, flexibility in other areas", x: 0.1, y: 0.3 },
-        { label: "Tie extra funding to meeting the national curriculum, but don't mandate it", x: -0.2, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Education",
-      text: "HECS debt is now indexed to CPI, meaning graduates can owe significantly more than they borrowed even while repaying. Should HECS debt be wiped for graduates who work in shortage occupations like nursing or teaching?",
-      options: [
-        { label: "Yes — targeted debt relief is an effective way to address workforce shortages", x: -0.5, y: 0.6 },
-        { label: "No — debt forgiveness is unfair to those who already paid their loans off", x: 0.6, y: -0.3 },
-        { label: "Yes — and go further and wipe all HECS debt for everyone", x: -0.8, y: 0.7 },
-        { label: "Better to increase wages in shortage occupations rather than manipulate debt", x: 0.1, y: 0.0 },
-      ]
-    },
-    {
-      topic: "Education",
-      text: "AI tools like ChatGPT are widely used by students. Many educators want them banned from schools. Should schools embrace AI as a learning tool or ban it from assessments entirely?",
-      options: [
-        { label: "Embrace it — teach students to use AI critically, it's the future of work", x: -0.4, y: -0.2 },
-        { label: "Ban it from assessments — it undermines the ability to assess real learning", x: 0.5, y: 0.6 },
-        { label: "Allow it as a tool for drafting and research but require AI-free exams", x: 0.2, y: 0.3 },
-        { label: "Redesign assessments to be AI-proof — focus on oral exams and applied tasks", x: 0.0, y: 0.4 },
-      ]
-    },
+// Environment (3 questions)
+{
+  topic: "Environment",
+  text: "Australia has some of the highest per-capita carbon emissions in the world. Should we put a price on carbon emissions — making polluting industries pay — even if it raises energy bills?",
+  options: [
+    { label: "Yes — a strong carbon price is essential and households can be compensated", x: -0.8, y: 0.5 },
+    { label: "A modest carbon price phased in slowly, with rebates for low-income earners", x: -0.3, y: 0.3 },
+    { label: "Voluntary industry targets are better than new taxes on businesses and consumers", x: 0.5, y: -0.2 },
+    { label: "No new carbon taxes — they hurt workers and families without changing the global picture", x: 0.8, y: -0.5 },
+  ]
+},
+{
+  topic: "Environment",
+  text: "A mining company wants to open a large new coal mine in regional Queensland, promising thousands of jobs. Environmentalists say it will damage the Great Barrier Reef. Should the government approve it?",
+  options: [
+    { label: "No — the reef and climate obligations outweigh the economic benefit", x: -0.8, y: 0.4 },
+    { label: "Only approve it with extremely strict environmental conditions and regular reviews", x: -0.2, y: 0.5 },
+    { label: "Approve it — regional jobs and energy security matter, and regulations already exist", x: 0.6, y: 0.2 },
+    { label: "Approve it — the market should decide, not government picking energy winners and losers", x: 0.8, y: -0.5 },
+  ]
+},
+{
+  topic: "Environment",
+  text: "Should Australia set a legally binding target to reach net-zero emissions by 2035, faster than the current 2050 target, even if it requires shutting down fossil fuel industries sooner?",
+  options: [
+    { label: "Yes — the climate crisis demands urgent action regardless of economic disruption", x: -0.9, y: 0.6 },
+    { label: "Move faster than 2050 but give industries a clear, managed transition timeline", x: -0.3, y: 0.3 },
+    { label: "Stick with 2050 — rushing risks job losses and power blackouts", x: 0.5, y: 0.1 },
+    { label: "No binding targets at all — let technology and market forces drive the transition", x: 0.8, y: -0.7 },
+  ]
+},
 
-    // --- TECHNOLOGY (3 questions) ---
-    {
-      topic: "Technology",
-      text: "Australian workers doing gig work (Uber, DoorDash, Airtasker) have no sick leave, super contributions, or unfair dismissal protection. Should gig workers be reclassified as employees and given full entitlements?",
-      options: [
-        { label: "Yes — these workers do regular work and deserve the same rights as anyone else", x: -0.8, y: 0.7 },
-        { label: "No — flexibility is the whole point of gig work, regulation will kill the model", x: 0.7, y: -0.7 },
-        { label: "Create a new 'dependent contractor' category with some but not all entitlements", x: -0.1, y: 0.3 },
-        { label: "Let workers choose between employee status and contractor status themselves", x: 0.3, y: -0.4 },
-      ]
-    },
-    {
-      topic: "Technology",
-      text: "The government is considering creating a national digital ID system. It would make government services faster but would require more personal data being held centrally. Should Australia adopt a mandatory digital ID?",
-      options: [
-        { label: "Yes — the efficiency gains are significant and security can be managed", x: 0.3, y: 0.7 },
-        { label: "No — a centralised database is a honeypot for hackers and too much government control", x: -0.2, y: -0.8 },
-        { label: "Voluntary only — those who want it can use it, others shouldn't be forced", x: 0.0, y: -0.4 },
-        { label: "Yes, but with strict independent oversight and no sharing between agencies", x: -0.3, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Technology",
-      text: "Large social media platforms profit enormously from Australian users but pay minimal local tax. A new 'social media levy' is proposed to fund Australian journalism. Should platforms be forced to pay?",
-      options: [
-        { label: "Yes — platforms have decimated Australian journalism and should fund its replacement", x: -0.6, y: 0.7 },
-        { label: "No — this is a tax on private companies for political purposes", x: 0.7, y: -0.6 },
-        { label: "Yes — but the money should go to public broadcasting, not commercial outlets", x: -0.5, y: 0.6 },
-        { label: "Better to reform media ownership laws than create new levies", x: -0.2, y: 0.3 },
-      ]
-    },
+// Education (3 questions)
+{
+  topic: "Education",
+  text: "Private schools in Australia receive significant government funding despite charging high fees. Should this funding be redirected to underfunded public schools instead?",
+  options: [
+    { label: "Yes — public schools are underfunded; private schools should rely on fees and donations", x: -0.8, y: 0.6 },
+    { label: "Reduce private school funding gradually and redirect it to disadvantaged public schools", x: -0.4, y: 0.4 },
+    { label: "Keep funding as is — parents who choose private schools still pay taxes", x: 0.5, y: 0.1 },
+    { label: "Increase funding to all schools and remove government from curriculum decisions", x: 0.2, y: -0.4 },
+  ]
+},
+{
+  topic: "Education",
+  text: "University graduates in Australia now leave with average debts of $30,000+. Should university education be free, paid for by general taxation?",
+  options: [
+    { label: "Yes — free university is an investment in society and removes barriers for poorer students", x: -0.8, y: 0.6 },
+    { label: "Make degrees free for high-demand fields like nursing, teaching, and engineering", x: -0.3, y: 0.4 },
+    { label: "Keep HECS as is — graduates earn more, so repaying over time is fair", x: 0.4, y: -0.1 },
+    { label: "University should be fully market-priced; students who benefit should pay the full cost", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Education",
+  text: "Some parents want the right to take their children out of sexual health and relationships education at school on religious or personal grounds. Should that opt-out be allowed?",
+  options: [
+    { label: "No — this curriculum is essential for safety and all children deserve it equally", x: -0.7, y: 0.5 },
+    { label: "Allow limited opt-outs but ensure basic consent and safety content is still covered", x: -0.1, y: 0.3 },
+    { label: "Parents should decide what values their children are taught — opt-outs are a reasonable right", x: 0.6, y: 0.2 },
+    { label: "Full opt-out rights — parental authority over children's education should be absolute", x: 0.8, y: -0.4 },
+  ]
+},
 
-    // --- DIGITAL RIGHTS (2 questions) ---
-    {
-      topic: "Digital Rights",
-      text: "Under Australia's Assistance and Access Act, tech companies can be ordered to build backdoors into encrypted products for law enforcement. Many experts say this weakens security for everyone. Should this law be repealed?",
-      options: [
-        { label: "Yes — undermining encryption damages cybersecurity for all Australians", x: -0.6, y: -0.6 },
-        { label: "No — law enforcement needs these tools to fight serious crime", x: 0.6, y: 0.7 },
-        { label: "Reform it with stronger oversight but keep the core capability", x: 0.2, y: 0.4 },
-        { label: "Repeal it and invest more in traditional investigative policing", x: -0.4, y: -0.3 },
-      ]
-    },
-    {
-      topic: "Digital Rights",
-      text: "Your employer can legally read your work emails and monitor your computer usage. Should workers have a legal right to privacy in workplace digital communications?",
-      options: [
-        { label: "Yes — employers shouldn't have unlimited surveillance over employees", x: -0.6, y: -0.5 },
-        { label: "No — it's a work device on a work network, monitoring is reasonable", x: 0.6, y: 0.5 },
-        { label: "Allow monitoring but require transparency — workers must be told what's monitored", x: 0.1, y: 0.3 },
-        { label: "Workers should have full privacy except where there is specific reasonable suspicion", x: -0.4, y: -0.2 },
-      ]
-    },
+// Work (2 questions)
+{
+  topic: "Work",
+  text: "Many Australians work casual or gig economy jobs with no sick leave, no job security, and no guarantee of hours. Should these workers be given the same rights as permanent employees?",
+  options: [
+    { label: "Yes — all workers deserve sick leave, job security, and predictable hours", x: -0.8, y: 0.6 },
+    { label: "Give casuals access to sick leave after 12 months but keep flexibility for employers", x: -0.3, y: 0.3 },
+    { label: "Keep the current system — flexibility suits many workers and forcing rights could cut jobs", x: 0.5, y: -0.2 },
+    { label: "Deregulate further — let workers and employers negotiate terms without government interference", x: 0.8, y: -0.7 },
+  ]
+},
+{
+  topic: "Work",
+  text: "A major employer wants to replace 30% of its workforce with AI automation. Should the government step in to slow this down or protect displaced workers?",
+  options: [
+    { label: "Yes — levy companies that automate jobs and use it to fund retraining and income support", x: -0.7, y: 0.8 },
+    { label: "Require companies to fund retraining for any worker they replace with automation", x: -0.3, y: 0.5 },
+    { label: "Expand unemployment support but don't slow automation — it raises living standards long term", x: 0.2, y: 0.1 },
+    { label: "Government should stay out — automation is progress and the market will create new jobs", x: 0.8, y: -0.7 },
+  ]
+},
 
-    // --- HEALTHCARE (3 questions) ---
-    {
-      topic: "Healthcare",
-      text: "Medicare bulk-billing rates have dropped significantly, meaning many GP visits now cost $40–$80 out of pocket. Should Medicare rebates be dramatically increased to restore universal bulk-billing, funded by a higher Medicare levy?",
-      options: [
-        { label: "Yes — healthcare should be free at point of use, that's what Medicare promised", x: -0.8, y: 0.8 },
-        { label: "No — GPs set their own fees, government can't price-control a profession", x: 0.6, y: -0.4 },
-        { label: "Raise rebates substantially and require bulk-billing for concession card holders", x: -0.4, y: 0.6 },
-        { label: "Increase rebates but allow a small patient co-payment to keep GPs viable", x: 0.1, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "The NDIS is growing rapidly in cost. Economists project it will cost $90 billion annually by 2030. Should access to NDIS be tightened with stricter eligibility criteria to make it sustainable?",
-      options: [
-        { label: "No — tighter criteria means cutting off vulnerable people who desperately need support", x: -0.7, y: 0.6 },
-        { label: "Yes — the scheme is unsustainable and needs serious reform to survive", x: 0.6, y: 0.4 },
-        { label: "Reform the pricing and provider fees rather than cutting participants", x: -0.3, y: 0.5 },
-        { label: "Increase NDIS funding — the growth reflects genuine unmet need in the community", x: -0.8, y: 0.8 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "Private health insurance rebates cost the government about $7 billion a year, mostly benefiting higher-income Australians. Should these rebates be abolished and the money redirected to the public hospital system?",
-      options: [
-        { label: "Yes — public money should fund public healthcare, not private insurance", x: -0.7, y: 0.7 },
-        { label: "No — private health reduces pressure on the public system and rebates encourage uptake", x: 0.7, y: -0.3 },
-        { label: "Means-test the rebate so only lower earners receive it", x: -0.2, y: 0.4 },
-        { label: "Phase it out gradually and invest the savings in hospital capacity", x: -0.5, y: 0.6 },
-      ]
-    },
+// Social (3 questions)
+{
+  topic: "Social",
+  text: "Should the Australian government recognise Indigenous sovereignty and sign a formal treaty with Aboriginal and Torres Strait Islander peoples?",
+  options: [
+    { label: "Yes — a treaty is long overdue and essential for justice and reconciliation", x: -0.8, y: 0.4 },
+    { label: "Support a treaty, but it needs broad community agreement and proper process first", x: -0.3, y: 0.3 },
+    { label: "Prioritise practical measures like closing the gap in health and education over symbolic steps", x: 0.4, y: 0.2 },
+    { label: "No treaty — Australia should focus on equality for all citizens, not separate arrangements", x: 0.8, y: 0.3 },
+  ]
+},
+{
+  topic: "Social",
+  text: "JobSeeker (the unemployment payment) sits well below the poverty line. Should it be raised significantly, even if it means higher taxes or more government debt?",
+  options: [
+    { label: "Yes — no one should live in poverty while looking for work; raise it substantially", x: -0.8, y: 0.7 },
+    { label: "Raise it to at least match the poverty line, with work-search requirements", x: -0.3, y: 0.5 },
+    { label: "Small increases are fine, but higher payments reduce the incentive to find work", x: 0.5, y: 0.1 },
+    { label: "The payment is adequate — government welfare should be a safety net, not a lifestyle", x: 0.8, y: -0.2 },
+  ]
+},
+{
+  topic: "Social",
+  text: "Religious organisations that run schools and hospitals receive public funding. Should they be exempt from anti-discrimination laws when hiring staff or accepting students?",
+  options: [
+    { label: "No — if you take public money, you follow the same non-discrimination rules as everyone else", x: -0.8, y: 0.6 },
+    { label: "Allow very narrow exemptions for religious roles, but not for teachers or medical staff", x: -0.2, y: 0.3 },
+    { label: "Broad exemptions are reasonable — religious freedom is a fundamental right", x: 0.6, y: 0.3 },
+    { label: "Full religious exemptions — the state should not interfere with how faith communities operate", x: 0.8, y: -0.3 },
+  ]
+},
 
-    // --- JUSTICE (2 questions) ---
-    {
-      topic: "Justice",
-      text: "Indigenous Australians are incarcerated at roughly 15 times the rate of non-Indigenous Australians. The Uluru Statement calls for constitutional reforms, including a Voice to Parliament. Do you support constitutional entrenchment of an Indigenous Voice?",
-      options: [
-        { label: "Yes — structural reform is essential to address systemic disadvantage", x: -0.7, y: 0.3 },
-        { label: "No — one group should not have a constitutionally enshrined voice others don't have", x: 0.8, y: 0.2 },
-        { label: "Support the principle but prefer a legislated rather than constitutional body", x: 0.1, y: 0.3 },
-        { label: "Yes — and go further with treaty and truth-telling processes", x: -0.9, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "Mandatory sentencing laws in some Australian states remove judicial discretion for certain offences. Should judges have full discretion to consider individual circumstances in all criminal cases?",
-      options: [
-        { label: "Yes — mandatory sentencing leads to unjust outcomes and ignores context", x: -0.6, y: -0.4 },
-        { label: "No — mandatory sentences deter crime and ensure consistency", x: 0.7, y: 0.6 },
-        { label: "Allow discretion but set clear sentencing guidelines as a framework", x: 0.1, y: 0.2 },
-        { label: "Mandatory minimums only for violent offences, full discretion for everything else", x: 0.4, y: 0.3 },
-      ]
-    },
+// Immigration (2 questions)
+{
+  topic: "Immigration",
+  text: "Australia's immigration intake has been running at record highs, which some say helps fill job shortages but others say worsens the housing crisis. Should the government cut immigration numbers?",
+  options: [
+    { label: "No — immigration is economically vital and we should welcome more people, not fewer", x: -0.8, y: -0.3 },
+    { label: "Modest cuts are reasonable, but fix housing supply rather than blaming migrants", x: -0.2, y: 0.2 },
+    { label: "Cut numbers significantly until housing and infrastructure catch up", x: 0.6, y: 0.4 },
+    { label: "Dramatically reduce immigration — Australians should come first in housing and jobs", x: 0.9, y: 0.5 },
+  ]
+},
+{
+  topic: "Immigration",
+  text: "People who arrive in Australia by boat seeking asylum are currently processed offshore and cannot settle in Australia. Should they be allowed to apply for protection onshore like other asylum seekers?",
+  options: [
+    { label: "Yes — offshore detention is cruel and everyone deserves a fair onshore assessment", x: -0.9, y: -0.5 },
+    { label: "Process claims onshore but with strict timelines and clear conditions", x: -0.4, y: 0.2 },
+    { label: "Keep offshore processing — it has stopped drownings at sea and must continue", x: 0.6, y: 0.5 },
+    { label: "Turn boats back immediately — strong borders are non-negotiable for national sovereignty", x: 0.9, y: 0.7 },
+  ]
+},
 
-    // --- IMMIGRATION (2 questions) ---
-    {
-      topic: "Immigration",
-      text: "Net overseas migration to Australia has hit record levels — over 500,000 in a single year. Some economists say this is driving up rents and putting pressure on infrastructure. Should Australia significantly reduce its immigration intake?",
-      options: [
-        { label: "Yes — we need to pause until we build enough homes and infrastructure to cope", x: 0.6, y: 0.4 },
-        { label: "No — immigration drives economic growth, fills skills shortages, and enriches Australian culture", x: -0.5, y: -0.2 },
-        { label: "Reduce temporary visas but maintain strong permanent skilled migration", x: 0.3, y: 0.1 },
-        { label: "Keep intake high but tie it to investment in housing and infrastructure", x: -0.3, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Immigration",
-      text: "Australia's Pacific Australia Labour Mobility (PALM) scheme brings in seasonal agricultural workers from Pacific islands. Critics say they are exploited and have limited rights. Should PALM workers receive the same labour rights as Australian workers?",
-      options: [
-        { label: "Yes — all workers on Australian soil should have the same protections", x: -0.7, y: 0.6 },
-        { label: "No — the scheme provides valuable income to Pacific nations and flexibility to farmers", x: 0.6, y: -0.3 },
-        { label: "Improve enforcement of existing protections before adding new entitlements", x: 0.2, y: 0.3 },
-        { label: "Create a Pacific Union framework with consistent rights across member nations", x: -0.4, y: 0.4 },
-      ]
-    },
+// Justice (3 questions)
+{
+  topic: "Justice",
+  text: "Australia has one of the highest rates of imprisonment for Aboriginal people in the world. Should the government set a formal target to reduce Aboriginal incarceration, even if it means fewer prison sentences for some offences?",
+  options: [
+    { label: "Yes — the system is broken; we need community-led justice and fewer custodial sentences", x: -0.8, y: -0.4 },
+    { label: "Set a target and fund diversion programs, but maintain prison for serious crimes", x: -0.3, y: 0.2 },
+    { label: "Address the root causes like poverty and trauma rather than changing sentencing rules", x: 0.2, y: 0.3 },
+    { label: "No special targets based on race — the law should apply equally to everyone", x: 0.8, y: 0.3 },
+  ]
+},
+{
+  topic: "Justice",
+  text: "Police in some states have powers to move on or search people without specific cause in certain areas. Should these stop-and-search powers be scaled back to protect civil liberties?",
+  options: [
+    { label: "Yes — they are disproportionately used against minorities and should be abolished", x: -0.8, y: -0.7 },
+    { label: "Scale them back significantly and require evidence of specific risk before use", x: -0.3, y: -0.2 },
+    { label: "Keep them but strengthen oversight and complaint mechanisms", x: 0.4, y: 0.3 },
+    { label: "Expand these powers — police need the tools to keep communities safe", x: 0.7, y: 0.8 },
+  ]
+},
+{
+  topic: "Justice",
+  text: "Recreational cannabis use is illegal in most of Australia. Should it be legalised and regulated like alcohol, with age restrictions and taxation?",
+  options: [
+    { label: "Yes — legalise it, tax it, and treat it like alcohol or tobacco", x: -0.7, y: -0.8 },
+    { label: "Decriminalise personal use but don't create a legal market yet", x: -0.3, y: -0.3 },
+    { label: "Keep it illegal but focus enforcement on dealers, not users", x: 0.4, y: 0.3 },
+    { label: "Keep it illegal and enforce the law — legalisation sends the wrong message", x: 0.7, y: 0.7 },
+  ]
+},
 
-    // --- CULTURE (2 questions) ---
-    {
-      topic: "Culture",
-      text: "The Australia Council for the Arts funds Australian artists, writers, and cultural organisations. Some argue government arts funding picks cultural winners. Should the government continue funding the arts, or leave it to the private sector?",
-      options: [
-        { label: "Yes — culture and the arts are public goods that markets systematically underfund", x: -0.6, y: 0.6 },
-        { label: "No — art that can't sustain itself commercially doesn't need taxpayer support", x: 0.7, y: -0.6 },
-        { label: "Fund only cultural heritage and Indigenous arts — leave contemporary art to the market", x: 0.3, y: 0.0 },
-        { label: "Increase arts funding significantly — it's an investment in the creative economy", x: -0.7, y: 0.7 },
-      ]
-    },
-    {
-      topic: "Culture",
-      text: "Large cultural institutions like the ABC are accused by some of having a left-wing bias. Should the government reduce ABC funding and allow more competition from commercial media?",
-      options: [
-        { label: "No — the ABC provides independent public broadcasting that markets can't replace", x: -0.7, y: 0.4 },
-        { label: "Yes — the ABC is biased and the government shouldn't fund journalism", x: 0.8, y: -0.5 },
-        { label: "Maintain ABC funding but strengthen editorial independence oversight", x: -0.3, y: 0.3 },
-        { label: "Increase ABC funding and mandate stronger regional and Indigenous content", x: -0.8, y: 0.6 },
-      ]
-    },
+// Technology (3 questions)
+{
+  topic: "Technology",
+  text: "Australian news outlets have won the right to be paid by tech giants like Google and Meta when their content appears in feeds and search results. Should this policy be extended and strengthened?",
+  options: [
+    { label: "Yes — tech platforms profit massively from news content and must pay fairly for it", x: -0.6, y: 0.7 },
+    { label: "Keep the current framework but improve transparency around how payments are calculated", x: -0.1, y: 0.4 },
+    { label: "Let the industry negotiate commercial deals without government mandating payments", x: 0.5, y: -0.3 },
+    { label: "Repeal it — it's a handout to legacy media and distorts the free market", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Technology",
+  text: "AI tools are increasingly used in hiring processes to screen job applications, sometimes filtering out candidates before a human reads their resume. Should this be regulated?",
+  options: [
+    { label: "Yes — AI hiring tools should be banned or require human review of every rejection", x: -0.7, y: 0.7 },
+    { label: "Require companies to audit AI hiring tools for bias and disclose when AI is used", x: -0.2, y: 0.5 },
+    { label: "Voluntary industry standards are enough — over-regulation slows innovation", x: 0.5, y: -0.2 },
+    { label: "No regulation — employers should be free to use any tool they choose to find the best staff", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Technology",
+  text: "Social media platforms have been linked to rising rates of anxiety and depression in young Australians. Should the government force platforms to make their algorithms less addictive?",
+  options: [
+    { label: "Yes — platforms should be legally required to prove their products are safe before operating", x: -0.6, y: 0.9 },
+    { label: "Require platforms to offer opt-out tools for algorithmic feeds and limit notifications by default", x: -0.2, y: 0.5 },
+    { label: "Better digital literacy education is the answer, not restricting how platforms work", x: 0.4, y: -0.1 },
+    { label: "Adults choose to use these platforms — government should not regulate private products", x: 0.8, y: -0.7 },
+  ]
+},
 
-    // --- WORK (2 questions) ---
-    {
-      topic: "Work",
-      text: "Australia's industrial relations system allows enterprise bargaining but many workers remain on award wages. Unions want the ability to bargain across entire industries rather than company by company. Should industry-wide multi-employer bargaining be expanded?",
-      options: [
-        { label: "Yes — it lifts wages across sectors and rebalances power between workers and employers", x: -0.8, y: 0.7 },
-        { label: "No — enterprise bargaining works better for individual businesses and their workers", x: 0.7, y: -0.4 },
-        { label: "Allow it in specific low-wage sectors like aged care and early education", x: -0.4, y: 0.5 },
-        { label: "Expand it only where workers vote for it in each specific workplace", x: -0.1, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Work",
-      text: "The 'right to disconnect' law gives employees the legal right to ignore work calls and emails outside hours. Small business owners say it makes it impossible to run flexible operations. Is the right to disconnect good policy?",
-      options: [
-        { label: "Yes — work should not invade personal time and workers need legal protection", x: -0.7, y: 0.6 },
-        { label: "No — it adds red tape and ignores the reality of how modern workplaces function", x: 0.6, y: -0.5 },
-        { label: "Yes, but with clear exemptions for small business and genuine emergencies", x: -0.2, y: 0.4 },
-        { label: "Better to make it a matter for individual enterprise agreements rather than law", x: 0.3, y: -0.2 },
-      ]
-    },
+// Digital Rights (3 questions)
+{
+  topic: "Digital Rights",
+  text: "The Australian government passed laws allowing it to access encrypted messages on platforms like WhatsApp without a court order under national security laws. Should this power be rolled back?",
+  options: [
+    { label: "Yes — backdoors in encryption put everyone's privacy at risk and should be outlawed", x: -0.7, y: -0.8 },
+    { label: "Keep it only for terrorism and serious crime, with strict judicial oversight", x: -0.1, y: 0.3 },
+    { label: "Security agencies need these tools; the current oversight framework is sufficient", x: 0.5, y: 0.5 },
+    { label: "Expand these powers — national security must come before digital privacy concerns", x: 0.7, y: 0.9 },
+  ]
+},
+{
+  topic: "Digital Rights",
+  text: "Companies collect enormous amounts of data about Australians — your location, purchases, and browsing habits. Should you have the legal right to demand a company delete your data?",
+  options: [
+    { label: "Yes — strong data deletion rights should be enshrined in law, like the EU's GDPR", x: -0.7, y: 0.6 },
+    { label: "A right to deletion for personal data, with reasonable exceptions for fraud prevention", x: -0.2, y: 0.4 },
+    { label: "Better privacy education and clearer consent at sign-up is enough", x: 0.3, y: -0.1 },
+    { label: "Regulating data collection stifles innovation — users can choose not to use these services", x: 0.8, y: -0.6 },
+  ]
+},
+{
+  topic: "Digital Rights",
+  text: "Australia introduced a law banning children under 16 from using social media. Should this kind of age-based restriction on online platforms be supported?",
+  options: [
+    { label: "Yes — protecting children from social media harms justifies this restriction", x: 0.3, y: 0.9 },
+    { label: "Support an age limit but only with proper digital ID systems that also protect adult privacy", x: 0.0, y: 0.5 },
+    { label: "Prefer parental controls and platform safety features over a hard government ban", x: 0.4, y: -0.2 },
+    { label: "No — it won't work, creates a surveillance infrastructure, and limits free expression", x: -0.6, y: -0.6 },
+  ]
+},
 
-    // --- HOUSING (2 questions) ---
-    {
-      topic: "Housing",
-      text: "Negative gearing allows property investors to offset rental losses against other income, and the 50% capital gains tax discount rewards long-term investors. Critics say these policies inflate property prices. Should both be abolished?",
-      options: [
-        { label: "Yes — these policies make housing unaffordable and prioritise investors over first home buyers", x: -0.7, y: 0.6 },
-        { label: "No — abolishing them would crash the property market and hurt millions of Australians", x: 0.7, y: -0.3 },
-        { label: "Grandfather existing investments but end negative gearing for new purchases only", x: -0.2, y: 0.3 },
-        { label: "Limit negative gearing to one investment property per person", x: -0.4, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Housing",
-      text: "State governments want to override local councils and rezone areas near train stations for high-density housing. Many residents oppose towers in their neighbourhoods. Should states be able to override councils on housing density?",
-      options: [
-        { label: "Yes — local veto power has caused decades of housing undersupply and high prices", x: -0.4, y: 0.6 },
-        { label: "No — communities should have the right to shape what gets built near their homes", x: 0.5, y: -0.4 },
-        { label: "Yes — but only within 800m of train stations and with infrastructure investment attached", x: -0.2, y: 0.4 },
-        { label: "Reform council decision-making to be faster and less obstructionist instead", x: 0.2, y: 0.1 },
-      ]
-    },
+// Extra Social question to reach 35 total
+{
+  topic: "Social",
+  text: "Australia's aged care system has been repeatedly found to be understaffed and underfunded, leaving elderly residents without adequate care. Should the government take direct control of more aged care facilities?",
+  options: [
+    { label: "Yes — aged care is too important to leave to the private sector; the government should run it", x: -0.8, y: 0.8 },
+    { label: "Set much stricter minimum staffing standards and heavily fine providers who don't comply", x: -0.3, y: 0.6 },
+    { label: "Fund private providers better but let them manage operations — government isn't efficient", x: 0.5, y: 0.1 },
+    { label: "Open aged care to full market competition — that drives quality better than regulation", x: 0.8, y: -0.5 },
+  ]
+},
 
-    // --- additional adult questions ---
-    {
-      topic: "Digital Rights",
-      text: "Australia's My Health Record system holds your entire medical history and is opt-out rather than opt-in. Overseas, breaches of centralised health databases have exposed millions of patients' records. Should My Health Record be converted to a strict opt-in system?",
-      options: [
-        { label: "Yes — medical records are among the most sensitive data; opt-in should be the minimum standard", x: -0.6, y: -0.4 },
-        { label: "No — opt-out maximises participation and the clinical benefits of a connected health record", x: 0.4, y: 0.5 },
-        { label: "Keep opt-out but strengthen data breach penalties and limit third-party access", x: 0.1, y: 0.3 },
-        { label: "Fund better cybersecurity infrastructure before expanding the system further", x: 0.0, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "Bail laws in several Australian states have been tightened after high-profile crimes committed while on bail, leading to rising remand populations. Remand prisoners have not been convicted of any offence but can spend months in custody awaiting trial. Should Australia introduce stricter limits on pre-trial remand to protect the presumption of innocence?",
-      options: [
-        { label: "Yes — imprisoning unconvicted people for months is a fundamental breach of the presumption of innocence", x: -0.6, y: -0.4 },
-        { label: "No — bail conditions are insufficient for some defendants; community safety must take priority", x: 0.7, y: 0.6 },
-        { label: "Reform bail to ensure electronic monitoring is always offered as a condition before remand is ordered", x: -0.2, y: 0.0 },
-        { label: "Set maximum remand periods with mandatory review hearings every 30 days", x: -0.4, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Immigration",
-      text: "Australia grants 195,000 permanent visas annually. However, around 2.4 million temporary visa holders — international students, working holiday makers, and temporary skilled migrants — live in Australia with limited rights. Many have been here for years with no pathway to permanence. Should temporary residents who have lived in Australia for three or more years receive an automatic right to apply for permanent residency?",
-      options: [
-        { label: "Yes — years of contribution to the Australian economy and community should create a pathway", x: -0.6, y: 0.3 },
-        { label: "No — temporary means temporary; permanent residency must be earned through a separate points assessment", x: 0.7, y: 0.2 },
-        { label: "Yes for workers in shortage occupations — but not all temporary residents equally", x: 0.1, y: 0.3 },
-        { label: "Create a new 'established resident' visa with full work rights but without an automatic citizenship pathway", x: 0.2, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Culture",
-      text: "The Australian government spends approximately $1.3 billion annually on advertising — making it one of the largest advertisers in the country. Critics argue government advertising is often politically motivated and blurs the line between public information campaigns and electoral promotion. Should there be an independent parliamentary budget office with binding authority to approve all government advertising campaigns?",
-      options: [
-        { label: "Yes — independent oversight is essential to prevent taxpayer-funded political propaganda", x: -0.5, y: 0.5 },
-        { label: "No — the government of the day has a democratic mandate to communicate its policies", x: 0.5, y: 0.3 },
-        { label: "Yes, and ban all government advertising within 6 months of a federal election", x: -0.6, y: 0.4 },
-        { label: "The Senate Estimates process already provides accountability; new bureaucracy is unnecessary", x: 0.4, y: -0.1 },
-      ]
-    },
-
+// Culture (2 questions)
+{
+  topic: "Culture",
+  text: "Should Australia become a republic and replace the King as head of state with an elected or appointed Australian citizen?",
+  options: [
+    { label: "Yes — it's time Australia had a fully independent identity with an Australian head of state", x: -0.7, y: 0.2 },
+    { label: "Become a republic but only after careful design to avoid giving too much power to one person", x: -0.2, y: 0.1 },
+    { label: "Keep the current system — the constitutional monarchy works well and change risks instability", x: 0.6, y: 0.4 },
+    { label: "Strongly support the monarchy — it is part of our heritage and keeps politics out of the role", x: 0.9, y: 0.6 },
+  ]
+},
+{
+  topic: "Culture",
+  text: "Australia Day is celebrated on January 26, the date of the First Fleet's arrival in 1788 — a day many Aboriginal Australians call Invasion Day. Should the date be changed?",
+  options: [
+    { label: "Yes — celebrating on that date is deeply hurtful and the date should change", x: -0.8, y: 0.3 },
+    { label: "Change the date and use it as an opportunity for genuine national reflection and unity", x: -0.4, y: 0.2 },
+    { label: "Keep the date but acknowledge its full history alongside the celebration", x: 0.4, y: 0.2 },
+    { label: "Keep the date — changing it is divisive political correctness that erases our history", x: 0.9, y: 0.4 },
+  ]
+},
   ],
 
   // ============================================================
-  // ACADEMIC MODE — 35 questions for selective/gifted students
+  // ACADEMIC MODE — 35 questions mixing teen accessibility with adult policy depth
   // ============================================================
   academic: [
 
-    // --- ECONOMY (4 questions) ---
-    {
-      topic: "Economy",
-      text: "Keynesian economics argues that government spending can stimulate aggregate demand during recessions. However, critics from the Chicago School argue that crowding out private investment makes fiscal stimulus self-defeating. Which view do you find more persuasive for modern Australia?",
-      options: [
-        { label: "Keynesian — targeted fiscal policy is essential during downturns and markets fail to self-correct", x: -0.7, y: 0.7 },
-        { label: "Monetarist — the RBA's monetary tools are more effective and government spending is inefficient", x: 0.6, y: -0.4 },
-        { label: "Both have merit — a blend depending on economic conditions is optimal", x: -0.1, y: 0.2 },
-        { label: "Modern Monetary Theory suggests deficit spending is not constrained the way either school claims", x: -0.8, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "The Laffer Curve theorises that beyond a certain tax rate, higher taxes reduce total revenue by discouraging economic activity. Australia's top marginal rate is 47%. Is there a compelling case that reducing this rate would increase tax receipts?",
-      options: [
-        { label: "No — empirical evidence for the Laffer effect at Australia's rate is weak; cuts reduce revenue", x: -0.6, y: 0.4 },
-        { label: "Yes — the rate discourages high-skilled migration and productive effort at the margin", x: 0.7, y: -0.5 },
-        { label: "Possibly, but the distributional effects outweigh any revenue gains", x: -0.3, y: 0.3 },
-        { label: "The debate misses the point — wealth taxes would be more effective than rate cuts", x: -0.7, y: 0.6 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Universal Basic Income (UBI) proposes replacing the welfare system with unconditional payments to all citizens. Pilots in Finland and Kenya show mixed results. Should Australia pilot a UBI scheme?",
-      options: [
-        { label: "Yes — it simplifies welfare, eliminates poverty traps, and recognises unpaid labour", x: -0.7, y: 0.4 },
-        { label: "No — unconditional income reduces work incentives and is fiscally unsustainable", x: 0.7, y: -0.5 },
-        { label: "Pilot it in a specific region to gather Australian-specific evidence first", x: -0.2, y: 0.3 },
-        { label: "Negative Income Tax is preferable — it targets the bottom without universal payments", x: 0.1, y: -0.1 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Pigouvian taxes correct market failures by pricing negative externalities into economic activity. Carbon pricing is the textbook example. Should Australia implement a broad-based economy-wide carbon price?",
-      options: [
-        { label: "Yes — it is the most economically efficient mechanism for reducing emissions", x: -0.6, y: 0.4 },
-        { label: "No — it raises costs for households and businesses and sends industry offshore", x: 0.7, y: -0.5 },
-        { label: "Yes, with full revenue recycled back to households to offset distributional impacts", x: -0.5, y: 0.5 },
-        { label: "Regulatory standards are more politically durable and equally effective", x: -0.1, y: 0.5 },
-      ]
-    },
+// Economy (5 questions)
+{
+  topic: "Economy",
+  text: "Some economists say raising the minimum wage helps workers afford a decent life. Others warn it pushes businesses to cut jobs or raise prices. If Australia raised the minimum wage to $30/hour, what would you expect?",
+  options: [
+    { label: "It would help millions of low-paid workers and boost consumer spending across the economy.", x: -0.7, y: 0.5 },
+    { label: "It would force small businesses to cut staff, ultimately hurting the workers it meant to help.", x: 0.7, y: -0.5 },
+    { label: "A gradual phased increase could work if small businesses receive government support during the transition.", x: -0.3, y: 0.3 },
+    { label: "Wages should be set by market competition, not government mandates — let supply and demand decide.", x: 0.6, y: -0.7 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "Australia's wealthiest 1% own more wealth than the bottom 50% combined. The philosopher John Rawls argued a just society is one you'd be OK entering no matter where you landed. Does Australia need more redistribution to be fair?",
+  options: [
+    { label: "Yes — a truly fair society requires taxing wealth and redistributing it to those born with less opportunity.", x: -0.8, y: 0.6 },
+    { label: "No — wealth inequality reflects different effort and choices; heavy redistribution punishes success.", x: 0.7, y: -0.4 },
+    { label: "Some redistribution through progressive taxes is fair, but we should focus on equal opportunity, not equal outcomes.", x: -0.2, y: 0.2 },
+    { label: "Voluntary charity and private giving are better solutions than government-enforced redistribution of wealth.", x: 0.5, y: -0.6 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "When the economy slumps, some argue the government should spend big — on infrastructure, welfare, and public services — to stimulate growth. Others say government debt crowds out private investment and makes things worse. What's your view?",
+  options: [
+    { label: "Government stimulus spending is essential during downturns — it creates jobs and keeps the economy moving.", x: -0.6, y: 0.7 },
+    { label: "Governments should cut spending in downturns, not grow debt — live within your means like any household.", x: 0.7, y: -0.3 },
+    { label: "Targeted stimulus on productive infrastructure can work, but blanket spending wastes taxpayer money.", x: 0.1, y: 0.3 },
+    { label: "Lower taxes and deregulation do more to stimulate growth than any government spending program.", x: 0.8, y: -0.7 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "Large corporations like Amazon and Apple pay very little tax in Australia by shifting profits to low-tax countries. Should Australia take stronger action to make multinational companies pay their fair share?",
+  options: [
+    { label: "Absolutely — multinationals use Australian infrastructure and markets; they must pay tax here like everyone else.", x: -0.7, y: 0.6 },
+    { label: "Lower corporate tax rates would stop profit-shifting and attract more foreign investment to Australia.", x: 0.8, y: -0.5 },
+    { label: "International cooperation on a global minimum corporate tax is the right solution rather than unilateral action.", x: -0.3, y: 0.4 },
+    { label: "Tax avoidance is legal; close loopholes, but don't penalise businesses for following the rules that exist.", x: 0.4, y: -0.2 },
+  ]
+},
+{
+  topic: "Economy",
+  text: "Free trade agreements allow Australian goods to be sold overseas more easily, but also mean cheaper imports that can undercut local manufacturers. On balance, is free trade good for Australia?",
+  options: [
+    { label: "Free trade benefits consumers with lower prices and drives economic growth — Australia should embrace it.", x: 0.6, y: -0.6 },
+    { label: "Australia should protect strategic industries from cheap imports to preserve jobs and economic sovereignty.", x: -0.5, y: 0.5 },
+    { label: "Free trade is good overall, but workers displaced by imports deserve retraining and government support.", x: -0.2, y: 0.2 },
+    { label: "Trade policy should be driven by national interest — not ideology — and reviewed industry by industry.", x: 0.2, y: 0.1 },
+  ]
+},
 
-    // --- ENVIRONMENT (3 questions) ---
-    {
-      topic: "Environment",
-      text: "The concept of ecological economics argues that GDP growth is incompatible with planetary boundaries and proposes 'degrowth' — deliberately shrinking economic output in wealthy nations. Does degrowth offer a credible policy pathway for Australia?",
-      options: [
-        { label: "Yes — infinite growth on a finite planet is a logical impossibility and degrowth is necessary", x: -0.8, y: 0.4 },
-        { label: "No — decoupling growth from emissions through technology is achievable and preferable", x: 0.5, y: -0.2 },
-        { label: "Degrowth in material consumption, but not in health, education, and wellbeing", x: -0.4, y: 0.3 },
-        { label: "The question is premature — develop green technology first, then reassess growth models", x: 0.2, y: 0.0 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "Intergenerational equity — the principle that future generations have equal moral standing to present generations — is a foundation of sustainable development theory. Should Australia amend its Constitution to include a right to a healthy environment for future generations?",
-      options: [
-        { label: "Yes — enshrining environmental rights constitutionally provides long-term protection", x: -0.7, y: 0.5 },
-        { label: "No — constitutional environmental rights would give unelected courts too much power over policy", x: 0.6, y: -0.3 },
-        { label: "Yes, but frame it as procedural rights (to information, to participate) rather than substantive", x: -0.2, y: 0.3 },
-        { label: "Statutory protection is adequate — reserve constitutional change for proven failures", x: 0.3, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "Australia's Nature Positive Plan commits to halting and reversing biodiversity loss by 2030. Some ecologists argue the plan allows offsetting — building in one place and 'compensating' elsewhere — which doesn't achieve true biodiversity outcomes. Should offsets be banned?",
-      options: [
-        { label: "Yes — biodiversity offsets rarely work in practice and allow destruction to continue", x: -0.7, y: 0.5 },
-        { label: "No — offsets are the only realistic way to balance development and conservation", x: 0.5, y: -0.2 },
-        { label: "Retain offsets but require like-for-like and independent verification", x: 0.0, y: 0.4 },
-        { label: "Strengthen protected areas and funding for land trusts instead of relying on offsets", x: -0.5, y: 0.4 },
-      ]
-    },
+// Environment (3 questions)
+{
+  topic: "Environment",
+  text: "Australia is one of the world's largest coal and gas exporters. Phasing out fossil fuels would reduce carbon emissions but could cost thousands of regional jobs. How fast should Australia transition to clean energy?",
+  options: [
+    { label: "As fast as possible — climate change is an emergency and delay costs more lives and money in the long run.", x: -0.8, y: 0.5 },
+    { label: "Australia's coal exports are someone else's emissions — we shouldn't sacrifice our economy for a global problem.", x: 0.8, y: -0.3 },
+    { label: "A managed transition over 10–15 years with real support for affected workers and communities is the right balance.", x: -0.3, y: 0.3 },
+    { label: "Market forces and new technology will drive the energy transition — government mandates just slow innovation.", x: 0.5, y: -0.6 },
+  ]
+},
+{
+  topic: "Environment",
+  text: "A carbon tax makes polluting industries pay per tonne of CO₂ they emit. Supporters say it's the most efficient way to cut emissions. Critics say it raises energy prices for ordinary Australians who can least afford it. Do you support a carbon price?",
+  options: [
+    { label: "Yes — putting a price on carbon is the most economically sound way to reduce emissions and drive clean investment.", x: -0.6, y: 0.4 },
+    { label: "No — carbon taxes just get passed on to consumers and hurt working families without solving the climate problem.", x: 0.6, y: -0.4 },
+    { label: "A carbon price could work if all revenue is returned to households as a dividend, protecting those on lower incomes.", x: -0.3, y: 0.2 },
+    { label: "Direct government investment in renewables is better than market mechanisms that add costs to everyday life.", x: -0.5, y: 0.7 },
+  ]
+},
+{
+  topic: "Environment",
+  text: "Australia has some of the world's most biodiverse ecosystems, but land clearing for farming and development continues to destroy habitats. Should stricter environmental laws limit what landowners can do with their own property?",
+  options: [
+    { label: "Yes — biodiversity belongs to all Australians and future generations, not just the landowner who happens to hold the title.", x: -0.7, y: 0.7 },
+    { label: "No — if you own land, you should be free to use it; environmental goals should be achieved through incentives, not restrictions.", x: 0.7, y: -0.6 },
+    { label: "Landowners who protect native habitat deserve to be paid for it — a stewardship payment scheme makes more sense than bans.", x: 0.1, y: -0.1 },
+    { label: "Some baseline protections for endangered ecosystems are justified, but current laws already go too far in restricting farmers.", x: 0.5, y: 0.2 },
+  ]
+},
 
-    // --- SOCIAL (3 questions) ---
-    {
-      topic: "Social",
-      text: "John Rawls' 'veil of ignorance' thought experiment argues that just social arrangements are those we would choose if we didn't know our position in society. Applied to Australia, which policy best reflects this principle?",
-      options: [
-        { label: "A strong welfare state that protects everyone regardless of circumstance", x: -0.7, y: 0.7 },
-        { label: "Equal opportunity through education reform rather than redistributive outcomes", x: 0.1, y: 0.3 },
-        { label: "Rawls himself endorsed only the difference principle — inequalities are fine if they benefit the least well-off", x: -0.3, y: 0.4 },
-        { label: "Nozick's entitlement theory is more coherent — just acquisition, not equal outcomes, matters", x: 0.7, y: -0.6 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "Capabilities theory (Amartya Sen, Martha Nussbaum) argues that human development should be measured by what people can do and be, not just income. Should Australia adopt a wellbeing framework — replacing GDP with multidimensional indicators — as its primary policy benchmark?",
-      options: [
-        { label: "Yes — New Zealand's wellbeing budget shows it's practically feasible and better guides policy", x: -0.6, y: 0.5 },
-        { label: "No — GDP remains the most reliable proxy for material living standards", x: 0.5, y: -0.3 },
-        { label: "Supplement GDP with wellbeing measures but don't replace it as the primary target", x: 0.0, y: 0.2 },
-        { label: "The capabilities framework is theoretically superior — adopt it fully in national accounts", x: -0.7, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "The politics of recognition (Charles Taylor, Axel Honneth) argues that cultural and identity recognition is as important as material redistribution. Australia's multicultural policy attempts to balance unity and diversity. Is multiculturalism as a state policy coherent and defensible?",
-      options: [
-        { label: "Yes — social recognition of diverse identities is both just and practically beneficial", x: -0.6, y: 0.3 },
-        { label: "No — a liberal state should be identity-neutral; multiculturalism as policy creates division", x: 0.6, y: -0.2 },
-        { label: "Multiculturalism is defensible but must be grounded in shared civic values", x: 0.1, y: 0.2 },
-        { label: "The debate requires separating descriptive multiculturalism from normative policy — they're different questions", x: -0.1, y: 0.0 },
-      ]
-    },
+// Social (3 questions)
+{
+  topic: "Social",
+  text: "Some people argue that systemic racism — discrimination built into laws, institutions, and social norms — still disadvantages Aboriginal and Torres Strait Islander Australians today. Does Australia need targeted policies to address this, or should policy be race-blind?",
+  options: [
+    { label: "Targeted policies for First Nations Australians are essential — you can't fix historical injustice with colour-blind rules.", x: -0.8, y: 0.5 },
+    { label: "Government policy should treat every citizen equally regardless of race — identity-based programs create division.", x: 0.7, y: -0.2 },
+    { label: "Targeted investment in remote communities and legal reform is justified, but outcomes — not race — should ultimately guide policy.", x: -0.3, y: 0.3 },
+    { label: "Community-led solutions work better than top-down government programs that ignore local knowledge and culture.", x: -0.4, y: -0.3 },
+  ]
+},
+{
+  topic: "Social",
+  text: "Australia legalised same-sex marriage in 2017. Some religious schools and organisations still want exemptions that allow them to discriminate in hiring based on sexual orientation. How should the law balance religious freedom and LGBTQ+ rights?",
+  options: [
+    { label: "No organisation receiving public funding should be allowed to discriminate — rights must be universal.", x: -0.8, y: 0.4 },
+    { label: "Religious institutions should have broad autonomy to operate according to their beliefs, including in employment.", x: 0.8, y: 0.3 },
+    { label: "Narrow exemptions may be reasonable for core religious roles, but not for general staff like teachers or admin workers.", x: -0.2, y: 0.2 },
+    { label: "People should be free to choose which organisations they work for — the market, not law, should resolve these tensions.", x: 0.4, y: -0.6 },
+  ]
+},
+{
+  topic: "Social",
+  text: "Drug-related deaths in Australia remain high despite decades of prohibition. Portugal decriminalised personal drug use in 2001 and saw overdose deaths and HIV infections fall dramatically. Should Australia try a similar approach?",
+  options: [
+    { label: "Yes — treating drug use as a health issue rather than a crime clearly saves lives, as Portugal proved.", x: -0.7, y: -0.5 },
+    { label: "No — decriminalisation sends the wrong message and would increase drug use, especially among young people.", x: 0.7, y: 0.5 },
+    { label: "Decriminalise personal possession, but keep drug trafficking as a serious criminal offence.", x: -0.3, y: -0.2 },
+    { label: "Expand treatment and harm reduction programs without changing criminal laws — address demand, not just supply.", x: -0.1, y: 0.3 },
+  ]
+},
 
-    // --- EDUCATION (3 questions) ---
-    {
-      topic: "Education",
-      text: "The Gonski Review found that Australian school funding is inequitable, with socioeconomic status the strongest predictor of educational outcomes. Should the Schooling Resource Standard (SRS) be achieved for all schools through progressive redistribution from over-funded systems?",
-      options: [
-        { label: "Yes — equity of educational opportunity requires funding students proportionally to their need", x: -0.7, y: 0.7 },
-        { label: "No — redistributing from schools creates political backlash and funding instability", x: 0.5, y: -0.2 },
-        { label: "Yes — but weight funding even more heavily toward students with disadvantage", x: -0.8, y: 0.6 },
-        { label: "Increase total education spending to meet the SRS without redistributing from any sector", x: -0.3, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Education",
-      text: "Paulo Freire's critical pedagogy critiques 'banking education' — where students are passive recipients of knowledge — and argues for dialogical learning that fosters critical consciousness. Should Australian curricula be restructured around Freirean principles?",
-      options: [
-        { label: "Yes — education should empower students to question structures of power, not just absorb content", x: -0.7, y: 0.1 },
-        { label: "No — a knowledge-rich curriculum (E.D. Hirsch) better equips students for life and reduces inequality", x: 0.5, y: 0.3 },
-        { label: "Blend critical inquiry with a robust knowledge base — both Freire and Hirsch offer valuable insights", x: -0.1, y: 0.3 },
-        { label: "Freirean pedagogy is valuable in social studies but inappropriate for STEM subjects", x: 0.2, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Education",
-      text: "Compulsory voting in federal elections is sometimes defended as a form of civic education in democracy. Should civic education — including practical electoral participation — be made a core compulsory subject in Years 9 and 10?",
-      options: [
-        { label: "Yes — democratic participation skills are as essential as numeracy and literacy", x: -0.4, y: 0.6 },
-        { label: "No — mandating political education risks government-influenced indoctrination", x: 0.5, y: -0.4 },
-        { label: "Yes — but taught in a rigorously pluralistic and non-partisan way", x: -0.2, y: 0.5 },
-        { label: "Extend the existing HASS curriculum; a separate subject is unnecessary duplication", x: 0.1, y: 0.2 },
-      ]
-    },
+// Education (3 questions)
+{
+  topic: "Education",
+  text: "Australia's wealthiest private schools receive millions in government funding while many public schools are under-resourced. The Gonski review found school funding should follow student need, not school type. Should the government redirect more funding to public schools?",
+  options: [
+    { label: "Yes — public schools educate the majority of students and deserve priority funding regardless of politics.", x: -0.7, y: 0.6 },
+    { label: "Parents who choose private schools still pay taxes — their schools deserve fair government support too.", x: 0.6, y: -0.1 },
+    { label: "Funding should follow student need — more to disadvantaged students wherever they are, public or private.", x: -0.2, y: 0.4 },
+    { label: "Introduce more competition between schools — vouchers and choice drive quality better than top-down funding formulas.", x: 0.7, y: -0.5 },
+  ]
+},
+{
+  topic: "Education",
+  text: "University fees in Australia have been rising for decades, pricing some students out of higher education. Should Australia make university tuition free, funded by general taxation?",
+  options: [
+    { label: "Yes — free university would make higher education a right, not a privilege, and benefit the whole economy.", x: -0.8, y: 0.6 },
+    { label: "No — graduates earn significantly more over their lifetimes and should contribute to the cost of their own education.", x: 0.6, y: -0.3 },
+    { label: "Means-tested fee support and expanded HECS-HELP is fairer than free tuition for everyone, including the wealthy.", x: 0.1, y: 0.3 },
+    { label: "Fund more vocational training and trades instead — Australia is oversaturated with degrees and short on skilled workers.", x: 0.4, y: 0.1 },
+  ]
+},
+{
+  topic: "Education",
+  text: "Some argue that the school curriculum has become too focused on social and cultural topics — gender, colonisation, climate — at the expense of literacy, numeracy, and STEM. Others say these topics are essential for students to understand the world they'll live in. Where do you stand?",
+  options: [
+    { label: "Schools should prioritise critical thinking about real-world social issues — these are as important as maths and reading.", x: -0.6, y: 0.4 },
+    { label: "Core academic skills — literacy, numeracy, science — must come first; social commentary doesn't belong in schools.", x: 0.7, y: 0.3 },
+    { label: "Both matter — a rigorous curriculum can include social and cultural content without sacrificing academic standards.", x: -0.1, y: 0.2 },
+    { label: "Parents should have more say in what their children are taught rather than leaving it to government curriculum designers.", x: 0.5, y: -0.4 },
+  ]
+},
 
-    // --- TECHNOLOGY (2 questions) ---
-    {
-      topic: "Technology",
-      text: "Nick Bostrom's 'Superintelligence' thesis argues that advanced AI poses an existential risk to humanity. Alternatively, critics argue AI risk is overstated and distracts from near-term harms. Should Australia's AI governance prioritise long-term existential risk or near-term algorithmic harms?",
-      options: [
-        { label: "Near-term harms — bias, labour displacement, and disinformation are concrete and urgent", x: -0.5, y: 0.5 },
-        { label: "Existential risk — the magnitude of a bad outcome justifies precautionary investment", x: 0.1, y: 0.6 },
-        { label: "Both — existential risk research and near-term harm mitigation are complementary", x: -0.2, y: 0.5 },
-        { label: "Neither should be the primary focus — AI's benefits to healthcare and productivity should guide policy", x: 0.4, y: -0.2 },
-      ]
-    },
-    {
-      topic: "Technology",
-      text: "The concept of the 'right to be forgotten' (RTBF) allows individuals to request deletion of personal data from search engines. Australia has limited RTBF provisions. Should Australia adopt a comprehensive RTBF similar to the GDPR framework?",
-      options: [
-        { label: "Yes — informational privacy is a fundamental right and outdated data causes lasting harm", x: -0.6, y: 0.3 },
-        { label: "No — RTBF undermines public access to accurate information and press freedom", x: 0.5, y: -0.4 },
-        { label: "Adopt a balanced RTBF limited to private individuals, not public figures", x: -0.2, y: 0.2 },
-        { label: "Privacy Act reform is a better mechanism than a specific RTBF provision", x: -0.1, y: 0.3 },
-      ]
-    },
+// Technology (3 questions)
+{
+  topic: "Technology",
+  text: "Artificial intelligence is replacing jobs — from truck drivers to radiologists. Some economists predict AI could displace 30% of current jobs within 20 years. Should the government take action now to manage this disruption?",
+  options: [
+    { label: "Yes — the government must invest heavily in retraining programs and strengthen safety nets before automation hits hard.", x: -0.6, y: 0.6 },
+    { label: "Technological progress creates more jobs than it destroys — the government should stay out of the way and let it happen.", x: 0.7, y: -0.6 },
+    { label: "A modest tax on AI-driven automation, used to fund worker retraining, would share the benefits more fairly.", x: -0.4, y: 0.3 },
+    { label: "Education systems should teach adaptable skills — critical thinking, creativity — not try to predict or slow automation.", x: 0.2, y: -0.2 },
+  ]
+},
+{
+  topic: "Technology",
+  text: "Social media platforms like Facebook and TikTok are driven by algorithms that maximise engagement — which often means amplifying outrage and misinformation. Should the Australian government regulate these algorithms in the public interest?",
+  options: [
+    { label: "Yes — platforms that shape public opinion have a responsibility to the public and must be regulated like other media.", x: -0.6, y: 0.7 },
+    { label: "No — government control over what algorithms show is a step toward censorship and should be rejected.", x: 0.6, y: -0.7 },
+    { label: "Mandate transparency and independent auditing of algorithms without letting government dictate the content itself.", x: -0.2, y: 0.2 },
+    { label: "Digital literacy education is a better long-term solution than trying to regulate fast-moving technology platforms.", x: 0.3, y: -0.3 },
+  ]
+},
+{
+  topic: "Technology",
+  text: "Australia has invested billions in building high-speed broadband through the National Broadband Network (NBN). Should high-quality internet access be treated as essential infrastructure — like roads and electricity — and run by the government?",
+  options: [
+    { label: "Yes — fast, affordable internet is critical infrastructure; private companies will always underserve rural and low-income areas.", x: -0.6, y: 0.7 },
+    { label: "No — privatise the NBN fully; competition between providers delivers better services and lower prices than government ownership.", x: 0.7, y: -0.6 },
+    { label: "Keep it government-owned in rural areas where markets fail, but allow competition in cities where it works.", x: 0.1, y: 0.3 },
+    { label: "The NBN was a costly mistake; focus subsidy on ensuring minimum broadband access, not nationalising the whole network.", x: 0.5, y: -0.2 },
+  ]
+},
 
-    // --- DIGITAL RIGHTS (2 questions) ---
-    {
-      topic: "Digital Rights",
-      text: "Philosopher Shoshana Zuboff describes 'surveillance capitalism' as a new economic logic that commodifies behavioural data without meaningful consent. Should Australia prohibit the commercial sale of personal behavioural data collected by platforms?",
-      options: [
-        { label: "Yes — treating human experience as raw material for profit is exploitative and must be banned", x: -0.7, y: 0.5 },
-        { label: "No — data commerce funds innovation and users implicitly consent through terms of service", x: 0.6, y: -0.5 },
-        { label: "Require meaningful informed consent and give users property rights over their data", x: -0.4, y: 0.2 },
-        { label: "Prohibit sale of data to foreign entities but allow domestic commercial use with consent", x: 0.1, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Digital Rights",
-      text: "Net neutrality requires that internet service providers treat all data equally. Australia has no formal net neutrality law. Should Australia legislate net neutrality protections to prevent ISPs from prioritising certain content?",
-      options: [
-        { label: "Yes — a neutral internet is essential for free expression and market competition", x: -0.6, y: 0.3 },
-        { label: "No — allowing ISPs to offer differentiated services drives infrastructure investment", x: 0.5, y: -0.4 },
-        { label: "Legislate against anti-competitive throttling while allowing genuine premium services", x: -0.1, y: 0.2 },
-        { label: "The ACCC has sufficient competition powers — specific net neutrality law is unnecessary", x: 0.3, y: -0.1 },
-      ]
-    },
+// Digital Rights (3 questions)
+{
+  topic: "Digital Rights",
+  text: "Social media companies make billions of dollars from collecting and selling your personal data. Some argue you should own your own data and be able to see, control, or even sell it yourself. Should Australia give citizens stronger legal rights over their personal data?",
+  options: [
+    { label: "Yes — your data is yours; you should have the right to access, delete, and profit from it just as companies do.", x: -0.7, y: -0.4 },
+    { label: "Data regulation adds compliance costs that stifle innovation — existing privacy laws are enough protection.", x: 0.6, y: -0.5 },
+    { label: "Strengthen privacy laws to require explicit consent and easy opt-out, but stop short of creating a personal data marketplace.", x: -0.4, y: 0.3 },
+    { label: "The solution is more digital literacy so people understand what they're agreeing to, not more government regulation.", x: 0.3, y: -0.4 },
+  ]
+},
+{
+  topic: "Digital Rights",
+  text: "Australia's encryption laws allow police to compel tech companies to provide access to encrypted messages — even private ones on apps like WhatsApp. Supporters say it's vital for catching criminals; critics say it undermines everyone's privacy. Where do you stand?",
+  options: [
+    { label: "Strong encryption protects everyone; giving governments backdoors puts all users at risk from hackers and authoritarian abuse.", x: -0.6, y: -0.7 },
+    { label: "Police need these tools to investigate terrorism and child exploitation — security must come before privacy in serious cases.", x: 0.6, y: 0.7 },
+    { label: "Targeted lawful access with strong judicial oversight is reasonable, but mass backdoors into encryption go too far.", x: 0.1, y: 0.2 },
+    { label: "Tech companies should be transparent about government access requests and resist overreach through public accountability.", x: -0.4, y: -0.3 },
+  ]
+},
+{
+  topic: "Digital Rights",
+  text: "Australia banned children under 16 from using social media in 2024. Supporters say it protects kids from online harm; critics argue it's unenforceable and denies young people agency. Was this the right call?",
+  options: [
+    { label: "Yes — the evidence on social media's harms to teen mental health is strong enough to justify government intervention.", x: 0.1, y: 0.8 },
+    { label: "No — teenagers should develop digital skills, not be banned from platforms that are part of modern social life.", x: -0.5, y: -0.6 },
+    { label: "Better approach: require platforms to design age-appropriate safe experiences rather than banning access outright.", x: -0.3, y: 0.3 },
+    { label: "Parents, not governments, should decide what's appropriate for their own children's online activity.", x: 0.6, y: -0.5 },
+  ]
+},
 
-    // --- HEALTHCARE (2 questions) ---
-    {
-      topic: "Healthcare",
-      text: "Bioethicist Peter Singer's utilitarian framework argues that wealthy nations have strong moral obligations to fund global health interventions — which save lives far more cost-effectively than domestic healthcare spending. Should Australia redirect health funding toward global health priorities?",
-      options: [
-        { label: "Yes — a dollar spent on malaria nets saves far more QALYs than domestic spending", x: -0.6, y: 0.2 },
-        { label: "No — governments have primary obligations to their own citizens, not global populations", x: 0.7, y: 0.1 },
-        { label: "Increase foreign aid for global health while maintaining domestic Medicare commitments", x: -0.4, y: 0.5 },
-        { label: "Singer's framework is correct in theory but politically untenable — focus on domestic reform first", x: 0.0, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "The social determinants of health (Marmot Review) show that income, education, housing, and early childhood experiences drive health outcomes more than healthcare access. Should Australia shift health funding upstream toward social determinants rather than clinical treatment?",
-      options: [
-        { label: "Yes — treating illness is far less cost-effective than addressing its root causes", x: -0.6, y: 0.6 },
-        { label: "No — people in acute need require clinical care; we can't wait for upstream reforms", x: 0.4, y: 0.4 },
-        { label: "Both — increase prevention funding significantly without cutting clinical care", x: -0.3, y: 0.5 },
-        { label: "The social determinants model is correct but implementation requires cross-portfolio reform beyond Health", x: -0.4, y: 0.3 },
-      ]
-    },
+// Healthcare (3 questions)
+{
+  topic: "Healthcare",
+  text: "Medicare gives all Australians access to free or subsidised healthcare. But long public hospital waiting lists have led many to argue for expanded private health options. Should Australia move toward a more market-driven healthcare system?",
+  options: [
+    { label: "No — universal healthcare is a cornerstone of a fair society; we should fix Medicare by funding it better.", x: -0.7, y: 0.7 },
+    { label: "Yes — more private competition would reduce waiting times and improve quality through market incentives.", x: 0.7, y: -0.5 },
+    { label: "A mixed model works — preserve universal access while allowing private options for those who want them.", x: 0.2, y: 0.1 },
+    { label: "Preventive health investment would save far more than reorganising the hospital system — focus on keeping people well.", x: -0.3, y: 0.4 },
+  ]
+},
+{
+  topic: "Healthcare",
+  text: "Mental health problems now account for a massive share of Australia's disease burden, yet mental healthcare is far less funded than physical health. Should Australia treat mental and physical health as completely equal in government funding and insurance coverage?",
+  options: [
+    { label: "Absolutely — mental illness is just as real and debilitating as physical illness; funding disparity is unjust.", x: -0.6, y: 0.6 },
+    { label: "Government should set priorities based on outcomes data — broad parity rules could misallocate resources.", x: 0.4, y: -0.2 },
+    { label: "Expand Medicare to cover more psychology and psychiatry sessions as a first step toward genuine parity.", x: -0.3, y: 0.5 },
+    { label: "Community-based mental health programs and peer support are more cost-effective than medicalising mental wellbeing.", x: -0.4, y: -0.2 },
+  ]
+},
+{
+  topic: "Healthcare",
+  text: "During COVID-19, Australia's vaccine rollout raised questions about mandates. Should the government ever make vaccinations compulsory for contagious diseases, even if some people have philosophical objections?",
+  options: [
+    { label: "Yes — when herd immunity requires high vaccination rates, individual objections cannot put the entire community at risk.", x: -0.3, y: 0.8 },
+    { label: "No — bodily autonomy is a fundamental right; vaccine decisions must ultimately remain with the individual.", x: -0.1, y: -0.8 },
+    { label: "Strong incentives and public education can achieve high vaccination rates without overriding personal choice.", x: 0.2, y: -0.3 },
+    { label: "Mandates may be justified in specific settings — hospitals, aged care — but not as a universal population-wide policy.", x: 0.3, y: 0.3 },
+  ]
+},
 
-    // --- JUSTICE (2 questions) ---
-    {
-      topic: "Justice",
-      text: "Legal philosopher H.L.A. Hart distinguished between primary rules (obligations) and secondary rules (meta-rules about legal systems). Australia's parliamentary sovereignty means parliament can override almost any right. Should Australia adopt a constitutionally entrenched Bill of Rights?",
-      options: [
-        { label: "Yes — fundamental rights should not be subject to parliamentary majorities", x: -0.6, y: 0.1 },
-        { label: "No — parliamentary sovereignty is a strength; courts should not override elected legislatures on rights", x: 0.7, y: 0.4 },
-        { label: "Yes, but a 'dialogue model' (like the UK HRA) that preserves parliamentary override", x: -0.1, y: 0.2 },
-        { label: "Strengthen the role of parliamentary scrutiny committees instead of courts", x: 0.3, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "Restorative justice theory (Howard Zehr) focuses on repairing harm to victims and communities rather than punishing offenders. Recidivism data from restorative programs in Australia is promising. Should restorative justice replace incarceration as the primary response for non-violent offences?",
-      options: [
-        { label: "Yes — incarceration is expensive, criminalising, and less effective at reducing reoffending", x: -0.7, y: -0.4 },
-        { label: "No — punishment serves retributive justice and the deterrence function that victims deserve", x: 0.7, y: 0.6 },
-        { label: "Make restorative justice the default for non-violent offences with incarceration as a last resort", x: -0.4, y: -0.1 },
-        { label: "Offer restorative justice as an option alongside conventional sentencing — it should not be mandatory", x: -0.1, y: 0.2 },
-      ]
-    },
+// Justice (3 questions)
+{
+  topic: "Justice",
+  text: "Australia has one of the highest incarceration rates for Indigenous people in the world. Some argue the criminal justice system is systemically biased; others say the answer is stricter enforcement in high-crime communities. What do you think?",
+  options: [
+    { label: "Address root causes — poverty, trauma, lack of services — rather than criminalising behaviour that stems from disadvantage.", x: -0.7, y: -0.3 },
+    { label: "Stronger policing and sentencing in high-crime areas protects victims, who are often also Indigenous and vulnerable.", x: 0.7, y: 0.5 },
+    { label: "Restorative justice and community-run diversion programs work better than incarceration for non-violent offences.", x: -0.5, y: -0.2 },
+    { label: "Systemic reform of laws that disproportionately criminalise poverty — like fines and public order offences — is the priority.", x: -0.6, y: 0.2 },
+  ]
+},
+{
+  topic: "Justice",
+  text: "Some argue the death penalty should be available for the worst crimes — mass murder, terrorism, child killing. Others say no justice system is infallible enough to take an innocent life. Should Australia consider reintroducing capital punishment?",
+  options: [
+    { label: "Never — the risk of executing an innocent person is too high, and the state should never have the power to kill citizens.", x: -0.5, y: -0.7 },
+    { label: "For the most heinous and proven crimes, the death penalty represents justice for victims and deters future atrocities.", x: 0.7, y: 0.6 },
+    { label: "Life without parole is a sufficient punishment for the worst crimes without the irreversible risk of capital punishment.", x: 0.2, y: 0.3 },
+    { label: "The criminal justice system should focus on rehabilitation and public safety, not vengeance through execution.", x: -0.6, y: -0.3 },
+  ]
+},
+{
+  topic: "Justice",
+  text: "Police in Australia currently have powers to stop and search people in some situations. Civil liberties groups argue this disproportionately targets young, non-white, or low-income people. How should the law balance public safety and individual rights?",
+  options: [
+    { label: "Stop and search powers should be significantly curtailed — the evidence shows they do more harm than good for communities.", x: -0.6, y: -0.6 },
+    { label: "Police need these tools to prevent crime before it happens; effective law enforcement requires proactive powers.", x: 0.6, y: 0.6 },
+    { label: "Require reasonable suspicion, mandatory recording of all searches, and independent review to prevent abuse.", x: -0.2, y: 0.2 },
+    { label: "Community policing and trust-building are more effective at reducing crime than expanded search powers.", x: -0.4, y: -0.1 },
+  ]
+},
 
-    // --- IMMIGRATION (2 questions) ---
-    {
-      topic: "Immigration",
-      text: "Cosmopolitan political theory (Joseph Carens) argues that national borders are morally arbitrary and that a global right to freedom of movement is defensible on liberal grounds. Should Australia's immigration system move toward open borders?",
-      options: [
-        { label: "Yes — birthplace is morally no different from race or gender as a basis for discrimination", x: -0.8, y: -0.5 },
-        { label: "No — nation-states have legitimate interests in controlling population, culture, and security", x: 0.8, y: 0.4 },
-        { label: "Expand freedom of movement within regional agreements (e.g., Pacific, ASEAN) as a first step", x: -0.4, y: -0.1 },
-        { label: "Carens' argument is philosophically interesting but practically incompatible with welfare states", x: 0.2, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Immigration",
-      text: "Australia's offshore processing regime for asylum seekers has been defended on deterrence grounds but condemned by international law scholars as a violation of the Refugee Convention. Is offshore processing justifiable?",
-      options: [
-        { label: "No — it violates non-refoulement, is cruel, and the deterrence evidence is weak", x: -0.8, y: -0.3 },
-        { label: "Yes — deterring dangerous boat journeys saves lives and protects the integrity of the system", x: 0.7, y: 0.5 },
-        { label: "It may be effective but must be accompanied by far greater regional processing capacity", x: 0.2, y: 0.3 },
-        { label: "The Refugee Convention itself needs updating for the modern context of climate displacement", x: 0.0, y: 0.1 },
-      ]
-    },
+// Immigration (2 questions)
+{
+  topic: "Immigration",
+  text: "Australia's population growth is driven largely by immigration. Some argue high immigration fills labour shortages and enriches culture; others say it drives up housing costs and strains services. What level of immigration is right for Australia?",
+  options: [
+    { label: "High immigration benefits Australia economically and culturally — open, multicultural societies are more dynamic and innovative.", x: -0.6, y: -0.2 },
+    { label: "Significantly reduce immigration to ease pressure on housing, wages, and public services until infrastructure catches up.", x: 0.7, y: 0.3 },
+    { label: "Maintain current levels but overhaul the visa system to target skills gaps and regional needs more effectively.", x: 0.2, y: 0.1 },
+    { label: "Link immigration intake to demonstrated infrastructure capacity — increase or reduce it based on real data, not politics.", x: 0.3, y: 0.3 },
+  ]
+},
+{
+  topic: "Immigration",
+  text: "People who flee war or persecution and arrive in Australia without prior authorisation — sometimes by boat — are currently held in offshore detention. Is this policy justifiable, or does it violate the rights of people seeking protection?",
+  options: [
+    { label: "Offshore detention is cruel and illegal under international law — people seeking asylum deserve to be processed humanely on Australian soil.", x: -0.8, y: -0.4 },
+    { label: "Offshore processing is an unfortunate but necessary deterrent — without it, dangerous people-smuggling operations surge.", x: 0.7, y: 0.5 },
+    { label: "Fast, fair on-shore processing with community detention — rather than offshore camps — is both humane and workable.", x: -0.5, y: 0.1 },
+    { label: "Australia should work with regional neighbours to create a coordinated asylum system rather than acting unilaterally.", x: -0.2, y: 0.3 },
+  ]
+},
 
-    // --- CULTURE (2 questions) ---
-    {
-      topic: "Culture",
-      text: "Benedict Anderson's 'Imagined Communities' argues that nations are social constructs held together by shared narratives. If national identity is constructed, can and should Australia deliberately reconstruct its national narrative to be more inclusive of Indigenous history and multicultural identity?",
-      options: [
-        { label: "Yes — national narratives should evolve and be contested; truth-telling is essential", x: -0.7, y: 0.2 },
-        { label: "No — destabilising a unifying national narrative carries serious social cohesion risks", x: 0.6, y: 0.3 },
-        { label: "Yes — through a truth-telling process and revised public history, not government decree", x: -0.5, y: 0.0 },
-        { label: "Anderson's framework shows national identity is always in flux — it doesn't require deliberate redesign", x: -0.1, y: -0.1 },
-      ]
-    },
-    {
-      topic: "Culture",
-      text: "Mill's 'harm principle' argues that state intervention is only justified to prevent harm to others. Applied to cultural expression, should the government restrict forms of expression — such as certain music, media, or public art — that some communities find deeply offensive?",
-      options: [
-        { label: "No — offence is not harm in Mill's sense; free expression must prevail", x: -0.2, y: -0.7 },
-        { label: "Yes — cultural vilification causes measurable harm to marginalised communities", x: -0.5, y: 0.5 },
-        { label: "Only where expression directly incites violence — not mere offence", x: -0.1, y: 0.2 },
-        { label: "The state should set minimum standards but defer to community norms where possible", x: 0.3, y: 0.3 },
-      ]
-    },
+// Culture (2 questions)
+{
+  topic: "Culture",
+  text: "Australia Day is celebrated on January 26 — the date of the first British landing in 1788. For many Aboriginal Australians, it marks the beginning of dispossession and is known as Invasion Day. Should Australia change the date?",
+  options: [
+    { label: "Yes — a national day should unite all Australians; celebrating on a date that causes pain to First Nations people is divisive.", x: -0.7, y: 0.2 },
+    { label: "No — the date is part of Australia's history; changing it erases the past rather than honestly grappling with it.", x: 0.7, y: 0.3 },
+    { label: "Change the date and use it as an opportunity to tell the full story of Australia, including its colonial history.", x: -0.5, y: 0.1 },
+    { label: "Australians should be free to commemorate the date however they choose — this should be a community decision, not a government one.", x: 0.3, y: -0.5 },
+  ]
+},
+{
+  topic: "Culture",
+  text: "Australia funds public arts and culture through bodies like the ABC and the Australia Council for the Arts. Some argue this is essential to preserve Australian culture and voices; others say culture should survive on its own commercial merits. Should the government fund the arts?",
+  options: [
+    { label: "Yes — commercial markets undervalue art, literature, and public broadcasting; government funding serves the public interest.", x: -0.6, y: 0.6 },
+    { label: "No — arts funding is an unnecessary subsidy; if audiences value it, they'll pay for it without taxpayer support.", x: 0.7, y: -0.5 },
+    { label: "Fund public broadcasting and art that markets won't support — like regional journalism and Indigenous storytelling — but not commercial artists.", x: -0.2, y: 0.4 },
+    { label: "Tax incentives for private arts patronage are better than direct government grants, which can impose political influence on culture.", x: 0.3, y: -0.2 },
+  ]
+},
 
-    // --- WORK (2 questions) ---
-    {
-      topic: "Work",
-      text: "Automation economists (Daron Acemoglu, Pascual Restrepo) find that automation in manufacturing has reduced labour demand without proportional new job creation. Should Australia tax capital-replacing automation to fund worker transition and education?",
-      options: [
-        { label: "Yes — automation displaces workers and the gains accrue to capital owners who should bear adjustment costs", x: -0.7, y: 0.6 },
-        { label: "No — taxing automation would slow adoption of productivity-enhancing technology", x: 0.7, y: -0.5 },
-        { label: "Tax automation revenue streams (profits) rather than the technology itself", x: -0.3, y: 0.4 },
-        { label: "Invest in education and retraining through general revenue rather than a specific automation tax", x: -0.1, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Work",
-      text: "The four-day work week has been trialled in the UK, Iceland, and Japan with largely positive results for productivity and wellbeing. Should the Australian government legislate a 32-hour standard working week?",
-      options: [
-        { label: "Yes — the standard 40-hour week was an industrial era construct and evidence supports reduction", x: -0.7, y: 0.5 },
-        { label: "No — legislating working hours ignores sectoral variation and reduces business flexibility", x: 0.6, y: -0.5 },
-        { label: "Enable it through enterprise bargaining and incentives rather than legislation", x: 0.1, y: -0.1 },
-        { label: "Trial it in the public sector first and evaluate results before considering legislation", x: -0.1, y: 0.3 },
-      ]
-    },
+// Work (2 questions)
+{
+  topic: "Work",
+  text: "Gig economy workers — like Uber drivers and Deliveroo riders — are classified as independent contractors rather than employees, which means they get no sick pay, superannuation, or unfair dismissal protection. Should Australia extend workers' rights to gig workers?",
+  options: [
+    { label: "Yes — gig workers deserve the same basic rights as employees; the contractor label is often just a way to avoid paying entitlements.", x: -0.7, y: 0.5 },
+    { label: "No — gig work offers genuine flexibility that employees don't have; mandating entitlements will destroy these flexible work options.", x: 0.7, y: -0.5 },
+    { label: "Create a new legal category for platform workers — with some protections but not all the obligations of full employment.", x: 0.1, y: 0.1 },
+    { label: "Let workers, platforms, and industry bodies negotiate fair conditions rather than having government impose a single solution.", x: 0.4, y: -0.3 },
+  ]
+},
+{
+  topic: "Work",
+  text: "A four-day work week pilot in the UK found that most workers maintained productivity while reporting better mental health and work-life balance. Should Australian businesses be encouraged — or required — to adopt a four-day week?",
+  options: [
+    { label: "A shorter work week should become standard — productivity gains make it viable and workers deserve more time to live their lives.", x: -0.6, y: 0.3 },
+    { label: "Governments shouldn't mandate working hours — businesses and employees should negotiate what works for them.", x: 0.6, y: -0.6 },
+    { label: "Voluntary industry pilots with government support make sense; mandating it nationally would hurt sectors where it doesn't work.", x: 0.2, y: -0.1 },
+    { label: "Flexible work hours and remote work options matter more than a uniform four-day rule — give workers choices, not rules.", x: 0.1, y: -0.4 },
+  ]
+},
 
-    // --- HOUSING (1 question) ---
-    {
-      topic: "Housing",
-      text: "Land value tax (LVT), advocated by economists from Henry George to Joseph Stiglitz, taxes the unimproved value of land rather than buildings or income, potentially reducing speculative land holding and improving housing affordability. Should Australia replace stamp duty and council rates with a broad-based LVT?",
-      options: [
-        { label: "Yes — LVT is arguably the most efficient and equitable tax available to government", x: -0.6, y: 0.5 },
-        { label: "No — it would impose significant burdens on asset-rich, income-poor homeowners (especially the elderly)", x: 0.5, y: -0.2 },
-        { label: "Transition to LVT gradually with revenue-neutral swaps — the economics are sound", x: -0.3, y: 0.3 },
-        { label: "Implement at state level (as ACT has begun) before considering federal adoption", x: -0.1, y: 0.2 },
-      ]
-    },
+// Work — extra question
+{
+  topic: "Work",
+  text: "Australian workers are legally entitled to ten days of paid sick leave per year. Some countries go much further, while many gig and casual workers in Australia get none at all. Should the government guarantee paid sick leave for every worker, regardless of their employment type?",
+  options: [
+    { label: "Yes — no worker should have to choose between paying rent and recovering from illness; sick leave is a basic right.", x: -0.7, y: 0.6 },
+    { label: "Mandating sick leave for all workers, including casuals, would push up costs and reduce total employment opportunities.", x: 0.6, y: -0.5 },
+    { label: "Extend sick leave to casuals proportionally based on hours worked — a fair middle ground that improves security.", x: -0.3, y: 0.3 },
+    { label: "Higher casual pay rates already compensate for the lack of leave entitlements — the current trade-off is reasonable.", x: 0.5, y: -0.3 },
+  ]
+},
 
-    // --- additional academic questions ---
-    {
-      topic: "Technology",
-      text: "Langdon Winner's classic essay 'Do Artifacts Have Politics?' argues that technological design embeds political values — his example being highway bridges designed to keep buses (and thus lower-income people) out of certain suburbs. Should Australian technology policy require algorithmic impact assessments that evaluate the distributional effects of publicly deployed AI systems?",
-      options: [
-        { label: "Yes — distributional harms from algorithmic systems are real and require systematic evaluation before deployment", x: -0.6, y: 0.6 },
-        { label: "No — impact assessments create bureaucratic barriers to beneficial technology adoption", x: 0.5, y: -0.4 },
-        { label: "Yes, but only for government-deployed AI; private sector systems should face market accountability", x: 0.0, y: 0.4 },
-        { label: "Winner's framework overstates the determinism of technology; governance should focus on uses, not artifacts", x: 0.3, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Digital Rights",
-      text: "The concept of 'information asymmetry' (George Akerlof's market for lemons) applies to data privacy: individuals cannot evaluate the risks of disclosing data because those risks are opaque. Some scholars propose reversing the burden — companies must demonstrate that data collection is necessary rather than individuals demonstrating harm. Should Australia's Privacy Act reform adopt a 'data minimisation' principle requiring companies to justify all data collection?",
-      options: [
-        { label: "Yes — a data minimisation default reverses the current asymmetry in favour of individuals", x: -0.6, y: 0.4 },
-        { label: "No — data minimisation constrains valuable uses of data in healthcare, research, and services", x: 0.5, y: -0.4 },
-        { label: "Adopt minimisation as a principle but allow opt-in expanded collection with informed consent", x: -0.2, y: 0.2 },
-        { label: "The problem is enforcement, not principles — strengthen the OAIC's investigative and penalty powers first", x: -0.1, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "Bioethics distinguishes between negative rights (freedom from interference) and positive rights (entitlements to goods and services). Medicare enshrines a positive right to healthcare access, but many Australians cannot access timely care despite nominal coverage. Using Sen's capability framework, is inadequate access to mental health care a violation of a fundamental capability that the Australian state is obligated to remedy?",
-      options: [
-        { label: "Yes — mental health is a core capability and inadequate access constitutes a state failure of positive obligation", x: -0.7, y: 0.6 },
-        { label: "No — positive rights claims in healthcare must be balanced against fiscal constraints and cannot be absolute", x: 0.4, y: 0.0 },
-        { label: "Yes, the state has an obligation but it can be satisfied through mixed public and community-led models", x: -0.3, y: 0.4 },
-        { label: "The capability framework is philosophically compelling but practically requires prioritisation; not all capabilities can be guaranteed simultaneously", x: 0.1, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "The concept of 'procedural justice' (Tom Tyler) finds that people's compliance with law and acceptance of legal outcomes depends more on whether they perceive the process as fair than on whether they agree with the outcome. Australian research shows trust in police is significantly lower among Aboriginal and Torres Strait Islander communities. Should reform of policing focus on procedural justice reforms — such as mandatory body camera footage, civilian oversight, and community policing models — rather than increasing police powers?",
-      options: [
-        { label: "Yes — rebuilding legitimacy through procedural justice is more effective than enforcement for long-term compliance", x: -0.6, y: 0.0 },
-        { label: "No — community safety requires adequate police powers; procedural reforms alone cannot address crime rates", x: 0.6, y: 0.5 },
-        { label: "Both are necessary — procedural justice reforms and adequate resources for community policing are complementary", x: -0.2, y: 0.4 },
-        { label: "The problem is systemic racism in the justice system, not police procedure; structural reform is the priority", x: -0.7, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Immigration",
-      text: "The literature on 'integration' versus 'assimilation' of immigrants distinguishes between models that require newcomers to adopt the host culture (assimilation) and models that expect mutual adaptation (integration). Australia's multiculturalism policy nominally adopts the integration model. Do empirical studies on second-generation outcomes support the integration or assimilation model as producing better social cohesion and economic outcomes?",
-      options: [
-        { label: "Integration — evidence shows second-generation migrants have better outcomes when cultural maintenance is supported alongside civic participation", x: -0.6, y: 0.2 },
-        { label: "Assimilation — stronger common cultural frameworks reduce group-based inequality and improve social cohesion", x: 0.6, y: 0.3 },
-        { label: "The distinction is empirically contested; context-specific factors (class, race, religion) dominate outcomes", x: 0.0, y: 0.0 },
-        { label: "The research supports pluralistic integration but requires genuine anti-discrimination enforcement to succeed", x: -0.4, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Work",
-      text: "The 'gig economy' challenges traditional definitions of employment. The High Court of Australia's WorkPac v Rossato judgment and subsequent legislative reform have clarified casual employment but left structural ambiguities. The ILO Decent Work agenda argues that labour protections must extend to all working people regardless of employment classification. Should Australia legislate a single employment status test across all contracts to end the proliferation of precarious work classifications?",
-      options: [
-        { label: "Yes — the ILO framework is correct; a single-status test would end legal games played with employment classifications", x: -0.7, y: 0.6 },
-        { label: "No — labour market flexibility is an economic asset; multiple classifications serve legitimate purposes", x: 0.6, y: -0.5 },
-        { label: "Adopt a single economic reality test but allow varied entitlements based on hours worked per week", x: -0.2, y: 0.3 },
-        { label: "The courts have made progress through common law; legislative certainty is desirable but the ILO model may be over-prescriptive", x: 0.2, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Housing",
-      text: "Planning economist Alain Bertaud argues in 'Order Without Design' that cities are fundamentally labour markets, and restrictive zoning that limits housing supply near employment centres reduces workers' access to jobs and lowers overall productivity. Sydney and Melbourne's planning systems are among the most restrictive in the OECD. Should state governments abolish minimum lot sizes and floor-area ratio limits within 3km of the CBD and major employment centres?",
-      options: [
-        { label: "Yes — Bertaud's analysis is compelling; high-density liberalisation near employment hubs would significantly improve both affordability and productivity", x: -0.5, y: 0.0 },
-        { label: "No — blanket deregulation ignores infrastructure constraints and community character; context-specific upzoning is better", x: 0.3, y: 0.1 },
-        { label: "Yes, but require concurrent infrastructure investment — density without transit and services creates livability problems", x: -0.3, y: 0.4 },
-        { label: "The supply-side emphasis is overstated; demand-side speculation is the primary affordability driver and must be addressed first", x: -0.5, y: 0.4 },
-      ]
-    },
-
+// Housing (2 questions)
+{
+  topic: "Housing",
+  text: "Australian house prices have doubled in the past decade, making homeownership out of reach for many young people. Some blame tax policies like negative gearing and the capital gains tax discount that benefit property investors. Should these be reformed?",
+  options: [
+    { label: "Yes — tax concessions for investors inflate prices and tilt the market against first-home buyers; reform them now.", x: -0.7, y: 0.4 },
+    { label: "No — negative gearing increases the supply of rental properties; removing it would push up rents and hurt tenants.", x: 0.7, y: -0.2 },
+    { label: "Phase out negative gearing for existing properties but allow it for new builds — boosting supply without inflating existing prices.", x: -0.3, y: 0.3 },
+    { label: "Zoning reform and faster planning approvals will do more to fix affordability than tinkering with tax policy.", x: 0.4, y: -0.3 },
+  ]
+},
+{
+  topic: "Housing",
+  text: "Homelessness in Australia affects over 100,000 people on any given night. Finland adopted a 'Housing First' model — giving people permanent homes without preconditions — and dramatically reduced homelessness. Should Australia adopt this approach?",
+  options: [
+    { label: "Yes — having a stable home is the foundation for addressing every other issue; Housing First evidence is compelling.", x: -0.7, y: 0.6 },
+    { label: "People need to address addiction and mental health issues first; giving homes without conditions rewards the wrong behaviour.", x: 0.5, y: 0.4 },
+    { label: "Housing First should be one tool among many — combined with mental health and substance support services.", x: -0.2, y: 0.4 },
+    { label: "Increase funding for community organisations already doing this work rather than creating another large government program.", x: 0.1, y: -0.1 },
+  ]
+},
   ],
 
   // ============================================================
-  // ECONOMIST / POLITICIAN MODE — 35 complex policy scenarios
+  // ECONOMIST MODE — 35 extremely difficult questions with dense data,
+  // Laffer Curve references, hypotheticals, and technical policy analysis
   // ============================================================
   economist: [
 
-    // --- ECONOMY (5 questions) ---
-    {
-      topic: "Economy",
-      text: "Australia's federal budget is structurally dependent on iron ore royalties and LNG revenues, which are projected to decline as global decarbonisation accelerates. The Henry Tax Review (2010) recommended a Resource Super Profits Tax (RSPT) on above-normal returns, but the Rudd government's watered-down MRRT raised far less than projected. Given this fiscal vulnerability, should Australia implement a genuine RSPT modelled on Norway's petroleum fund model, with revenues quarantined for a sovereign wealth fund?",
-      options: [
-        { label: "Yes — Norway's model demonstrates that strong resource taxation and long-term sovereign wealth are compatible with a thriving resource sector", x: -0.7, y: 0.6 },
-        { label: "No — Australia's sovereign risk reputation suffered severely after the RSPT debacle; any resurrection would deter foreign resource investment", x: 0.7, y: -0.4 },
-        { label: "Yes, but design it as a pure rent tax (above risk-free return) to minimise investment distortions", x: -0.4, y: 0.4 },
-        { label: "Focus on diversifying the tax base — financial transaction tax, land value tax — rather than doubling down on resource dependency", x: -0.5, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Australia's current account position has improved due to commodity price windfalls, but the net foreign liability position remains large. At the same time, household debt-to-income ratios are among the highest in the OECD, primarily driven by mortgage debt. If the RBA is forced to hold rates higher for longer to manage the inflation-employment trade-off, a significant share of mortgagors will face acute financial stress. Should the government establish a sovereign mortgage backstop facility — similar to the UK's mortgage guarantee scheme — to prevent a housing-led financial crisis?",
-      options: [
-        { label: "Yes — the systemic risk to the banking system and broader economy justifies a backstop, as Australia's banks are highly exposed to residential mortgage debt", x: -0.5, y: 0.7 },
-        { label: "No — moral hazard concerns are significant; a backstop encourages excessive borrowing and socialises private risk", x: 0.7, y: -0.5 },
-        { label: "Establish a last-resort facility but activate it only if foreclosure rates breach a pre-set threshold", x: 0.0, y: 0.4 },
-        { label: "Address the root cause — reduce macroprudential limits on high LVR lending rather than backstopping its consequences", x: 0.3, y: 0.0 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Australia's Competition and Consumer Commission has consistently found that the major supermarket duopoly (Coles and Woolworths) exercises significant market power over suppliers and maintains elevated profit margins relative to international peers. Inquiry options range from mandatory unit pricing reform and supply chain codes to structural divestiture. What is the appropriate regulatory response to supermarket market power in Australia?",
-      options: [
-        { label: "Structural divestiture — breaking up Coles and Woolworths is the only durable solution to oligopoly power", x: -0.7, y: 0.7 },
-        { label: "Strengthen the Food and Grocery Code of Conduct with binding arbitration and penalties, but avoid structural remedies", x: 0.0, y: 0.5 },
-        { label: "Reduce barriers to entry — reform planning laws to allow more supermarket competition rather than regulating existing players", x: 0.5, y: -0.4 },
-        { label: "The duopoly provides supply chain efficiency; price regulation is more effective than structural intervention", x: 0.4, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "Australia's trade exposure to China represents approximately 30% of exports, creating significant geopolitical vulnerability as demonstrated by the 2020 trade coercions (barley, wine, coal). The government's Future Made in Australia program attempts to onshore critical supply chains through subsidies. However, mainstream trade economists warn that industrial policy in Australia's small open economy is likely to be captured by incumbents and generate welfare losses. Should Australia pursue active industrial policy to reduce trade concentration risk?",
-      options: [
-        { label: "Yes — geopolitical risk and critical minerals strategy justify selective industrial policy despite efficiency costs", x: -0.5, y: 0.7 },
-        { label: "No — Australia's comparative advantage lies in resources and services; industrial policy misallocates capital", x: 0.7, y: -0.4 },
-        { label: "Yes, but limit it to genuine national security sectors — critical minerals processing, defence supply chains, pharmaceuticals", x: 0.1, y: 0.4 },
-        { label: "Pursue trade diversification through bilateral agreements rather than costly domestic production subsidies", x: 0.4, y: -0.1 },
-      ]
-    },
-    {
-      topic: "Economy",
-      text: "The Productivity Commission has documented a long-term decline in Australia's multifactor productivity growth. Economists debate whether this reflects inadequate competition, underinvestment in R&D relative to GDP (Australia spends 1.7% vs OECD average of 2.7%), insufficient university-industry links, or structural factors. What is the highest-priority reform to lift Australia's productivity trajectory?",
-      options: [
-        { label: "Substantially increase public R&D investment and reform the R&D tax incentive to focus on breakthrough research", x: -0.5, y: 0.5 },
-        { label: "Deregulate product and labour markets — regulatory drag is the primary constraint on business dynamism", x: 0.7, y: -0.6 },
-        { label: "Reform competition policy to reduce concentration in banking, supermarkets, and telecommunications", x: -0.3, y: 0.4 },
-        { label: "Increase skilled migration in shortage sectors — human capital is the binding constraint", x: 0.2, y: 0.1 },
-      ]
-    },
+  {
+    topic: "Economy",
+    text: "Australia's top marginal personal income tax rate of 47% (including 2% Medicare levy) applies above $190,000. The Henry Tax Review (2010) recommended reducing this to 40% while broadening the base. Treasury modelling using a dynamic scoring framework estimates that a rate increase to 55% would raise gross revenue by $18bn annually, but behavioural responses — including increased avoidance via trusts, reduced labour supply at the margin, and capital flight — could erode net revenue by 30–40%. Critics invoking the Laffer Curve argue Australia is near or past the revenue-maximising rate, while proponents cite comparable rates in Denmark (55.9%) and France (55%). Given this evidence, how should Australia approach the top marginal rate?",
+    options: [
+      {
+        label: "Reduce the top rate to 40% and broaden the base by closing superannuation concessions and trust avoidance vehicles, as the Henry Review recommended, to maximise long-run efficiency and voluntary compliance.",
+        x: 0.3,
+        y: -0.5
+      },
+      {
+        label: "Raise the top rate to 55% and invest in ATO enforcement capacity to counter avoidance, accepting some behavioural leakage in exchange for substantially higher revenue for public services and redistribution.",
+        x: -0.8,
+        y: 0.7
+      },
+      {
+        label: "Hold the rate at 47% but eliminate the 50% CGT discount and tax trusts at individual marginal rates, closing structural loopholes that allow high earners to avoid the headline rate without changing it.",
+        x: -0.4,
+        y: 0.4
+      },
+      {
+        label: "Index all tax brackets to wage growth and reduce the rate to 45%, prioritising bracket creep correction over rate changes — this is a supply-side measure that pays for itself via higher labour force participation.",
+        x: 0.6,
+        y: -0.4
+      }
+    ]
+  },
 
-    // --- ENVIRONMENT (3 questions) ---
-    {
-      topic: "Environment",
-      text: "Australia's Safeguard Mechanism requires large industrial facilities to reduce their baseline emissions, with a declining trajectory to 2030. However, new LNG projects are being approved with baselines that effectively allow them to increase absolute emissions in the near term. Simultaneously, Australia is committed to 43% emissions reduction by 2030 under its updated NDC. Is the current policy architecture — Safeguard Mechanism plus the Capacity Investment Scheme for renewables — sufficient to meet the 2030 target without further carbon pricing?",
-      options: [
-        { label: "No — a comprehensive carbon price signal (ETS or carbon tax) is necessary to drive economy-wide decarbonisation at least cost", x: -0.6, y: 0.4 },
-        { label: "The Safeguard Mechanism combined with the CIS is adequate; adding a carbon price risks political backlash that reverses progress", x: 0.3, y: 0.3 },
-        { label: "The 2030 target itself is insufficient — a 75% reduction by 2035 is necessary to align with 1.5°C pathways", x: -0.8, y: 0.5 },
-        { label: "Sector-specific regulation (vehicle standards, building codes, industrial efficiency) is more effective than a broad carbon price", x: -0.2, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "The proposed Barossa gas field in the Timor Sea was granted approval despite CSIRO modelling suggesting its embodied emissions would be significant. The project faces legal challenges from Tiwi Islander communities invoking cultural harm provisions under environmental law. This case illustrates tensions between First Nations rights, climate commitments, and energy security. How should Australia resolve these competing obligations?",
-      options: [
-        { label: "Reject the project — First Nations consent and climate obligations are non-negotiable", x: -0.8, y: 0.5 },
-        { label: "Approve it with an enhanced emissions offset package and binding First Nations benefit agreements", x: 0.4, y: 0.2 },
-        { label: "Establish an independent tribunal with First Nations representation to adjudicate such conflicts", x: -0.3, y: 0.5 },
-        { label: "Energy security requires approving Barossa; First Nations concerns should be addressed through compensation", x: 0.6, y: 0.0 },
-      ]
-    },
-    {
-      topic: "Environment",
-      text: "Australia has committed to net-zero by 2050. Achieving net-zero almost certainly requires either carbon capture and storage (CCS) or land-based sequestration at massive scale. CCS has repeatedly underperformed globally (Gorgon CCS captured 30% of projected CO₂). Simultaneously, the CSIRO's GenCost analysis consistently finds new-build solar and wind are cheaper than any new thermal generation, including gas. Should public investment be concentrated in renewable infrastructure and storage, or should Australia hedge with CCS investment as an insurance policy?",
-      options: [
-        { label: "Concentrate on renewables — CCS has a poor track record, costs are falling rapidly, and the technology risk is lower", x: -0.6, y: 0.4 },
-        { label: "Hedge with CCS — path dependence in industrial emissions (steel, cement, aluminium) makes CCS necessary even in an electrified economy", x: 0.3, y: 0.2 },
-        { label: "Fund both, but maintain strict performance benchmarks — no blank cheques for underperforming CCS projects", x: 0.0, y: 0.4 },
-        { label: "Public investment should focus on the transmission grid — generation investment should be left to the market", x: 0.4, y: -0.3 },
-      ]
-    },
+  {
+    topic: "Economy",
+    text: "The RBA's Non-Accelerating Inflation Rate of Unemployment (NAIRU) estimate has shifted from 5.0% in 2019 to approximately 4.25% in 2024, reflecting structural labour market changes including awards modernisation and reduced union density. The Phillips Curve relationship has flattened significantly: the 2022–23 inflation episode was driven primarily by supply shocks and energy pass-through rather than a tight labour market per se, yet the RBA tightened by 425 basis points regardless. Critics, including former RBA Governor Bernie Fraser, argue the Bank's unemployment-inflation trade-off modelling remains mechanistic and causes unnecessary job losses. The RBA Review (2023) gave the Bank an explicit dual mandate including full employment. How should Australia calibrate its tolerance for unemployment in monetary policy settings?",
+    options: [
+      {
+        label: "Accept a NAIRU closer to 3.5% as the operational target, consistent with pre-pandemic lows in the US; the RBA should hold rates longer before tightening, prioritising job creation given the flattened Phillips Curve.",
+        x: -0.6,
+        y: -0.3
+      },
+      {
+        label: "Retain the RBA's current 4–4.5% NAIRU estimate with symmetric inflation targeting; the Bank's operational independence must not be compromised by political pressure to run the labour market hotter than evidence supports.",
+        x: 0.5,
+        y: 0.2
+      },
+      {
+        label: "Shift monetary policy focus to nominal GDP level targeting, which implicitly tolerates lower unemployment without committing to a specific NAIRU figure, and subjects the RBA to greater parliamentary accountability.",
+        x: -0.3,
+        y: 0.5
+      },
+      {
+        label: "Transfer primary employment responsibility to fiscal policy; the RBA should target 2–3% inflation exclusively, while the government uses a federal Job Guarantee as the buffer stock to maintain price stability at full employment.",
+        x: -0.8,
+        y: 0.8
+      }
+    ]
+  },
 
-    // --- SOCIAL (3 questions) ---
-    {
-      topic: "Social",
-      text: "The Productivity Commission's review of the NDIS (2023) found significant administrative failure, cost overruns driven partly by plan inflation and unregistered provider exploitation, and inadequate support for participants with complex needs. The scheme's foundational principles — individual choice, control, and market provision — are in tension with fiscal sustainability and quality assurance. Should Australia reform the NDIS back toward a managed care model with block-funding for providers, or can the individualised funding model be salvaged through better regulation?",
-      options: [
-        { label: "Reform, not retreat — strengthen the agency's regulatory capacity and fraud detection; the individualised model is worth saving", x: -0.5, y: 0.6 },
-        { label: "The market model has structurally failed disabled people; transition back to a managed care approach with provider quality standards", x: -0.3, y: 0.7 },
-        { label: "Retain individual funding for high-complexity participants but use block grants for mainstream disability support services", x: 0.1, y: 0.5 },
-        { label: "The scheme needs a hard spending cap; growth above a fixed percentage of GDP should trigger automatic eligibility tightening", x: 0.6, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "Australia's rate of women's homicide by intimate partners remains persistently high despite two National Plans to Reduce Violence Against Women. The Royal Commission into Family Violence (Victoria) made 227 recommendations. Evidence from Norway and Sweden suggests mandatory perpetrator intervention programs and early identification in schools are more effective than crisis response. Should Australia redirect family violence funding from crisis response toward mandatory perpetrator programs and primary prevention?",
-      options: [
-        { label: "Yes — primary prevention is the only sustainable solution; evidence shows perpetrator programs reduce recidivism significantly", x: -0.6, y: 0.5 },
-        { label: "Crisis services must remain adequately funded — women fleeing violence cannot wait for long-term prevention to work", x: -0.5, y: 0.7 },
-        { label: "Substantially increase total funding so prevention can be expanded without reducing crisis capacity", x: -0.4, y: 0.7 },
-        { label: "Mandatory programs raise civil liberties concerns; voluntary perpetrator programs combined with swift legal consequences are better", x: 0.2, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Social",
-      text: "Australia's social security system retains welfare conditionality — including compulsory mutual obligations for JobSeeker recipients — despite evidence that conditional welfare does not substantially improve employment outcomes and imposes significant compliance costs. New Zealand has moved toward a Te Tiriti-based, wellbeing-focused social security model that reduces conditionality. Should Australia reform JobSeeker to remove mutual obligations and raise the payment to a liveable rate?",
-      options: [
-        { label: "Yes — conditionality is punitive and counterproductive; a liveable unconditional payment respects human dignity", x: -0.8, y: 0.5 },
-        { label: "No — mutual obligations maintain work norms and link public support to social participation", x: 0.7, y: 0.4 },
-        { label: "Raise the rate substantially but retain light-touch conditionality — volunteering, training, or job search with flexibility", x: -0.3, y: 0.5 },
-        { label: "Replace JobSeeker with a Job Guarantee — publicly funded employment of last resort at award wages", x: -0.6, y: 0.7 },
-      ]
-    },
+  {
+    topic: "Economy",
+    text: "Australia's federal gross debt is projected to reach 36% of GDP by 2026-27 — low by OECD standards (Japan 255%, US 122%) but rising from near-zero in 2008. IMF research on fiscal multipliers finds values ranging from 0.4 in open economies with floating exchange rates (consistent with Mundell-Fleming) to 1.8 in liquidity-trap conditions at the zero lower bound. Australia's 2008–09 stimulus package (1.8% of GDP) is frequently cited as having prevented recession, but critics note the Building the Education Revolution generated significant deadweight waste. With infrastructure needs estimated at $120bn over a decade by Infrastructure Australia, and the structural budget deficit projected at 1.2% of GDP, what is the appropriate fiscal posture?",
+    options: [
+      {
+        label: "Run a structural surplus averaging 0.5% of GDP, issuing long-dated bonds only for high-productivity infrastructure with positive NPV; fiscal discipline preserves intergenerational equity and sovereign ratings under Ricardian equivalence conditions.",
+        x: 0.7,
+        y: 0.3
+      },
+      {
+        label: "Expand the structural deficit to 2% of GDP to fund public investment in housing, green infrastructure, and human capital; with the real 10-year bond yield below nominal GDP growth (r < g), debt dynamics are self-stabilising.",
+        x: -0.7,
+        y: 0.6
+      },
+      {
+        label: "Establish an independent National Infrastructure Commission with binding cost-benefit analysis requirements; fund priority projects via hypothecated levies rather than general revenue to avoid deficit blowout and improve project selection.",
+        x: 0.2,
+        y: 0.4
+      },
+      {
+        label: "Privatise non-essential government assets to fund new infrastructure, maintaining fiscal neutrality; government should leverage private capital through availability payments and PPPs rather than expanding the public balance sheet.",
+        x: 0.8,
+        y: -0.5
+      }
+    ]
+  },
 
-    // --- EDUCATION (2 questions) ---
-    {
-      topic: "Education",
-      text: "Australia's vocational education system (TAFE) has been severely weakened by two decades of privatisation, contestable funding models, and VET-FEE HELP scandals. Manufacturing and construction industries report critical skills shortages despite high youth unemployment in some regions. The 2023 TAFE fee-free reform is a partial reversal. Should Australia establish a National TAFE Commission with guaranteed baseline funding independent of contestable market mechanisms?",
-      options: [
-        { label: "Yes — TAFE is public infrastructure and must be funded as such, not subjected to market competition for courses it always provided", x: -0.7, y: 0.7 },
-        { label: "No — quality private providers have emerged under contestable funding and ending competition would reduce responsiveness", x: 0.5, y: -0.3 },
-        { label: "Guarantee TAFE's role in trade and community courses while maintaining competition in upper-level qualifications", x: -0.2, y: 0.4 },
-        { label: "The skills shortage is better addressed through immigration reform than rebuilding a public provider", x: 0.4, y: -0.1 },
-      ]
-    },
-    {
-      topic: "Education",
-      text: "PISA data (2022) show Australian Year 4 students rank among the lowest in the OECD on reading scores, with a significant long-tail of underperforming students from low-SES backgrounds. The evidence base for structured literacy (systematic phonics instruction) is extremely strong. Yet many state curricula still include balanced literacy approaches. Should the federal government condition school funding on adoption of evidence-based structured literacy programs in all primary schools?",
-      options: [
-        { label: "Yes — the reading evidence is settled; withholding funding for states that ignore it is appropriate", x: 0.1, y: 0.7 },
-        { label: "No — curriculum is a state responsibility; federal funding conditions are constitutionally inappropriate", x: 0.6, y: -0.3 },
-        { label: "Yes — fund transition support, professional development, and then condition on implementation", x: -0.1, y: 0.6 },
-        { label: "Incentivise adoption through competitive grants rather than conditions on base funding", x: 0.3, y: 0.2 },
-      ]
-    },
+  {
+    topic: "Economy",
+    text: "The Australia Institute estimates foregone revenue from superannuation tax concessions at $52.5 billion annually (2024–25) — exceeding the cost of the Age Pension at $55bn. Treasury projects that by 2060 the super system will cost more in tax concessions than it saves in pension outlays, contradicting the system's original fiscal rationale. The concessions are structurally regressive: the top quintile receives 38% of benefits. The Henry Tax Review proposed a flat 15% contribution tax with a means-tested rebate for low incomes. Meanwhile, the Grattan Institute has argued for a 30% earnings tax on balances above $3 million. How should Australia reform superannuation tax treatment?",
+    options: [
+      {
+        label: "Tax superannuation contributions at marginal rates with a low-income government co-contribution, eliminate the 15% concessional flat rate that disproportionately benefits high earners, and cap tax-free retirement balances at $2 million.",
+        x: -0.7,
+        y: 0.5
+      },
+      {
+        label: "Maintain the current 15% contributions tax but apply earnings tax progressively above $3 million in retirement phase as legislated; this is a targeted, evidence-based reform that preserves incentive to save while improving equity.",
+        x: -0.2,
+        y: 0.3
+      },
+      {
+        label: "Reduce the superannuation guarantee from 11.5% to 9% and return wage capacity to workers; Treasury modelling overstates concession costs by ignoring the pension offset and individual savings decisions should not be second-guessed by government.",
+        x: 0.7,
+        y: -0.6
+      },
+      {
+        label: "Increase the superannuation guarantee to 15%, funded by a productivity dividend, while standardising the earnings tax at 20% for all balances — this maintains retirement savings incentives while improving fiscal sustainability and national savings.",
+        x: -0.3,
+        y: 0.6
+      }
+    ]
+  },
 
-    // --- TECHNOLOGY (3 questions) ---
-    {
-      topic: "Technology",
-      text: "The AUKUS partnership commits Australia to acquiring nuclear-powered submarines (SSNs) at an estimated cost of $368 billion over several decades. The strategic rationale is deterrence of Chinese naval expansion, but critics argue it entrenches strategic dependency on the US, creates interoperability constraints, and diverts defence spending from near-term capabilities. ASEAN neighbours have expressed concern about the nuclear precedent. Is AUKUS a prudent long-term strategic investment for Australia?",
-      options: [
-        { label: "Yes — SSNs provide genuine long-range deterrence capability and deepen the alliance relationship with the US and UK", x: 0.6, y: 0.5 },
-        { label: "No — the cost is extraordinary, delivery is uncertain, and it inflames regional tensions Australia cannot afford", x: -0.5, y: -0.3 },
-        { label: "Proceed with AUKUS but negotiate conditions for greater Australian sovereign control and domestic industrial build", x: 0.2, y: 0.3 },
-        { label: "Divert AUKUS spending to cyber, space, and autonomous systems — the domains where future conflict will be determined", x: -0.1, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Technology",
-      text: "The Artificial Intelligence Act (EU) introduces a risk-tiered regulatory framework requiring conformity assessments for high-risk AI systems in employment, credit, healthcare, and law enforcement. Australia has no equivalent legislation. Australia's government has committed to voluntary guardrails. Given the pace of AI deployment in healthcare (diagnostic AI), welfare (automated decision making in Centrelink), and law enforcement, should Australia adopt mandatory AI governance legislation modelled on the EU AI Act?",
-      options: [
-        { label: "Yes — voluntary guardrails have consistently failed in self-regulatory regimes; binding law with enforcement is essential", x: -0.6, y: 0.6 },
-        { label: "No — prescriptive regulation will impede AI adoption in areas where Australia has genuine competitive opportunity", x: 0.6, y: -0.5 },
-        { label: "Adopt binding rules only for high-risk government AI applications; allow voluntary standards for commercial AI", x: 0.0, y: 0.4 },
-        { label: "Wait for international frameworks to converge before legislating to avoid regulatory fragmentation", x: 0.3, y: 0.0 },
-      ]
-    },
-    {
-      topic: "Technology",
-      text: "Australia is one of the world's largest suppliers of critical minerals — lithium, cobalt, rare earths — essential for the global clean energy transition. Currently, Australia exports most of these as raw ore. The government's critical minerals strategy proposes value-added processing subsidies to move up the value chain. However, China controls roughly 80% of the rare earth processing capacity globally. Is Australia's critical minerals strategy adequately resourced and designed to achieve strategic processing sovereignty?",
-      options: [
-        { label: "Yes — the strategy is on the right track; increase funding and add binding offtake agreements with allied buyers", x: -0.3, y: 0.5 },
-        { label: "No — Australia's comparative advantage is mining, not processing; processing subsidies will fail against China's scale advantages", x: 0.6, y: -0.3 },
-        { label: "Establish a joint processing venture with the US, UK, Japan, and Korea to pool capital and guarantee demand", x: 0.1, y: 0.4 },
-        { label: "Nationalise at least one processing facility as a strategic anchor — market forces alone are insufficient for sovereign capability", x: -0.6, y: 0.7 },
-      ]
-    },
+  {
+    topic: "Economy",
+    text: "Australia has no sovereign wealth fund. Norway's Government Pension Fund Global, funded by oil revenues, holds USD $1.7 trillion. During Australia's mining boom (2003–2013), commodity export revenues added approximately $350bn in government receipts above trend. The Intergenerational Report (2023) projects a $34bn structural deficit by 2060–61 from demographic ageing. Economist Ross Garnaut has repeatedly called for a sovereign wealth fund capitalised from resources rents, noting that Dutch Disease effects during the mining boom hollowed out Australia's manufacturing and tradeable services sectors by overvaluing the Australian dollar. Should Australia establish a sovereign wealth fund?",
+    options: [
+      {
+        label: "Establish a sovereign wealth fund capitalised from a reformed PRRT and minerals royalty floor price, ring-fencing non-renewable resource rents for intergenerational transfer and insulating the exchange rate from commodity cycle Dutch Disease.",
+        x: -0.5,
+        y: 0.7
+      },
+      {
+        label: "Reject a new sovereign wealth fund; Australia's superannuation pool ($3.9 trillion) already functions as a de facto national savings vehicle, and additional government-managed funds introduce political risk and poor asset allocation relative to diversified private markets.",
+        x: 0.6,
+        y: -0.5
+      },
+      {
+        label: "Create a Future Fund extension specifically for infrastructure and housing, deploying domestic capital into productivity-enhancing assets rather than offshore portfolio investment, with parliamentary oversight of mandate and drawdown rules.",
+        x: -0.2,
+        y: 0.5
+      },
+      {
+        label: "Reform the Petroleum Resource Rent Tax to capture a larger share of LNG windfall profits and place proceeds directly into debt reduction; fiscal discipline now is the most efficient intergenerational transfer given demographic headwinds.",
+        x: 0.4,
+        y: 0.2
+      }
+    ]
+  },
 
-    // --- DIGITAL RIGHTS (2 questions) ---
-    {
-      topic: "Digital Rights",
-      text: "Australia's Online Safety Act 2021 gives the eSafety Commissioner broad powers to require removal of harmful content, including an 'industry codes' framework. However, academics and civil liberties groups argue the Act's definition of 'harmful' is dangerously broad and gives a single regulator excessive power over online speech without adequate judicial oversight. Should the Online Safety Act be reformed to require judicial authorisation for content removal orders?",
-      options: [
-        { label: "Yes — removing online content has the same speech implications as pre-publication censorship and requires judicial oversight", x: -0.6, y: -0.5 },
-        { label: "No — harmful content causes real harm, especially to children; regulators need swift action powers without court delays", x: 0.5, y: 0.7 },
-        { label: "Require judicial oversight for removal orders affecting speech, but retain administrative powers for child sexual abuse material", x: -0.2, y: 0.3 },
-        { label: "The Act is appropriate but needs clearer definitions of harm to reduce regulatory overreach", x: 0.2, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Digital Rights",
-      text: "The Five Eyes intelligence alliance (Australia, US, UK, Canada, New Zealand) regularly shares signals intelligence under the UKUSA Agreement. The 2019 Home Affairs minister's call for Five Eyes nations to mandate encryption backdoors was declined by Canada and New Zealand on civil liberties grounds. Australia's Assistance and Access Act already allows technical assistance orders. Should Australia unilaterally revoke the Assistance and Access Act's most controversial provisions to protect Australian software exports and civil liberties, even at the cost of intelligence community capability?",
-      options: [
-        { label: "Yes — the Act damages Australia's tech export reputation and the security benefits are marginal relative to the civil liberties cost", x: -0.7, y: -0.4 },
-        { label: "No — the capability gaps from revoking the Act would significantly impair counter-terrorism and serious crime investigation", x: 0.6, y: 0.7 },
-        { label: "Revoke the most controversial provisions but retain narrower powers with mandatory parliamentary oversight committee review", x: -0.3, y: 0.1 },
-        { label: "Work through Five Eyes to develop a multilateral framework — unilateral action weakens the alliance's effectiveness", x: 0.2, y: 0.3 },
-      ]
-    },
+  // ── ENVIRONMENT (3 questions) ─────────────────────────────────────────
 
-    // --- HEALTHCARE (3 questions) ---
-    {
-      topic: "Healthcare",
-      text: "Australia's pharmaceutical benefits scheme (PBS) negotiates drug prices through a cost-effectiveness framework based on QALYs (quality-adjusted life years). Recent gene therapies and personalised oncology treatments carry list prices of $1–3 million per patient. The PBS's QALY threshold effectively rules out many of these treatments. Should Australia adopt managed access programs that allow conditional reimbursement of high-cost therapies pending real-world evidence collection?",
-      options: [
-        { label: "Yes — managed access programs enable equitable access to transformative therapies while managing fiscal risk", x: -0.5, y: 0.5 },
-        { label: "No — conditional reimbursement creates perverse incentives for pharmaceutical companies to overprice, expecting eventual full listing", x: 0.3, y: 0.2 },
-        { label: "Yes, and establish a separate advanced therapy budget ring-fenced from the standard PBS to avoid crowding out", x: -0.3, y: 0.6 },
-        { label: "Strengthen the PBS's international reference pricing to reduce entry prices rather than creating managed access workarounds", x: -0.1, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "The Aged Care Royal Commission found systemic failure across the aged care sector — inadequate staffing, poor nutrition, abuse, and the fundamental problem of a for-profit model in conflict with the duty of care. The government has introduced a Aged Care Act and mandatory care minutes. However, structural funding remains fee-for-service with thin margins. Evidence from Nordic countries shows that municipally owned aged care with high staffing ratios produces substantially better outcomes. Should Australia transition to a primarily government-owned aged care sector over 10 years?",
-      options: [
-        { label: "Yes — the profit motive is fundamentally incompatible with quality care; staged nationalisation is the right response", x: -0.8, y: 0.8 },
-        { label: "No — government-owned services are not inherently better quality; the problem is under-funding and poor regulation, not ownership", x: 0.5, y: 0.2 },
-        { label: "Establish strong government and not-for-profit providers as a 'public option' that competes with and disciplines for-profit providers", x: -0.4, y: 0.6 },
-        { label: "Fix the funding model — move to resident-weighted casemix funding with strict quality benchmarks before considering ownership changes", x: 0.2, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Healthcare",
-      text: "Alcohol causes approximately 5,500 deaths and $36 billion in social costs annually in Australia, yet its industry receives light regulatory treatment relative to the harm evidence. Evidence from Scotland's minimum unit pricing law shows a significant reduction in alcohol-related mortality. Australia's Henry Tax Review recommended volumetric alcohol taxation. Should Australia implement minimum unit pricing for alcohol and reform excise to volumetric rates, over the strong objection of the hospitality and wine industries?",
-      options: [
-        { label: "Yes — the evidence base from Scotland and Nordic countries is compelling; industry objection is not a reason to delay", x: -0.6, y: 0.6 },
-        { label: "No — pricing interventions are regressive, disproportionately affecting low-income drinkers rather than addressing alcohol misuse", x: 0.5, y: -0.3 },
-        { label: "Yes, implement both reforms but use the increased excise revenue for alcohol treatment services", x: -0.5, y: 0.6 },
-        { label: "Minimum unit pricing yes, but wine excise reform should be phased over 10 years to protect regional wine communities", x: -0.2, y: 0.4 },
-      ]
-    },
+  {
+    topic: "Environment",
+    text: "Australia's Safeguard Mechanism, reformed in 2023, now requires the 215 largest industrial emitters (covering ~28% of national emissions) to reduce their emissions intensity at 4.9% per year. The reformed mechanism allows unlimited use of Australian Carbon Credit Units (ACCUs), a design choice that critics — including the Climate Change Authority and several environmental economists — argue will allow firms to defer abatement via offsets of contested integrity rather than genuine decarbonisation. An alternative, a sector-specific carbon price linked to the EU ETS (~A$140/tonne CO2-e), would provide a uniform price signal. Proponents of the ETS approach cite the Pigouvian tax principle and the efficiency of price discovery; proponents of intensity-based standards cite transition certainty for trade-exposed industries. What is Australia's optimal industrial decarbonisation mechanism?",
+    options: [
+      {
+        label: "Replace the Safeguard Mechanism with a broad-based carbon price at $75/tonne rising 5% annually in real terms, with full border adjustment to address trade exposure — a clean Pigouvian signal that maximises abatement at least cost across the economy.",
+        x: -0.4,
+        y: 0.2
+      },
+      {
+        label: "Strengthen the Safeguard Mechanism by restricting ACCU use to no more than 20% of a facility's obligation, requiring residual abatement to occur at the source; this maintains sectoral accountability while preserving regulatory familiarity for industry.",
+        x: -0.5,
+        y: 0.6
+      },
+      {
+        label: "Link Australia's carbon market to the EU ETS and accept price discovery via international markets; this eliminates the distortion of domestically-issued ACCUs and aligns Australia with global decarbonisation finance at scale.",
+        x: -0.2,
+        y: 0.4
+      },
+      {
+        label: "Abandon intensity-based carbon regulation and rely on technology mandates and direct public investment in green hydrogen and CCS; regulatory carbon pricing disadvantages Australian trade-exposed industries relative to competitors without equivalent schemes.",
+        x: 0.5,
+        y: 0.3
+      }
+    ]
+  },
 
-    // --- JUSTICE (3 questions) ---
-    {
-      topic: "Justice",
-      text: "Australia's federal Counter-Terrorism Act has been expanded multiple times since 2001. The statute permits control orders on individuals who have not been charged or convicted of any offence, preventive detention for up to 14 days, and citizenship stripping for dual nationals. The Australian Human Rights Commission has consistently found these measures incompatible with international human rights law. Should Australia repeal preventive detention and control order regimes and rely on conventional criminal investigation and prosecution?",
-      options: [
-        { label: "Yes — pre-crime detention is incompatible with the rule of law and evidence shows these measures are disproportionate to the actual risk", x: -0.7, y: -0.5 },
-        { label: "No — terrorism poses a genuine national security threat requiring exceptional powers that conventional criminal law cannot adequately address", x: 0.7, y: 0.7 },
-        { label: "Retain the powers but require judicial authorisation at every 24-hour interval and an independent monitor", x: -0.1, y: 0.4 },
-        { label: "Repeal control orders and preventive detention but invest substantially more in ASIO surveillance and community liaison", x: -0.3, y: 0.1 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "The Uluru Statement from the Heart calls for three elements: Voice, Makarrata (Treaty), and Truth. The 2023 Voice referendum failed decisively (60.6% No). Post-referendum analysis shows the failure reflected both principled opposition and procedural concerns about implementation detail. Should the government proceed with Treaty and Truth-telling as standalone processes, or does the referendum result represent a broader rejection of the Uluru Statement's agenda?",
-      options: [
-        { label: "Proceed with Treaty and Truth-telling — the referendum was about the Voice mechanism, not the full Statement", x: -0.7, y: 0.3 },
-        { label: "The referendum result reflects a clear verdict against constitutional reform; all Uluru Statement elements should be shelved", x: 0.8, y: 0.2 },
-        { label: "Pursue Treaty processes at state level where political conditions are more favourable", x: -0.4, y: 0.2 },
-        { label: "Commission an independent process with First Nations co-design before any further federal action", x: -0.3, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Justice",
-      text: "Australia's prison population has grown by approximately 40% over a decade despite falling crime rates. The per-prisoner cost exceeds $110,000 annually. Recidivism rates within two years of release sit at approximately 45%. The evidence for drug courts, mental health courts, and community corrections as cost-effective alternatives is strong. Should Australia set an explicit target for reducing the prison population by 30% over 10 years, accompanied by expanded alternative sentencing and community services?",
-      options: [
-        { label: "Yes — the evidence clearly supports expanded diversion, and the fiscal and human cost of mass incarceration is unjustifiable", x: -0.7, y: -0.3 },
-        { label: "No — prison population reflects public safety needs; arbitrary targets could compromise community protection", x: 0.7, y: 0.5 },
-        { label: "Set a diversion target rather than a reduction target — expand community sentencing without necessarily reducing imprisonment for violent offences", x: -0.2, y: 0.1 },
-        { label: "Invest in pre-entry diversion (drug treatment, mental health) and post-exit reintegration without setting a prison population target", x: -0.4, y: 0.2 },
-      ]
-    },
+  {
+    topic: "Environment",
+    text: "Australia's mining sector contributed $14.3bn in PRRT and royalties in 2022–23 against LNG export revenues of $91bn — an effective tax rate of approximately 15.7%, compared to Norway's 78% on oil and gas. Economists including Richard Holden have argued this structural under-taxation of non-renewable resources constitutes an intergenerational wealth transfer away from future Australians, equivalent to permanently gifting a common inheritance. Meanwhile, the Productivity Commission found no evidence that concessional tax treatment for resources significantly changes investment decisions at the margin, given Australia's resource endowment and geological comparative advantage. During the 2010–2013 mining boom the Australian dollar appreciated to USD 1.10, compressing manufacturing margins and accelerating deindustrialisation — a textbook Dutch Disease episode. How should Australia manage resource wealth extraction and its macroeconomic consequences?",
+    options: [
+      {
+        label: "Raise the effective PRRT rate to 50% via an immediate-deductibility reform and use proceeds to capitalise a sovereign wealth fund; investing resource rents in diversified global assets sterilises Dutch Disease exchange rate appreciation.",
+        x: -0.6,
+        y: 0.6
+      },
+      {
+        label: "Reform PRRT uplift rates to approximate Treasury bond rates (removing the current 12.5–17.5% uplift), increasing revenue capture without deterring marginal projects; pair with an RBA mandate to monitor resource-sector exchange rate effects.",
+        x: -0.3,
+        y: 0.4
+      },
+      {
+        label: "Maintain current PRRT settings; the rent tax collects substantially more in boom periods by design, and radical reform risks delaying final investment decisions on $50bn+ of LNG expansion projects that provide long-run employment and export earnings.",
+        x: 0.7,
+        y: -0.2
+      },
+      {
+        label: "Use state royalty reforms rather than federal PRRT changes to increase community benefit sharing, directing revenues to regional infrastructure and skills training in mining communities — a federally-appropriate response to sovereign resource wealth.",
+        x: 0.2,
+        y: 0.3
+      }
+    ]
+  },
 
-    // --- IMMIGRATION (2 questions) ---
-    {
-      topic: "Immigration",
-      text: "Australia's international student sector has grown to become a $48 billion export industry, but investigations have revealed widespread exploitation of international students in the gig economy, systematic wage theft in hospitality and aged care, and visa gaming through low-quality private colleges. The government has introduced caps on international student numbers at some universities. Is restricting international student numbers the right policy response, or does it impose costs on Australian universities and students from the Global South disproportionately to the benefits?",
-      options: [
-        { label: "Caps are a blunt instrument; fix the underlying exploitation — stronger enforcement of labour laws and education quality standards", x: -0.5, y: 0.5 },
-        { label: "Yes, caps are necessary — the sector has grown too fast and the labour market distortions are real", x: 0.5, y: 0.3 },
-        { label: "Reform the work rights attached to student visas; the problem is exploitation, not enrolment numbers", x: -0.4, y: 0.4 },
-        { label: "Shut down private college migration pathways entirely while maintaining university student numbers", x: 0.2, y: 0.5 },
-      ]
-    },
-    {
-      topic: "Immigration",
-      text: "Australia operates one of the world's most sophisticated points-tested immigration systems with employer-sponsored, independent skilled, and family streams. Treasury modelling consistently shows skilled migration has positive net fiscal and wage effects at the aggregate level. However, distributional analysis shows wage compression is concentrated among recent migrants competing in the same occupational niches. Should Australia expand its refugee and humanitarian intake to 40,000 per year — double the current level — and fund this by reducing the skilled migration programme?",
-      options: [
-        { label: "Yes — Australia's humanitarian obligations are under-met; the case for doubling humanitarian intake at the expense of skilled migration is strong", x: -0.7, y: 0.3 },
-        { label: "No — skilled migration generates the fiscal surplus that funds public services including humanitarian settlement costs", x: 0.6, y: -0.1 },
-        { label: "Increase humanitarian intake to 40,000 but fund it through a moderate increase in the overall program, not at the expense of skilled migration", x: -0.4, y: 0.4 },
-        { label: "Expand the Pacific labour pathway and refugee intake but restrict lower-skilled temporary visas to address the wage compression evidence", x: -0.1, y: 0.3 },
-      ]
-    },
+  {
+    topic: "Environment",
+    text: "The Climate Change Authority's 2023 review found that Australia's legislated 43% emissions reduction target by 2030 (below 2005 levels) is inconsistent with a 1.5°C trajectory, which would require approximately 75% reduction. The electricity sector is on track, with renewables reaching 38% of NEM generation in 2024. However, agriculture (13% of emissions), land use, and fugitive emissions from gas are showing minimal progress. The Australian Bureau of Agricultural and Resource Economics (ABARES) warns that aggressive emissions standards on agriculture could reduce farm productivity by 12–18% without viable mitigation technologies for ruminant methane. Conversely, environmental economists note that agriculture receives an implicit subsidy of $6.9bn annually by being excluded from carbon pricing. How should Australia approach agricultural emissions?",
+    options: [
+      {
+        label: "Include agriculture in the Safeguard Mechanism or a dedicated carbon price with a delayed start date and complementary R&D investment in methane inhibitors; excluding agriculture creates a $6.9bn implicit subsidy that violates carbon pricing principles.",
+        x: -0.5,
+        y: 0.5
+      },
+      {
+        label: "Maintain agriculture's exemption from direct carbon pricing but fund voluntary incentive payments for soil carbon sequestration, land restoration, and low-methane livestock breeds; coercive regulation would devastate regional communities without meaningful abatement.",
+        x: 0.6,
+        y: 0.2
+      },
+      {
+        label: "Apply a voluntary biodiversity and carbon credits scheme with payment rates that fully reflect the social cost of carbon ($120/tonne); competitive market design will draw in high-integrity sequestration projects without mandating producer behaviour.",
+        x: 0.2,
+        y: -0.3
+      },
+      {
+        label: "Establish mandatory methane reduction targets for intensive livestock operations only, exempting extensive grazing; complement with publicly-funded agricultural extension services and CSIRO research into low-methane feed supplements and vaccine programmes.",
+        x: -0.1,
+        y: 0.6
+      }
+    ]
+  },
 
-    // --- CULTURE (2 questions) ---
-    {
-      topic: "Culture",
-      text: "Australia's media landscape is dominated by News Corp Australia (owns approximately 60% of metropolitan newspaper circulation) and Nine Entertainment. The ACCC has documented significant market concentration in news media and its effects on public deliberation. The News Media Bargaining Code compelled platforms to pay publishers. Should Australia go further and introduce media ownership limits to prevent any single entity controlling more than 30% of news media market share?",
-      options: [
-        { label: "Yes — media concentration at current levels is incompatible with the democratic function of a free press", x: -0.7, y: 0.5 },
-        { label: "No — digital disruption has already fundamentally altered the media landscape; traditional ownership rules are obsolete", x: 0.5, y: -0.4 },
-        { label: "Yes, combined with substantial increased funding for public broadcasting as a structural counterweight", x: -0.6, y: 0.6 },
-        { label: "Require algorithmic transparency from news aggregators (Google, Facebook) — that's where the real concentration of attention lies", x: -0.2, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Culture",
-      text: "The Closing the Gap framework has produced 17 years of government commitments with limited improvement across key indicators including life expectancy, child mortality, early childhood development, and school completion. Critics argue the framework has failed because it is designed by governments rather than First Nations peoples, and because structural racism in housing, health, and justice systems is not adequately addressed. Should the Closing the Gap framework be replaced with a treaty-based self-determination model where First Nations communities control the design and delivery of services?",
-      options: [
-        { label: "Yes — Aboriginal and Torres Strait Islander self-determination is both a right and the most effective service delivery model, as demonstrated in several community-controlled health organisations", x: -0.8, y: 0.3 },
-        { label: "No — government retains accountability to taxpayers and must maintain oversight of funded services", x: 0.6, y: 0.5 },
-        { label: "Transition to community-controlled services progressively where communities have the capacity and governance structures to take on delivery", x: -0.4, y: 0.4 },
-        { label: "Reform Closing the Gap with binding targets and consequences for government, rather than replacing the framework", x: -0.2, y: 0.5 },
-      ]
-    },
+  // ── SOCIAL (3 questions) ──────────────────────────────────────────────
 
-    // --- WORK (2 questions) ---
-    {
-      topic: "Work",
-      text: "Australia's workplace relations system has moved progressively toward enterprise bargaining since the Keating government's Accord transition. However, wage growth has been persistently below productivity growth, raising questions about bargaining power asymmetry. The Fair Work Act's Better Off Overall Test (BOOT) has been criticised by employers as an obstacle to productive enterprise agreements. Should the BOOT be restored to its pre-Omnibus Bill form, or should the balance between flexibility and protection be shifted toward employers?",
-      options: [
-        { label: "Restore the full BOOT — weakening it shifts power to employers and allows undermining of award conditions through complex agreements", x: -0.7, y: 0.6 },
-        { label: "Reform the BOOT to allow genuine flexibility in exchange for non-wage benefits — its current form is too rigid", x: 0.6, y: -0.4 },
-        { label: "The real problem is inadequate award coverage and low unionisation; BOOT reform is a second-order issue", x: -0.5, y: 0.5 },
-        { label: "Supplement the BOOT with industry-level minimum standards so that enterprise agreements can't deviate below a clear floor", x: -0.3, y: 0.4 },
-      ]
-    },
-    {
-      topic: "Work",
-      text: "Superannuation's Superannuation Guarantee (SG) is scheduled to reach 12% in 2025. Research from the Grattan Institute argues that higher SG primarily reduces take-home wages rather than adding to total compensation, and that the elderly poor (who rely on the aged pension) would be better served by stronger pension adequacy than super tax concessions. The industry funds argue that compound growth over a working life justifies the SG, particularly for women and low-income workers. Should Australia freeze the SG at 11% and redirect the fiscal cost of further SG increases to a higher aged pension?",
-      options: [
-        { label: "Yes — the pension is more effective at reducing poverty among the elderly; super disproportionately benefits high-income earners", x: -0.4, y: 0.5 },
-        { label: "No — compulsory super creates broad-based wealth and reduces long-term fiscal pressure; reaching 12% is essential", x: -0.5, y: 0.4 },
-        { label: "Freeze SG at 11% and substantially increase the pension — the Grattan analysis is persuasive", x: 0.1, y: 0.3 },
-        { label: "Continue to 12% but reform super tax concessions to redirect the fiscal benefit toward lower-income workers' accounts", x: -0.4, y: 0.5 },
-      ]
-    },
+  {
+    topic: "Social",
+    text: "Australia's JobSeeker payment sits at $762.70 per fortnight (single, no children) — 41% of the minimum wage, the lowest replacement rate of any OECD country with a contributory welfare system. The OECD's 2023 review found that below-poverty income support combined with intensive mutual obligation requirements and payment suspensions (over 600,000 compliance failures in 2022–23) creates poverty traps and persistent unemployment rather than reducing it. An unconditional basic income (UBI) pilot in Finland (2017–18) found small positive effects on wellbeing and comparable employment outcomes to the conditionality regime it replaced. However, modelling by the Parliamentary Budget Office suggests a UBI of $1,200/fortnight for all working-age Australians would cost $250bn annually — 20% of GDP — before tax-financed recycling. How should Australia redesign working-age income support?",
+    options: [
+      {
+        label: "Implement a partial UBI of $600/fortnight as a floor income for all adults 18–65, taxable above a threshold, replacing JobSeeker and most categorical payments; fund through a land value tax and higher super earnings tax, with a phased 5-year implementation.",
+        x: -0.7,
+        y: 0.3
+      },
+      {
+        label: "Raise JobSeeker to 90% of the Henderson poverty line (~$1,100/fortnight) and retain mutual obligation requirements but replace compliance-based suspensions with positive incentive structures and intensive employment services for the long-term unemployed.",
+        x: -0.5,
+        y: 0.6
+      },
+      {
+        label: "Maintain current payment levels but reform conditionality to focus exclusively on participation in training, education, or voluntary work, removing punitive suspension mechanisms that evidence shows increase poverty and reduce employment.",
+        x: -0.2,
+        y: 0.4
+      },
+      {
+        label: "Index JobSeeker to 50% of median wages but tighten activity testing requirements; income support should incentivise labour market attachment and the compliance regime, while imperfect, prevents moral hazard in a tight labour market.",
+        x: 0.5,
+        y: 0.3
+      }
+    ]
+  },
 
-    // --- HOUSING (2 questions) ---
-    {
-      topic: "Housing",
-      text: "Australia's housing affordability crisis is driven by a combination of undersupply, speculative demand, and planning restrictions. The Albanese government's Housing Australia Future Fund aims to deliver 30,000 social and affordable homes over 5 years — far below the estimated 640,000 shortfall in social housing. The Grattan Institute estimates Australia needs to build 1.2 million homes over the decade to restore affordability. Treasury modelling suggests stamp duty replacement with broad-based land value tax would unlock 100,000 additional homes. What policy combination offers the greatest impact on housing affordability?",
-      options: [
-        { label: "Replace stamp duty with land value tax nationally, accelerate HAFF, and override restrictive zoning near transit — the full Grattan reform package", x: -0.5, y: 0.6 },
-        { label: "The most direct lever is public housing construction at scale; private market reform is too slow and politically constrained", x: -0.6, y: 0.8 },
-        { label: "Abolish negative gearing and halve the CGT discount — demand-side speculation is the primary driver of unaffordability", x: -0.6, y: 0.5 },
-        { label: "Comprehensive planning reform to allow density is the most cost-effective lever — public housing is too expensive per dwelling", x: -0.1, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Housing",
-      text: "Build-to-rent (BTR) is expanding in Australia as institutional investors (superannuation funds, REITs) develop large-scale rental properties. BTR investors have lobbied for preferential managed investment trust tax treatment to compete with individual landlords' negative gearing advantages. BTR can potentially provide longer leases and more professional management. However, critics argue it institutionalises rental housing, creating concentrated landlord power and reducing pathways to home ownership. Should Australia provide substantial tax concessions to BTR to scale it rapidly?",
-      options: [
-        { label: "Yes — BTR can deliver well-managed, long-tenure rental housing at scale and institutional ownership is more accountable than individual landlords", x: -0.2, y: 0.4 },
-        { label: "No — BTR concessions socialise the benefits of institutional landlordism while making home ownership even less attainable", x: -0.3, y: -0.1 },
-        { label: "Support BTR only for affordable and social housing components, not market-rate rentals", x: -0.4, y: 0.5 },
-        { label: "Remove tax advantages for all rental housing investment equally — individual negative gearing and BTR concessions both distort the housing market", x: -0.6, y: 0.3 },
-      ]
-    },
+  {
+    topic: "Social",
+    text: "Australia has one of the world's most gender-segregated occupational structures: female-dominated industries (care work, education, hospitality) attract wages 15–31% below male-dominated industries of equivalent skill-complexity per Workplace Gender Equality Agency (WGEA) analysis. The Fair Work Commission's 2023 Aged Care Work Value case awarded a 15% pay rise on the grounds of historical undervaluation, costing the Commonwealth $11.3bn over four years. Critics argue this represents government-directed wages policy interfering with award-setting independence; supporters cite persistent market failure in pricing socially essential care work. The Gender Pay Gap is 21.8% (total remuneration, November 2023). What is the most effective policy lever to close the structural gender pay gap?",
+    options: [
+      {
+        label: "Extend the Work Value case methodology to all female-dominated award sectors (childcare, disability support, social work) with a 20% base uplift, funded via a hypothecated Care Sector Levy on employers; market wages systematically undervalue feminised labour.",
+        x: -0.7,
+        y: 0.7
+      },
+      {
+        label: "Expand mandatory WGEA gender pay gap reporting to firms with 50+ employees (from 100+), with binding gender equity action plans and pay equity audits; transparency-forcing regulation is lower cost than direct wage regulation and promotes competitive adjustment.",
+        x: -0.3,
+        y: 0.5
+      },
+      {
+        label: "Subsidise childcare to 90% of cost for all income levels to remove the secondary earner penalty and lift female labour force participation; occupational sorting and wage gaps close naturally when structural barriers to participation are removed.",
+        x: -0.5,
+        y: 0.4
+      },
+      {
+        label: "Rely on award modernisation and equal pay orders via the Fair Work Commission rather than sector-wide legislative intervention; government-mandated pay increases in care sectors risk cost inflation and workforce substitution via technology or service rationing.",
+        x: 0.4,
+        y: 0.0
+      }
+    ]
+  },
 
-    // --- additional economist/politician questions ---
-    {
-      topic: "Education",
-      text: "Australia's higher education system has seen a 40% decline in funding per student in real terms over two decades, offset by international student revenue. The Universities Accord (2023) proposes increasing the proportion of Australians with a tertiary qualification to 80% by 2050, which would require an additional 1.8 million university places. This ambition sits in tension with the Grattan Institute's finding that around 30% of current graduates are in jobs that don't use their degree. Should Australia expand university places toward the Accord target, or redirect investment toward quality vocational pathways?",
-      options: [
-        { label: "Expand universities — the economic and social returns to higher education justify the investment at the aggregate level", x: -0.5, y: 0.5 },
-        { label: "Redirect investment to vocational pathways — Australia has a TAFE deficit, not a university deficit", x: 0.3, y: 0.3 },
-        { label: "Expand both simultaneously — the skills shortage is broad and neither sector alone can meet 2050 workforce needs", x: -0.2, y: 0.5 },
-        { label: "Control university growth and redirect to technical tertiary qualifications modelled on the German dual system", x: 0.4, y: 0.2 },
-      ]
-    },
-    {
-      topic: "Work",
-      text: "The Reserve Bank of Australia's Statement on Monetary Policy uses a labour market Phillips Curve framework — the assumption that lower unemployment causes higher inflation — to justify keeping rates elevated until unemployment rises above the estimated NAIRU (non-accelerating inflation rate of unemployment) of approximately 4.5%. Critics including Stiglitz argue the NAIRU is theoretical fiction, empirically unstable, and that the RBA's framework systematically sacrifices workers' jobs to control inflation. Should the RBA's mandate be legislatively amended to give equal statutory weight to maximum employment, modelled on the US Federal Reserve's dual mandate?",
-      options: [
-        { label: "Yes — the current mandate structurally biases policy toward inflation over employment and the cost falls on working people", x: -0.7, y: 0.4 },
-        { label: "No — the Fed's dual mandate created the conditions for the 2021–23 inflation surge; Australia should not replicate it", x: 0.5, y: 0.2 },
-        { label: "Yes, with a twist — adopt full employment as a coequal objective but retain the RBA's operational independence to balance the two targets", x: -0.3, y: 0.2 },
-        { label: "Reform the RBA's internal modelling and transparency rather than legislating targets that may conflict under inflationary conditions", x: 0.2, y: 0.3 },
-      ]
-    },
-    {
-      topic: "Housing",
-      text: "The Minns government in NSW and the Allan government in Victoria have both invoked emergency powers to rezone land near train stations for medium and high density, overriding local council objections. This represents a significant centralisation of planning power at the state level and a departure from the Coombs Commission model of strong local government. The academic planning literature is divided: some economists (Ed Glaeser) argue that local veto power is the principal cause of housing undersupply, while urban planners argue that state-imposed density without coordinated infrastructure investment creates neighbourhood dysfunction. What is the appropriate division of planning authority between state and local government for housing supply?",
-      options: [
-        { label: "State government should hold binding authority over zoning decisions near transit — local veto is the housing crisis's root cause", x: -0.3, y: 0.5 },
-        { label: "Local councils should retain planning authority — housing crisis solutions require community buy-in that top-down rezoning destroys", x: 0.5, y: -0.3 },
-        { label: "State government sets non-negotiable density minimums; councils design neighbourhood-specific plans within those minimums", x: -0.1, y: 0.4 },
-        { label: "Create regional planning authorities — neither state nor local government has the right geographic scale to optimise housing and infrastructure decisions", x: -0.2, y: 0.3 },
-      ]
-    },
+  {
+    topic: "Social",
+    text: "Australia's rate of incarceration is 221 per 100,000 population — below the US (531) but substantially above Norway (54) and the Netherlands (61). Indigenous Australians are incarcerated at 17 times the rate of non-Indigenous Australians, the highest disparity in any comparable OECD nation. The Productivity Commission's Report on Government Services (2024) found recidivism within two years runs at 44.9% nationally, with rehabilitation programme reach covering only 28% of the prison population. The cost per prisoner is approximately $130,000 per annum. The Royal Commission into Aboriginal Deaths in Custody (1991) made 339 recommendations, of which fewer than half have been fully implemented three decades later. How should Australia reform its criminal justice system?",
+    options: [
+      {
+        label: "Redirect at least 20% of the corrective services budget to diversionary programmes, community-based sentencing, and Aboriginal Community Controlled Organisations; mass incarceration is a public health failure, not a justice success, and carries negative fiscal externalities.",
+        x: -0.7,
+        y: -0.2
+      },
+      {
+        label: "Implement the unfinished recommendations of the 1991 Royal Commission as a legislative priority, with an independent compliance body and time-bound targets; over-representation cannot be addressed without resolving the underlying structural dispossession and service gaps.",
+        x: -0.6,
+        y: 0.6
+      },
+      {
+        label: "Introduce mandatory rehabilitative programming as a condition of parole eligibility, expand prison-based education and vocational training funding, and measure corrections performance against recidivism rates rather than bed occupancy.",
+        x: -0.1,
+        y: 0.5
+      },
+      {
+        label: "Strengthen truth-in-sentencing laws and reduce judicial discretion for repeat violent offenders; public safety requires predictable sentencing as a deterrent, and community confidence in the justice system depends on proportionate custodial penalties.",
+        x: 0.8,
+        y: 0.4
+      }
+    ]
+  },
 
-  ],
+  // ── HEALTHCARE (3 questions) ──────────────────────────────────────────
+
+  {
+    topic: "Healthcare",
+    text: "The NDIS cost has grown from $22bn (2020–21) to a projected $59bn by 2025–26, representing 2.1% of GDP and now exceeding the Medicare programme. The NDIS Review (2023), led by Bruce Bonyhady and Lisa Paul, found widespread funding model problems: 60% of the cost blowout comes from 10% of participants with complex psychosocial disability; the scheme has created a market for plan management services estimated to cost $5bn annually with limited quality controls; and the original actuarial model underestimated demand for psychosocial disability by 300%. The review recommended a foundational supports tier outside the scheme and tighter eligibility. Critics from disability advocacy groups argue any tightening represents an abrogation of the original social compact. What is the most defensible NDIS reform path?",
+    options: [
+      {
+        label: "Implement the foundational supports tier as recommended, removing psychosocial disability not requiring intensive support from individual NDIS packages; this restores actuarial integrity while maintaining the scheme's core commitment to people with permanent significant disability.",
+        x: 0.2,
+        y: 0.5
+      },
+      {
+        label: "Expand NDIS eligibility and funding within the original intent but invest heavily in plan management quality controls, price regulation of support providers, and capacity building for participants to self-direct funding; the cost blowout reflects provider market failure, not excessive participant need.",
+        x: -0.6,
+        y: 0.7
+      },
+      {
+        label: "Cap NDIS annual expenditure growth at CPI + 2% via an appropriation limit, requiring the NDIA to prioritise based on severity and functional impact; fiscal sustainability requires a binding constraint that forces internal prioritisation rather than demand-driven expansion.",
+        x: 0.5,
+        y: 0.4
+      },
+      {
+        label: "Transition the NDIS to a social insurance model with lifetime entitlement caps and co-contribution requirements above median income; Australia cannot sustain a universal uncapped disability entitlement within a fiscally responsible framework.",
+        x: 0.7,
+        y: 0.0
+      }
+    ]
+  },
+
+  {
+    topic: "Healthcare",
+    text: "Medicare bulk-billing rates for GP services fell to 77.9% nationally in 2023 — the lowest in over a decade — and to 62% in capital city private practices. The RACGP estimates Australia needs 11,000 additional GPs by 2031. The Strengthening Medicare Taskforce (2022) recommended tripling the bulk-billing incentive for children and concession cardholders, which the government implemented at a cost of $3.5bn. However, economists including Stephen Duckett argue this does not address the structural fee-for-service incentive misalignment that under-rewards preventive care, care coordination, and complex chronic disease management relative to throughput. The MBS Review Task Force (2020) identified $2.4bn in low-value care. How should Australia reform primary care funding?",
+    options: [
+      {
+        label: "Transition GP funding from fee-for-service to blended capitation payments based on patient complexity, age, and chronic disease burden; this aligns incentives with health outcomes rather than throughput and is consistent with international best practice in primary care.",
+        x: -0.4,
+        y: 0.6
+      },
+      {
+        label: "Increase MBS rebates to 100% of the AMA schedule fee, eliminating out-of-pocket costs for all Australians at GPs; universal bulk-billing is achievable within the existing fee-for-service framework and removes financial barriers to timely primary care.",
+        x: -0.7,
+        y: 0.7
+      },
+      {
+        label: "Introduce voluntary patient enrolment with practice-based capitation top-ups, as piloted in the Strengthening Medicare trials; provide additional payments for care planning, multidisciplinary teamwork, and after-hours cover rather than rebate universality.",
+        x: -0.1,
+        y: 0.5
+      },
+      {
+        label: "Allow co-payments for non-concessional patients with means-testing, redirect savings to fund the GP workforce pipeline; price signals reduce low-acuity demand and cross-subsidise rural and underserved communities where market failure is genuine.",
+        x: 0.6,
+        y: 0.0
+      }
+    ]
+  },
+
+  {
+    topic: "Healthcare",
+    text: "Australia's Pharmaceutical Benefits Scheme (PBS) provides subsidised access to 5,900 medicines, at a net cost of approximately $16.2bn (2023–24). The PBS uses cost-effectiveness thresholds of approximately $45,000–$75,000 per quality-adjusted life year (QALY), below the UK NICE threshold of £30,000 (~A$57,000) and well below the US willingness-to-pay of USD $150,000. Pharmaceutical companies have increasingly pursued managed access or risk-sharing agreements for high-cost gene therapies and immunotherapies, some listed at $2–5 million per treatment. The Medicines Australia submission to the PBS review argued the threshold has not been formally updated since 2003 and does not reflect current willingness-to-pay. Meanwhile, the Grattan Institute warns that raising thresholds without differential pricing for rare disease would advantage large-market blockbusters. How should Australia calibrate PBS cost-effectiveness thresholds?",
+    options: [
+      {
+        label: "Maintain the current implicit threshold but introduce a transparent, differential threshold for ultra-rare diseases (orphan drugs) of up to $150,000/QALY, coupled with mandatory outcomes-based rebates where long-term efficacy data is unavailable at listing.",
+        x: -0.1,
+        y: 0.5
+      },
+      {
+        label: "Formally raise the base threshold to $100,000/QALY indexed to GDP per capita growth, with stronger international reference pricing benchmarks and mandatory confidential rebate agreements to prevent gaming; Australians deserve access to breakthrough therapies.",
+        x: -0.5,
+        y: 0.5
+      },
+      {
+        label: "Introduce value-based pricing with outcomes-linked payment models; pharmaceutical companies should bear the financial risk of efficacy uncertainty rather than transferring it to taxpayers via upfront listing at speculative QALY estimates.",
+        x: -0.3,
+        y: 0.3
+      },
+      {
+        label: "Hold the QALY threshold at current levels to constrain PBS expenditure growth; with fiscal pressures from NDIS and ageing demographics, extending the threshold risks crowding out more cost-effective community health spending with marginal benefit therapies.",
+        x: 0.4,
+        y: 0.2
+      }
+    ]
+  },
+
+  // ── HOUSING (2 questions) ─────────────────────────────────────────────
+
+  {
+    topic: "Housing",
+    text: "Australia's housing affordability crisis is structurally driven by supply-side constraints. The Productivity Commission (2022) estimated that restrictive residential zoning reduces housing supply elasticity in Australian cities to 0.3–0.5 (compared to 1.5+ in Houston or Tokyo), costing renters $14.5bn annually in excess rental expenditure. CoreLogic data shows Sydney median house prices at 13.4x median household income — the third most unaffordable market globally. The National Housing Accord targets 1.2 million new homes over five years, but planning approval rates in inner and middle suburbs remain constrained by heritage overlays, minimum parking requirements, and FSR caps. Economic modelling from UNSW's City Futures Research Centre suggests upzoning within 800m of train stations could add 320,000 dwellings to Sydney's constrained supply. What is the most effective housing supply reform?",
+    options: [
+      {
+        label: "Mandate medium-density as-of-right zoning within 800m of all train stations and within 400m of any Activity Centre, stripping councils of discretionary rejection powers and eliminating parking minimums; supply-side elasticity is the only durable solution to affordability.",
+        x: -0.5,
+        y: -0.3
+      },
+      {
+        label: "Use federal funding grants conditional on demonstrated zoning liberalisation metrics, preserving state-local government constitutional responsibility for planning while creating financial incentives aligned with the National Housing Accord targets.",
+        x: 0.1,
+        y: 0.2
+      },
+      {
+        label: "Reform negative gearing and CGT concessions as demand-side interventions first; supply-side reforms without addressing tax-driven investor demand will see new supply absorbed by investors rather than improving owner-occupier affordability.",
+        x: -0.6,
+        y: 0.4
+      },
+      {
+        label: "Fund a major public housing construction programme of 100,000 social and affordable units via a Housing Australia Future Fund increase; the market cannot deliver deeply affordable housing and the waitlist of 170,000 households requires direct government provision.",
+        x: -0.8,
+        y: 0.8
+      }
+    ]
+  },
+
+  {
+    topic: "Housing",
+    text: "Australia's negative gearing provisions allow investors to deduct rental property losses against personal income tax. Treasury estimates the annual revenue cost at $4.0bn. The 50% CGT discount (introduced 1999) costs an estimated $24bn annually in foregone revenue and has been directly linked by RBA research to amplifying house price cycles, contributing 5–8% to real price growth in major cities. The 2019 federal election saw Labor's proposed quarantining of negative gearing (grandfathering existing properties) and halving the CGT discount rejected, partly on the grounds that modelling suggested rent increases of $5–$15/week nationally. The Grattan Institute argues the combined concessions have transferred $1 trillion in wealth from younger to older Australians over two decades. How should Australia reform property investment tax concessions?",
+    options: [
+      {
+        label: "Grandfather existing investments and abolish negative gearing for new investment properties while halving the CGT discount to 25%; phase the reform over five years to prevent market disruption while restoring intergenerational equity in wealth accumulation.",
+        x: -0.6,
+        y: 0.4
+      },
+      {
+        label: "Retain negative gearing and the CGT discount but limit deductibility to positively-geared properties after three years; this removes the speculative incentive without penalising genuine long-term investment and addresses the fiscal cost at source.",
+        x: 0.3,
+        y: 0.1
+      },
+      {
+        label: "Replace stamp duty with a broad-based annual land value tax at 1.2% of unimproved capital value, making housing a less attractive speculative asset class; this reform is revenue-neutral, efficiency-improving, and dampens price cycles without touching CGT.",
+        x: -0.3,
+        y: 0.0
+      },
+      {
+        label: "Maintain all current concessions; property investment creates rental supply that would otherwise not exist, and modelling shows reform causes rent increases that hurt the lowest-income renters most — the stated beneficiaries of reform.",
+        x: 0.8,
+        y: -0.2
+      }
+    ]
+  },
+
+  // ── EDUCATION (3 questions) ───────────────────────────────────────────
+
+  {
+    topic: "Education",
+    text: "The Gonski Review (2011) recommended needs-based school funding using a Schooling Resource Standard (SRS) tied to student disadvantage loading. Twelve years later, the Australian Government Schooling Review (2023) found that 99% of Catholic and independent schools receive below their SRS allocation, while government schools in all states except the ACT and Victoria also remain below 100% SRS. The OECD PISA 2022 results show Australia's mean mathematics score declined 27 points (2000–2022), with the socioeconomic achievement gap among the top four in the OECD. Per-student recurrent expenditure in the highest-fee independent schools averages $34,000 — four times the $8,500 average in government schools in the same postcode. What is the priority for federal schools funding reform?",
+    options: [
+      {
+        label: "Require all non-government schools to reach 80% SRS from government sources within five years, redirecting the remaining Commonwealth non-government sector premium to government school equity loadings; public money should serve public accountability.",
+        x: -0.6,
+        y: 0.6
+      },
+      {
+        label: "Fund all schools to 100% SRS within four years regardless of sector, as the original Gonski architecture intended; sector-neutral needs-based funding eliminates the perverse incentive for states to reclassify government spending to avoid federal co-payments.",
+        x: -0.3,
+        y: 0.5
+      },
+      {
+        label: "Tie additional federal school funding to demonstrated literacy and numeracy outcomes under the National School Improvement Tool, replacing formula-based entitlement with conditional grants that create accountability for public investment.",
+        x: 0.4,
+        y: 0.3
+      },
+      {
+        label: "Deregulate private school fee-setting and introduce a means-tested voucher system worth 70% of per-student public cost; competitive provision will drive quality improvement and parental choice produces better matching of educational approaches to student needs.",
+        x: 0.8,
+        y: -0.4
+      }
+    ]
+  },
+
+  {
+    topic: "Education",
+    text: "Australia's university sector received $11.9bn in Commonwealth Grants Scheme funding in 2023. The Australian Universities Accord (2023) recommended lifting participation to 55% of working-age Australians holding a degree by 2050 (from 45%) with a new Commonwealth Parity Supplement for students from low-SES backgrounds. HECS-HELP debt has grown to $74.4bn outstanding, with 20% of debtors projected to never fully repay under current thresholds, effectively converting a loan scheme into a graduate tax for lower-income cohorts — disproportionately affecting women in feminised graduate professions. The revenue from full-fee international students ($14.3bn, 2023) cross-subsidises domestic teaching and research, creating a structural dependency that the Australian Strategic Policy Institute has flagged as a geopolitical concentration risk. How should Australia reform university funding?",
+    options: [
+      {
+        label: "Increase Commonwealth per-student funding to restore the 2008 base funding level in real terms, reduce the HECS repayment rate for low-income graduates, and cap international student revenue reliance at 30% per institution to reduce strategic vulnerability.",
+        x: -0.5,
+        y: 0.6
+      },
+      {
+        label: "Introduce income-contingent free tuition for high-priority STEM and care sector degrees funded by a dedicated graduate levy on employers; this aligns training costs with the primary beneficiaries of skilled graduates and removes price barriers to shortage occupations.",
+        x: -0.4,
+        y: 0.5
+      },
+      {
+        label: "Deregulate domestic student fees with means-tested income-contingent loans, allowing universities to price courses by graduate earnings outcomes; market signals will redirect students from low-return courses and improve resource allocation across disciplines.",
+        x: 0.7,
+        y: -0.3
+      },
+      {
+        label: "Maintain the current mixed funding model but introduce performance-based Commonwealth funding allocation tied to graduate employment outcomes, research translation metrics, and equity participation targets for low-SES and First Nations students.",
+        x: 0.2,
+        y: 0.4
+      }
+    ]
+  },
+
+  {
+    topic: "Education",
+    text: "Australia's early childhood education and care (ECEC) system has undergone major reform with the three-day guarantee and Activity Test changes, increasing childcare subsidy (CCS) expenditure to $14.1bn (2024–25). The Productivity Commission's ECEC study (2024) found that Australian children participate in formal ECEC at 88% of OECD average rates, with outcomes for children from low-SES backgrounds showing a 6-month developmental lag relative to high-SES peers attributable to quality and access gaps rather than attendance rates. The PC recommended universal pre-school entitlement (30 hours/week) for 3 and 4-year-olds, harmonised national standards, and a long-term workforce strategy noting 30,000 unfilled ECEC worker vacancies. The system employs 50% casual workers, with median wages $24.50/hour. What is the optimal policy architecture for ECEC?",
+    options: [
+      {
+        label: "Implement the Productivity Commission recommendation for universal 30-hour pre-school entitlement funded directly to providers at a regulated rate, removing the Activity Test; early childhood is a developmental rights issue, not an employment incentive.",
+        x: -0.6,
+        y: 0.7
+      },
+      {
+        label: "Means-test the CCS more steeply to concentrate subsidy on low-income families with access barriers, redirect savings to quality uplift funding for community-based services in low-SES areas, and mandate minimum wage parity with primary teachers.",
+        x: -0.4,
+        y: 0.6
+      },
+      {
+        label: "Expand the existing CCS framework with additional hours support while improving workforce wages through a sector award decision; full universality is not the most cost-effective path to improving child outcomes compared to targeted quality investment.",
+        x: -0.1,
+        y: 0.4
+      },
+      {
+        label: "Introduce a childcare tax credit replacing the CCS to allow parents to choose any provider including unlicensed family-based care; provider diversity and parental choice produce better cultural fit and developmental outcomes than a regulated institutional system.",
+        x: 0.6,
+        y: -0.5
+      }
+    ]
+  },
+
+  // ── TECHNOLOGY (3 questions) ──────────────────────────────────────────
+
+  {
+    topic: "Technology",
+    text: "Australia's R&D expenditure (GERD) was 1.68% of GDP in 2022 — below the OECD average of 2.71% and well below Israel (5.6%), South Korea (4.9%), and Sweden (3.4%). Business R&D (BERD) has declined from 1.3% to 0.9% of GDP since 2008. The Productivity Commission found that the R&D Tax Incentive (costing $3.5bn annually) has low additionality: 60–70 cents of every dollar claimed would have been spent anyway. The Cutler Review (2008) and subsequent reviews have consistently recommended a direct grant programme to complement the tax incentive, targeting transformative research with positive externalities. The Solow growth decomposition attributes approximately 40% of Australia's long-run growth to total factor productivity (TFP), which has grown at only 0.3% annually 2015–2024, down from 1.5% in 1990–2005. How should Australia reform its innovation policy?",
+    options: [
+      {
+        label: "Replace the R&D Tax Incentive with a competitive direct grant programme administered by an independent agency modelled on DARPA or the UK's Advanced Research and Invention Agency, targeting pre-commercial research with high spillovers and genuine additionality.",
+        x: -0.4,
+        y: 0.5
+      },
+      {
+        label: "Retain the R&D Tax Incentive but raise the base rate from 43.5% to 50% for collaborative research involving universities or publicly-funded research organisations, and reduce the administrative compliance burden that deters small-firm participation.",
+        x: 0.1,
+        y: 0.2
+      },
+      {
+        label: "Create a $50bn sovereign technology investment fund capitalised over a decade from PRRT reform, investing in deep tech sectors (quantum computing, battery technology, critical minerals processing) where market failure and first-mover advantage are most pronounced.",
+        x: -0.6,
+        y: 0.7
+      },
+      {
+        label: "Deregulate product liability and regulatory approval pathways to lower the cost of commercialisation; Australia's innovation problem is not R&D supply but commercialisation failure — regulatory reform has higher additionality than further public investment.",
+        x: 0.7,
+        y: -0.4
+      }
+    ]
+  },
+
+  {
+    topic: "Technology",
+    text: "Australia's AI governance framework is largely voluntary. The Digital Platform Services Inquiry (ACCC, 2023) found that Google and Meta control 80% of digital advertising revenue in Australia — $12.2bn — giving them structural leverage over media, retail, and financial services sectors. The EU AI Act (2024) establishes risk-tiered regulation with mandatory conformity assessments for high-risk AI in employment, credit, law enforcement, and critical infrastructure. Treasury has flagged that AI-driven productivity gains could add 0.8–1.5% to annual GDP growth, but the CSIRO's National AI Centre estimates 30% of Australian jobs have high automation exposure by 2035. How should Australia regulate artificial intelligence?",
+    options: [
+      {
+        label: "Adopt a risk-tiered regulatory framework aligned with the EU AI Act, with mandatory algorithmic impact assessments for high-risk applications in employment, housing, and financial services, administered by an expanded Australian Human Rights Commission.",
+        x: -0.4,
+        y: 0.7
+      },
+      {
+        label: "Establish a voluntary AI safety certification scheme with government procurement requirements creating market incentives for compliance; premature binding regulation will disadvantage Australian firms relative to less-regulated US and Chinese competitors.",
+        x: 0.4,
+        y: -0.2
+      },
+      {
+        label: "Focus regulation on platform market power rather than AI specifically — break up digital advertising duopolies, mandate data portability, and apply ex-ante competition rules under a digital markets regime; AI harms are largely a manifestation of market concentration.",
+        x: -0.5,
+        y: 0.4
+      },
+      {
+        label: "Invest in a National AI Capability Programme through universities and the CSIRO to build domestic AI leadership, and allow industry self-regulation with transparency reporting requirements; government is poorly positioned to regulate rapidly evolving technology effectively.",
+        x: 0.2,
+        y: -0.1
+      }
+    ]
+  },
+
+  {
+    topic: "Technology",
+    text: "Australia's critical minerals sector holds the world's largest reserves of lithium (57%), cobalt (17%), and rare earths (3.7%), with export revenues of $17bn in 2023. The Critical Minerals Strategy (2023) acknowledges that 95% of rare earth processing occurs in China, meaning Australia exports raw ore at a fraction of the value of refined products. The value-add ratio from ore to battery-grade lithium carbonate is approximately 8–12x. The Inflation Reduction Act (IRA) in the US provides $369bn in subsidies for clean energy supply chains that preferentially benefit onshore processing. The OECD has criticised Australia's unilateral approach, arguing industrial policy subsidies create global market distortions and reduce allocative efficiency relative to comparative advantage specialisation. How should Australia develop its critical minerals value chain?",
+    options: [
+      {
+        label: "Establish a Critical Minerals Processing Corporation as a joint-venture equity partner for mid-stream processing facilities, requiring a minimum 30% Australian ownership; foreign investment without value-add processing requirements captures resource rents for overseas shareholders.",
+        x: -0.5,
+        y: 0.6
+      },
+      {
+        label: "Match US IRA-equivalent subsidies for battery manufacturing and rare earth processing in Australia, including a $10,000/tonne processing incentive; competing on industrial policy requires fiscal commitment at scale, not principles-based restraint.",
+        x: -0.3,
+        y: 0.5
+      },
+      {
+        label: "Negotiate bilateral free trade agreements with the EU and US that provide preferential market access for Australian refined critical minerals in exchange for security-of-supply commitments, using market access rather than subsidies to incentivise processing.",
+        x: 0.3,
+        y: 0.1
+      },
+      {
+        label: "Focus comparative advantage on extraction and export of high-grade ore rather than processing; attempting to replicate China's vertically-integrated supply chain ignores decades of industrial development and will produce stranded assets if clean energy transitions accelerate.",
+        x: 0.7,
+        y: -0.3
+      }
+    ]
+  },
+
+  // ── DIGITAL RIGHTS (2 questions) ─────────────────────────────────────
+
+  {
+    topic: "Digital Rights",
+    text: "The eSafety Commissioner has exercised powers under the Online Safety Act 2021 to direct removal of content from global platforms, including a challenge to X (formerly Twitter) over graphic content. The Act includes Basic Online Safety Expectations, industry codes for social media and app stores, and powers to issue removal notices with penalties of up to $782,500/day. The Australian Law Reform Commission's 2023 report found that existing privacy law provides no meaningful compensation for data misuse, and Australia lacks a statutory tort for serious invasions of privacy. The Attorney-General's Department consultation on an Online Privacy Act (2022) proposed consent-based data collection with opt-in defaults for sensitive data — a standard that no major platform currently meets. How should Australia govern personal data and online privacy?",
+    options: [
+      {
+        label: "Enact a Privacy Act aligned with GDPR principles: legitimate interest test, right to erasure, data portability, and a statutory cause of action for serious privacy breaches; Australia's 1988 framework is structurally inadequate for the platform economy.",
+        x: -0.4,
+        y: 0.6
+      },
+      {
+        label: "Create an independent Digital Rights Commission with investigative powers, class action facilitation for data breach compensation, and mandatory algorithmic transparency reporting for platforms over 5 million Australian users.",
+        x: -0.6,
+        y: 0.7
+      },
+      {
+        label: "Mandate data portability and interoperability standards under competition law rather than privacy law; this reduces switching costs, fosters competitive alternatives, and achieves user empowerment without prescriptive data processing rules that impede innovation.",
+        x: -0.2,
+        y: 0.0
+      },
+      {
+        label: "Retain the current principles-based privacy framework with targeted amendments for sensitive data categories; overly prescriptive privacy regulation creates compliance barriers for small Australian tech firms and pushes data processing offshore.",
+        x: 0.5,
+        y: -0.2
+      }
+    ]
+  },
+
+  {
+    topic: "Digital Rights",
+    text: "The Australian Signals Directorate (ASD) has advocated for lawful access to encrypted communications, and the Assistance and Access Act 2018 (TOLA) requires designated communications providers to provide technical assistance or capability to government agencies — with no judicial warrant requirement for the weakest form (Technical Assistance Requests). The Parliamentary Joint Committee on Intelligence and Security (PJCIS) found in 2020 that the Act lacks adequate oversight mechanisms. Meanwhile, the Australian Federal Police notes that end-to-end encryption is now used in 93% of serious criminal and terrorism investigations that involve digital evidence. Cryptographers from UNSW and ANU have argued that any systemic backdoor undermines security for all users, including banking, health records, and commercial confidentiality. How should Australia balance encryption and lawful access?",
+    options: [
+      {
+        label: "Repeal or substantially amend TOLA to require judicial authorisation for all technical assistance demands and prohibit capability notices that require building systemic vulnerabilities; security for all Australians depends on uncompromised end-to-end encryption.",
+        x: -0.6,
+        y: -0.5
+      },
+      {
+        label: "Retain TOLA but establish mandatory judicial oversight for all three notice tiers, increase PJCIS review frequency, and prohibit notices that would create a systemic weakness — distinguishing targeted access from generic backdoor mandates.",
+        x: 0.0,
+        y: 0.3
+      },
+      {
+        label: "Invest in lawful hacking capabilities (endpoint exploitation) rather than encryption backdoors; compromising individual devices through targeted exploitation achieves the same investigative outcome without undermining cryptographic infrastructure.",
+        x: 0.2,
+        y: -0.1
+      },
+      {
+        label: "Strengthen TOLA enforcement and extend it to cover international platforms serving Australian users; the security of Australians from terrorism and child exploitation outweighs theoretical cryptographic integrity concerns that primarily benefit criminal users.",
+        x: 0.7,
+        y: 0.8
+      }
+    ]
+  },
+
+  // ── JUSTICE (3 questions) ─────────────────────────────────────────────
+
+  {
+    topic: "Justice",
+    text: "Australia has no federal bill of rights or human rights act, unlike the US, Canada, UK, and New Zealand. The ACT and Victoria have enacted legislative charters of human rights. The Parliamentary Joint Committee on Human Rights scrutinises federal legislation for consistency with Australia's international treaty obligations, but this is advisory only. The Brennan Committee (2009) recommended a federal human rights act with a weak-form dialogue model — courts interpret legislation compatibly where possible, and parliament may override by explicit statement. Critics, including former Chief Justice Murray Gleeson, argued such a model transfers political questions to unelected judges. Proponents point to post-Robodebt, post-Binskin review failures as evidence that administrative law alone is insufficient to protect citizens from government overreach. How should Australia protect fundamental rights?",
+    options: [
+      {
+        label: "Enact a federal Human Rights Act using the dialogue model: courts issue declarations of incompatibility, parliament must respond with an override statement; this preserves parliamentary sovereignty while creating accountability for rights-inconsistent legislation.",
+        x: -0.5,
+        y: -0.1
+      },
+      {
+        label: "Entrench a minimum constitutional bill of rights via referendum, including judicially-enforceable protections for freedom of expression, due process, and equality; legislative charters are insufficient because parliament can silently abrogate them.",
+        x: -0.7,
+        y: -0.3
+      },
+      {
+        label: "Strengthen the PJCHR reporting function with compulsory government response timelines and mandate human rights impact assessments for all new Commonwealth legislation and expenditure programmes; administrative reform is more achievable than constitutional entrenchment.",
+        x: -0.2,
+        y: 0.5
+      },
+      {
+        label: "Retain the current constitutional framework; Australia's common law tradition, independent judiciary, and separation of powers provide sufficient structural protection, and a rights act would shift power to unelected judges without democratic accountability.",
+        x: 0.7,
+        y: 0.1
+      }
+    ]
+  },
+
+  {
+    topic: "Justice",
+    text: "Australia's financial crimes enforcement capacity has been repeatedly criticised. The Financial Action Task Force (FATF) mutual evaluation (2015) rated Australia non-compliant in 14 of 40 categories — the worst performance of any developed OECD country — primarily due to the exemption of real estate agents, lawyers, and accountants from anti-money laundering (AML) reporting (so-called Tranche 2). AUSTRAC estimates $8–$51bn in illicit funds is laundered through Australia annually. Real estate is identified as the primary laundering vehicle, with transparency body Global Financial Integrity noting that Australian residential property attracts flows from foreign officials, drug trafficking, and tax evasion. AFCA-aligned reforms (Tranche 2) were finally passed in 2024 after 17 years of lobbying resistance from the legal profession. How should Australia approach financial crime regulation?",
+    options: [
+      {
+        label: "Full and expeditious implementation of Tranche 2 AML obligations for lawyers, accountants, and real estate agents with AUSTRAC supervision; the 17-year delay has cost Australia an estimated $130bn in laundered funds and damaged its FATF standing.",
+        x: -0.2,
+        y: 0.7
+      },
+      {
+        label: "Introduce a beneficial ownership register for all Australian companies and trusts that is publicly accessible and updated in real time; opacity in corporate structures is the primary enabler of financial crime that AML reporting obligations alone cannot address.",
+        x: -0.4,
+        y: 0.6
+      },
+      {
+        label: "Prioritise AUSTRAC capacity building and cross-agency intelligence sharing over new reporting obligations; further obligations on professionals create compliance burdens without proportionate enforcement capability to act on the data generated.",
+        x: 0.3,
+        y: 0.1
+      },
+      {
+        label: "Establish a dedicated financial crimes court with specialist prosecutors and fast-track asset forfeiture; detection capacity is adequate but prosecution failure rates reflect judicial and procedural constraints, not reporting deficiencies.",
+        x: 0.5,
+        y: 0.5
+      }
+    ]
+  },
+
+  // ── JUSTICE additional ──────────────────────────────────────────────
+
+  {
+    topic: "Justice",
+    text: "Australia's Robodebt scheme (2016–2019) unlawfully raised $1.76bn in welfare debts against approximately 443,000 recipients using an illegal income-averaging methodology. The Royal Commission into the Robodebt Scheme (2023) found systematic public service failures, ministerial misconduct, and a deliberate strategy of legal opacity designed to prevent judicial review. The Commonwealth settled class action claims for $1.76bn. The Commission made 57 recommendations, including a new Public Service Act, strengthened APS values enforcement, and criminal referrals of five individuals. Administrative law scholars at ANU note that the existing judicial review framework under the Administrative Decisions (Judicial Review) Act 1977 did not prevent four years of unlawful government action. What reforms would most effectively prevent future systemic administrative law violations?",
+    options: [
+      {
+        label: "Create an independent Federal Integrity Commission with proactive audit powers over major algorithmic decision-making systems affecting welfare recipients; Robodebt was systemic, not individual, and requires systemic oversight rather than after-the-fact criminal referrals.",
+        x: -0.4,
+        y: 0.7
+      },
+      {
+        label: "Implement all 57 Royal Commission recommendations including APS accountability reform and pursue criminal prosecutions for identified officials; deterrence requires consequences and the existing framework failed because accountability mechanisms lacked enforcement teeth.",
+        x: -0.3,
+        y: 0.6
+      },
+      {
+        label: "Mandate proactive legal risk certification by the Solicitor-General for all mass automated decision-making programmes before implementation, with binding legal opinion publication; parliamentary scrutiny of algorithm-based welfare administration must precede, not follow, deployment.",
+        x: -0.1,
+        y: 0.5
+      },
+      {
+        label: "Strengthen merits review tribunal capacity in the AAT (now Administrative Review Tribunal) and fund free legal representation for welfare recipients facing automated debt decisions; individual access to justice is the most reliable check on administrative overreach.",
+        x: -0.5,
+        y: 0.4
+      }
+    ]
+  },
+
+  // ── IMMIGRATION (2 questions) ───────────────────────────────────────────────────
+
+  {
+    topic: "Immigration",
+    text: "Australia's net overseas migration (NOM) reached a record 528,000 in 2022–23, driven by post-pandemic international student and temporary worker visa backlogs. The Centre for Population (Treasury) projects NOM to moderate to 260,000 by 2024–25. The Productivity Commission (2016) found net fiscal benefit of immigration is positive but concentrated in the young and highly-skilled; low-skilled temporary visa holders in agriculture, meat processing, and hospitality have documented wage theft rates of 47% (FWO, 2022), suppressing wages in those sectors. The RBA has argued that population growth via migration increases both labour supply and housing demand — the net effect on per-capita housing affordability is close to zero in the short run. The National Population Strategy has not been updated since 2011. What is the appropriate migration policy architecture?",
+    options: [
+      {
+        label: "Reduce permanent migration to 120,000 per annum and shift composition toward highest-skill categories with genuine labour market testing; migration should not substitute for workforce training investment or suppress wages for low-income workers.",
+        x: 0.6,
+        y: 0.3
+      },
+      {
+        label: "Maintain high migration intakes but require all temporary visa holders to have minimum wage protections legally equivalent to permanent residents, with co-determination of workplace conditions; labour market suppression via visa vulnerability is the primary problem, not the volume.",
+        x: -0.5,
+        y: 0.5
+      },
+      {
+        label: "Develop a National Population Strategy that co-ordinates migration policy with infrastructure planning, regional settlement incentives, and housing supply reform; migration management should be supply-chain managed, not quota-driven without capacity planning.",
+        x: -0.1,
+        y: 0.4
+      },
+      {
+        label: "Replace the current points-based employer-sponsored visa system with a fully open skilled migration stream for occupations with demonstrated wage growth above CPI; price signals in labour markets are a more reliable shortage indicator than ANZSCO skill lists.",
+        x: 0.1,
+        y: -0.5
+      }
+    ]
+  },
+
+  {
+    topic: "Immigration",
+    text: "Australia's humanitarian intake was 13,750 in 2023–24 — unchanged since 2018 and constituting 0.8% of NOM. UNHCR data shows 117 million people are forcibly displaced globally, the highest ever recorded, with climate displacement projected to add 1.2 billion people by 2050 (Institute for Economics and Peace). The Australian Human Rights Commission found that Australia's offshore processing regime (Nauru and Manus, reintroduced under the RSP arrangements with Cambodia and other nations) cost $9.6bn over nine years — approximately $573,000 per person transferred — compared to $100,000 per person for community-based processing. The High Court's NZYQ decision (2023) found indefinite detention of stateless persons unconstitutional. The refugee convention's non-refoulement principle has been tested in Australian courts 23 times since 2013 with Australia losing in 19 cases. How should Australia structure its asylum seeker policy?",
+    options: [
+      {
+        label: "Abolish offshore processing and process all asylum claims onshore within a 90-day fast-track system; the financial and humanitarian cost of offshore deterrence is indefensible, and onshore processing is demonstrably cheaper and more legally compliant.",
+        x: -0.7,
+        y: -0.2
+      },
+      {
+        label: "Raise the humanitarian intake to 27,000 — the level recommended by the Refugee Council of Australia — with a regional burden-sharing agreement with ASEAN nations funded by Australian development assistance; managed resettlement is superior to deterrence.",
+        x: -0.5,
+        y: 0.4
+      },
+      {
+        label: "Maintain offshore processing as a deterrent to dangerous maritime voyages but replace Cambodia-style third-country arrangements with an UNHCR-administered Pacific regional protection framework; deterrence is legitimate but must operate within multilateral legal standards.",
+        x: 0.4,
+        y: 0.5
+      },
+      {
+        label: "Maintain the current regime; regardless of per-person processing costs, the deterrent effect has reduced maritime deaths from 1,200 in 2013 to near-zero, and international obligations must be balanced against sovereign border control and preventing criminal smuggling.",
+        x: 0.8,
+        y: 0.6
+      }
+    ]
+  },
+
+  // ── WORK additional (automation) ─────────────────────────────────────────
+
+  {
+    topic: "Work",
+    text: "Artificial intelligence and automation tools are projected to affect 30% of Australian jobs with high displacement risk by 2035 (CSIRO, 2024). Historical technology transitions show that while aggregate employment levels recover, transition costs are heavily concentrated on mid-skill routine workers in their 40s–50s who lack the time horizon to retrain for equivalent wages. The Productivity Commission found Australia spends 0.04% of GDP on active labour market programmes — the lowest in the OECD, compared to Denmark’s 2.1%. TAFE funding in real per-student terms has declined 30% since 2012. Jobs and Skills Australia projects shortfalls of 36,000 nurses and 22,000 ICT professionals by 2026, while 140,000 manufacturing and clerical workers simultaneously face structural redundancy. How should Australia prepare workers for AI-driven labour market transition?",
+    options: [
+      {
+        label: "Fund a national Transition Income Support scheme at 80% of previous wages for up to two years for automation-displaced workers, conditional on enrolment in accredited retraining; wage insurance is the most evidence-supported intervention for mid-career displaced workers per OECD comparative data.",
+        x: -0.6,
+        y: 0.6
+      },
+      {
+        label: "Increase active labour market programme spending to 0.5% of GDP directed to fee-free TAFE places in shortage occupations with income support during training; Australia must close the OECD gap in labour market investment as a structural productivity priority.",
+        x: -0.4,
+        y: 0.5
+      },
+      {
+        label: "Introduce an Automation Levy on firms with annual technology capital expenditure exceeding $10 million, hypothecated to a Workforce Transition Fund; those who capture productivity gains from displacement should bear proportionate responsibility for transition costs.",
+        x: -0.7,
+        y: 0.5
+      },
+      {
+        label: "Deregulate vocational education through income-contingent loan extensions to private providers and employer co-investment incentives; government-directed TAFE investment is supply-push training that consistently mismatches employer skill demand in fast-moving technology transitions.",
+        x: 0.6,
+        y: -0.3
+      }
+    ]
+  },
+
+  // ── CULTURE (2 questions) ─────────────────────────────────────────────
+
+  {
+    topic: "Culture",
+    text: "The News Media Bargaining Code (NMBC, 2021) compelled Google and Meta to negotiate commercial deals with Australian news publishers, generating an estimated $200–250mn annually in payments. The ACCC's 2024 review found that Meta's termination of its deals in 2023 created significant revenue gaps for regional and suburban outlets, and that the Code's mandatory arbitration mechanism has rarely been triggered. The Productivity Commission (2022) found Australian journalism employment fell by 22% (2012–2022), with regional and local news experiencing 40% workforce reductions. The Cairncross Review (UK) and similar analyses argue public interest journalism has positive externalities — it is a public good that market mechanisms systematically under-provide. The ABC's budget has been cut by $375mn in real terms since 2014. How should Australia sustain public interest journalism?",
+    options: [
+      {
+        label: "Restore and expand ABC and SBS funding by $400mn annually, with an independent statutory endowment model removing political control over budget cycles; public broadcasting is the most cost-effective vehicle for quality public interest journalism at scale.",
+        x: -0.6,
+        y: 0.6
+      },
+      {
+        label: "Establish a Public Interest Journalism Fund of $100mn annually administered by the Australian Communications and Media Authority, available to any news organisation — including digital natives — meeting defined editorial independence and local content standards.",
+        x: -0.3,
+        y: 0.5
+      },
+      {
+        label: "Strengthen the NMBC to prevent unilateral platform withdrawal, mandate revenue floor payments for regional outlets, and expand the digital platforms tax to fund a journalism levy; market correction requires binding rather than voluntary commercial arrangements.",
+        x: -0.4,
+        y: 0.6
+      },
+      {
+        label: "Rely on market mechanisms and philanthropic models; government journalism funding creates editorial dependency risk, and the NMBC's uneven distribution has favoured incumbent media proprietors over new digital entrants with stronger public interest credentials.",
+        x: 0.6,
+        y: -0.3
+      }
+    ]
+  },
+
+  {
+    topic: "Culture",
+    text: "The Voice to Parliament referendum (2023) was defeated 60.1%–39.9% with a majority of states also voting No. The Uluru Statement from the Heart (2017) called for Voice, Treaty, and Truth as a sequenced pathway to constitutional recognition and structural reform. The Institute for Governance and Policy Analysis found that Indigenous Australians have the worst life outcomes of any cohort in the country — 10-year life expectancy gap, incarceration rate 17x non-Indigenous, child removal rate 11x, suicide rate 2.3x. Closing the Gap implementation reviews consistently find governance and self-determination deficits as primary barriers to progress: government-directed programmes achieve less than community-controlled organisations. What is the most effective path to structural change for First Nations Australians following the referendum result?",
+    options: [
+      {
+        label: "Pursue Makarrata (treaty process) directly via a Makarrata Commission as recommended by the Uluru Statement, enabling state and territory-level treaties that create justiciable rights and resource transfer arrangements without requiring another referendum.",
+        x: -0.7,
+        y: 0.3
+      },
+      {
+        label: "Redirect Closing the Gap funding exclusively to Aboriginal Community Controlled Organisations (ACCOs), removing mainstream provider delivery for Indigenous-specific programmes; evidence consistently shows ACCOs outperform government and non-Indigenous NGO delivery.",
+        x: -0.5,
+        y: 0.1
+      },
+      {
+        label: "Reintroduce a statutory National Indigenous Advisory Body with legislative powers to review legislation affecting First Nations peoples, not requiring a referendum; this delivers the substantive function of the Voice within the existing constitutional framework.",
+        x: -0.3,
+        y: 0.6
+      },
+      {
+        label: "Focus on practical programmes in health, education, housing, and economic development with rigorous evaluation; constitutional and treaty processes are important but must not divert political capital from service delivery where the mortality and wellbeing gaps are most acute.",
+        x: 0.4,
+        y: 0.4
+      }
+    ]
+  },
+
+  // ── ECONOMY additional ───────────────────────────────────────────────
+
+  {
+    topic: "Economy",
+    text: "During the 2020–2023 period Australia simultaneously deployed the most expansionary fiscal policy in peacetime history (deficit of 7.8% of GDP in 2020–21, $213bn in direct stimulus) and near-zero interest rates from the RBA. The Mundell-Fleming trilemma implies that under a floating exchange rate, monetary policy is the dominant stabilisation tool, making fiscal stimulus crowd out net exports rather than aggregate demand. Yet the 2020–21 experience saw the fiscal multiplier estimated at 1.4–1.7 for JobKeeper (Debelle, RBA 2022), consistent with liquidity-trap dynamics. Now, with underlying inflation at 3.8% and cash rate at 4.35%, the government is running a structural deficit while the RBA holds rates above neutral — creating a contradictory policy mix. What is the correct assignment of monetary and fiscal policy to domestic stabilisation objectives?",
+    options: [
+      {
+        label: "Move to a clear Tinbergen assignment: fiscal policy targets structural objectives (public investment, redistribution, long-run debt sustainability) and monetary policy targets cyclical demand stabilisation; conflicting policy stances are the primary source of Australia's current stagflationary risk.",
+        x: 0.3,
+        y: -0.1
+      },
+      {
+        label: "Use fiscal consolidation — specifically winding back Stage 3 tax cut benefits above $100,000 and returning bracket creep proceeds — to allow the RBA to cut rates sooner, reducing the mortgage-holder burden of disinflation rather than transferring it to public spending cuts.",
+        x: -0.3,
+        y: 0.4
+      },
+      {
+        label: "Expand the RBA's mandate to include exchange rate management and financial stability alongside inflation targeting, with automatic fiscal stabilisers strengthened so that monetary policy bears less of the cyclical adjustment burden in future episodes.",
+        x: -0.2,
+        y: 0.6
+      },
+      {
+        label: "Maintain current settings; the contradiction between loose fiscal and tight monetary policy is a short-run transitional phenomenon, and premature loosening of monetary policy risks re-igniting inflation that carries the greatest burden for lowest-income households.",
+        x: 0.6,
+        y: 0.2
+      }
+    ]
+  },
+
+  // ── WORK (2 questions) ────────────────────────────────────────────────
+
+  {
+    topic: "Work",
+    text: "Gig economy workers — Uber, DoorDash, Airtasker — number approximately 250,000 active participants in Australia. The Gig Workers Support Services (2022) found median platform earnings of $14.20/hour before expenses, below the national minimum wage of $23.23. The High Court's Personnel Contracting and Jamsek decisions (2022) narrowed the definition of employment, potentially reclassifying previously deemed employees as contractors and reducing platform labour cost obligations. The 'same job, same pay' reforms (2023) apply to labour hire workers in host employer workplaces, but explicitly exclude digital platform workers. The ILO's Recommendation 198 on Employment Relationships recommends a rebuttable presumption of employment wherever there is economic dependence. How should Australia regulate platform work?",
+    options: [
+      {
+        label: "Create a new 'dependent contractor' employment category with proportionate rights — minimum pay, super, unfair dismissal protection — without full employee classification; this reflects the genuine hybrid nature of platform work rather than forcing a binary categorisation.",
+        x: -0.3,
+        y: 0.4
+      },
+      {
+        label: "Apply the ILO Recommendation 198 presumption of employment to all platform workers earning over 80% of income from a single platform, requiring platforms to opt out by demonstrating genuine independence; economic dependence should confer employment protections.",
+        x: -0.7,
+        y: 0.6
+      },
+      {
+        label: "Mandate superannuation, workers' compensation, and minimum hourly payment for all digital platform workers regardless of classification; these are minimum social protections that should not be arbitraged via contractual relabelling of economic dependence.",
+        x: -0.5,
+        y: 0.7
+      },
+      {
+        label: "Retain independent contractor status for platform workers who genuinely choose flexibility; market-mandated reclassification will reduce platform flexibility and likely reduce overall gig sector participation as platforms adjust pricing or exit the Australian market.",
+        x: 0.7,
+        y: -0.4
+      }
+    ]
+  },
+
+  {
+    topic: "Work",
+    text: "Workplace productivity growth in Australia has averaged 0.0% per annum since 2017, compared to 1.2% in the decade prior. The RBA's Research Discussion Paper (2024) attributes this partly to composition effects (employment growth concentrated in low-productivity services), but also to declining capital deepening — gross fixed capital formation as a share of GDP fell from 29% to 23.5% from 2012 to 2023. The Productivity Commission's 5-year review identified industrial relations complexity as a moderate drag, estimating that multi-enterprise bargaining creates efficiency losses of $2.3bn annually. However, union density has fallen from 45% (1984) to 13.8% (2023), and the Productivity Commission also found wage-productivity divergence — labour's share of national income fell from 58% to 52% over the same period. How should Australia reform workplace relations to improve productivity and wages simultaneously?",
+    options: [
+      {
+        label: "Expand multi-enterprise bargaining and increase union bargaining rights in low-coverage sectors; wage-productivity divergence shows that declining union power redistributes productivity gains away from labour, and collective bargaining is the most effective mechanism for sharing productivity dividends.",
+        x: -0.7,
+        y: 0.5
+      },
+      {
+        label: "Reform enterprise agreement approval processes to reduce the Better Off Overall Test compliance cost by 60%, and allow productivity-linked pay components beyond the current NES floor; enterprise-level bargaining better aligns incentives for firm-level investment and innovation.",
+        x: 0.5,
+        y: 0.1
+      },
+      {
+        label: "Implement a Worker Capital programme allowing super funds to co-invest in workplace training and technology adoption as part of enterprise agreement packages; capital deepening is the primary productivity lever and industrial relations reform is second-order.",
+        x: -0.2,
+        y: 0.3
+      },
+      {
+        label: "Move to a sector-bargaining model for low-wage industries with a minimum productivity growth clause; this combines the coverage benefits of industry-wide bargaining with the productivity incentive absent from current award structures.",
+        x: -0.4,
+        y: 0.4
+      }
+    ]
+  }
+  ]
 
 };
