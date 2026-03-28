@@ -10,6 +10,7 @@ let settings = {
   questionCount: 20,
   shuffle: true,
   showTopics: true,
+  unhinged: false,
 };
 
 // ===== THEME =====
@@ -69,6 +70,8 @@ function readSettings() {
   settings.questionCount = slider ? parseInt(slider.value) : 20;
   settings.shuffle = shuffleToggle ? shuffleToggle.checked : true;
   settings.showTopics = topicToggle ? topicToggle.checked : true;
+  const unhingedToggle = document.getElementById('unhingedToggle');
+  settings.unhinged = unhingedToggle ? unhingedToggle.checked : false;
   if (defaultMode) currentMode = defaultMode.value;
 }
 
@@ -297,7 +300,9 @@ function drawCompass(px, py) {
 function renderProfile(x, y) {
   const card = document.getElementById('profileCard');
 
-  if (typeof getDetailedSummary === 'function') {
+  if (settings.unhinged && typeof getUnhingedSummary === 'function') {
+    card.innerHTML = getUnhingedSummary(x, y, topicScores);
+  } else if (typeof getDetailedSummary === 'function') {
     card.innerHTML = getDetailedSummary(x, y, topicScores);
   } else {
     // Fallback if summaries.js not loaded

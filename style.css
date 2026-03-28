@@ -699,6 +699,23 @@ details[open] .topic-toggle::before { content: '▾ '; }
 }
 .btn-danger:hover { opacity: 0.9; }
 
+/* ===== UNHINGED MODE ===== */
+.personality-summary.unhinged {
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  background: var(--color-accent-soft);
+}
+.personality-summary.unhinged .summary-name {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.personality-summary.unhinged .summary-section h3 {
+  color: var(--color-accent);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 520px) {
   .screen { padding: var(--space-4); }
