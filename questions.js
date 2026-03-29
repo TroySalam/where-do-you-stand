@@ -391,7 +391,7 @@ const QUESTION_BANKS = {
   text: "Big multinationals like tech giants operating in Australia often pay very little tax by shifting profits overseas. Should the government close these loopholes and force them to pay their fair share?",
   options: [
     { label: "Yes — corporations must pay full tax on Australian profits, no exceptions", x: -0.8, y: 0.7 },
-    { label: "Close the worst loopholes, but keep some incentives to attract foreign investment", x: -0.3, y: 0.2 },
+    { label: "Close the worst loopholes, but keep some incentives to attract foreign investment", x: -0.3, y: 0.0 },
     { label: "Leave it to international agreements — unilateral action could scare off investment", x: 0.5, y: -0.3 },
     { label: "Lower the corporate tax rate for everyone so avoidance becomes less worthwhile", x: 0.8, y: -0.6 },
   ]
@@ -401,7 +401,7 @@ const QUESTION_BANKS = {
   text: "The government is running a budget deficit. It needs to either raise taxes or cut spending on public services. Which approach do you prefer?",
   options: [
     { label: "Raise taxes on high earners and big business to protect services", x: -0.8, y: 0.6 },
-    { label: "A balanced mix — modest tax rises and targeted spending cuts", x: -0.2, y: 0.2 },
+    { label: "A balanced mix — modest tax rises and targeted spending cuts", x: -0.2, y: 0.0 },
     { label: "Mostly cut government spending and find efficiencies in the public sector", x: 0.6, y: -0.4 },
     { label: "Cut taxes to grow the economy and let revenue catch up naturally", x: 0.9, y: -0.7 },
   ]
@@ -411,7 +411,7 @@ const QUESTION_BANKS = {
   text: "The minimum wage in Australia is set to be reviewed. Workers say it hasn't kept up with the cost of living. Small business owners say a big rise will force them to cut jobs. What should happen?",
   options: [
     { label: "Raise the minimum wage significantly — workers need a living wage now", x: -0.8, y: 0.5 },
-    { label: "Raise it gradually in line with inflation to balance workers and businesses", x: -0.3, y: 0.2 },
+    { label: "Raise it gradually in line with inflation to balance workers and businesses", x: -0.3, y: 0.0 },
     { label: "Keep increases small and let market wages rise naturally in a strong economy", x: 0.5, y: -0.3 },
     { label: "Remove the minimum wage — let employers and workers negotiate freely", x: 0.8, y: -0.8 },
   ]
@@ -475,7 +475,7 @@ const QUESTION_BANKS = {
   text: "Public hospital waiting lists are blowing out — people wait months for elective surgery. Should the government increase hospital funding significantly, even if it means higher taxes?",
   options: [
     { label: "Yes — a well-funded public system is a right; raise taxes if needed", x: -0.8, y: 0.7 },
-    { label: "Fund hospitals better but also incentivise private health to take pressure off", x: -0.1, y: 0.3 },
+    { label: "Fund hospitals better but also incentivise private health to take pressure off", x: -0.1, y: 0.0 },
     { label: "Focus on efficiency and administration cuts before spending more", x: 0.5, y: -0.1 },
     { label: "Expand private healthcare options and let competition drive better outcomes", x: 0.8, y: -0.6 },
   ]
@@ -517,7 +517,7 @@ const QUESTION_BANKS = {
   text: "Should Australia set a legally binding target to reach net-zero emissions by 2035, faster than the current 2050 target, even if it requires shutting down fossil fuel industries sooner?",
   options: [
     { label: "Yes — the climate crisis demands urgent action regardless of economic disruption", x: -0.9, y: 0.6 },
-    { label: "Move faster than 2050 but give industries a clear, managed transition timeline", x: -0.3, y: 0.3 },
+    { label: "Move faster than 2050 but give industries a clear, managed transition timeline", x: -0.3, y: 0.1 },
     { label: "Stick with 2050 — rushing risks job losses and power blackouts", x: 0.5, y: 0.1 },
     { label: "No binding targets at all — let technology and market forces drive the transition", x: 0.8, y: -0.7 },
   ]
@@ -561,7 +561,7 @@ const QUESTION_BANKS = {
   text: "Many Australians work casual or gig economy jobs with no sick leave, no job security, and no guarantee of hours. Should these workers be given the same rights as permanent employees?",
   options: [
     { label: "Yes — all workers deserve sick leave, job security, and predictable hours", x: -0.8, y: 0.6 },
-    { label: "Give casuals access to sick leave after 12 months but keep flexibility for employers", x: -0.3, y: 0.3 },
+    { label: "Give casuals access to sick leave after 12 months but keep flexibility for employers", x: -0.3, y: 0.1 },
     { label: "Keep the current system — flexibility suits many workers and forcing rights could cut jobs", x: 0.5, y: -0.2 },
     { label: "Deregulate further — let workers and employers negotiate terms without government interference", x: 0.8, y: -0.7 },
   ]
@@ -583,9 +583,9 @@ const QUESTION_BANKS = {
   text: "Should the Australian government recognise Indigenous sovereignty and sign a formal treaty with Aboriginal and Torres Strait Islander peoples?",
   options: [
     { label: "Yes — a treaty is long overdue and essential for justice and reconciliation", x: -0.8, y: 0.4 },
-    { label: "Support a treaty, but it needs broad community agreement and proper process first", x: -0.3, y: 0.3 },
+    { label: "Support a treaty, but it needs broad community agreement and proper process first", x: -0.3, y: 0.1 },
     { label: "Prioritise practical measures like closing the gap in health and education over symbolic steps", x: 0.4, y: 0.2 },
-    { label: "No treaty — Australia should focus on equality for all citizens, not separate arrangements", x: 0.8, y: 0.3 },
+    { label: "No treaty — Australia should focus on equality for all citizens, not separate arrangements", x: 0.8, y: -0.2 },
   ]
 },
 {
@@ -603,7 +603,7 @@ const QUESTION_BANKS = {
   text: "Religious organisations that run schools and hospitals receive public funding. Should they be exempt from anti-discrimination laws when hiring staff or accepting students?",
   options: [
     { label: "No — if you take public money, you follow the same non-discrimination rules as everyone else", x: -0.8, y: 0.6 },
-    { label: "Allow very narrow exemptions for religious roles, but not for teachers or medical staff", x: -0.2, y: 0.3 },
+    { label: "Allow very narrow exemptions for religious roles, but not for teachers or medical staff", x: -0.2, y: 0.0 },
     { label: "Broad exemptions are reasonable — religious freedom is a fundamental right", x: 0.6, y: 0.3 },
     { label: "Full religious exemptions — the state should not interfere with how faith communities operate", x: 0.8, y: -0.3 },
   ]
@@ -747,7 +747,7 @@ const QUESTION_BANKS = {
     { label: "Yes — it's time Australia had a fully independent identity with an Australian head of state", x: -0.7, y: 0.2 },
     { label: "Become a republic but only after careful design to avoid giving too much power to one person", x: -0.2, y: 0.1 },
     { label: "Keep the current system — the constitutional monarchy works well and change risks instability", x: 0.6, y: 0.4 },
-    { label: "Strongly support the monarchy — it is part of our heritage and keeps politics out of the role", x: 0.9, y: 0.6 },
+    { label: "Strongly support the monarchy — it is part of our heritage and keeps politics out of the role", x: 0.9, y: -0.2 },
   ]
 },
 {
@@ -757,7 +757,7 @@ const QUESTION_BANKS = {
     { label: "Yes — celebrating on that date is deeply hurtful and the date should change", x: -0.8, y: 0.3 },
     { label: "Change the date and use it as an opportunity for genuine national reflection and unity", x: -0.4, y: 0.2 },
     { label: "Keep the date but acknowledge its full history alongside the celebration", x: 0.4, y: 0.2 },
-    { label: "Keep the date — changing it is divisive political correctness that erases our history", x: 0.9, y: 0.4 },
+    { label: "Keep the date — changing it is divisive political correctness that erases our history", x: 0.9, y: -0.2 },
   ]
 },
   ],
@@ -1167,7 +1167,7 @@ const QUESTION_BANKS = {
       {
         label: "Hold the rate at 47% but eliminate the 50% CGT discount and tax trusts at individual marginal rates, closing structural loopholes that allow high earners to avoid the headline rate without changing it.",
         x: -0.4,
-        y: 0.4
+        y: 0.1
       },
       {
         label: "Index all tax brackets to wage growth and reduce the rate to 45%, prioritising bracket creep correction over rate changes — this is a supply-side measure that pays for itself via higher labour force participation.",
@@ -1243,7 +1243,7 @@ const QUESTION_BANKS = {
       {
         label: "Maintain the current 15% contributions tax but apply earnings tax progressively above $3 million in retirement phase as legislated; this is a targeted, evidence-based reform that preserves incentive to save while improving equity.",
         x: -0.2,
-        y: 0.3
+        y: 0.0
       },
       {
         label: "Reduce the superannuation guarantee from 11.5% to 9% and return wage capacity to workers; Treasury modelling overstates concession costs by ignoring the pension offset and individual savings decisions should not be second-guessed by government.",
@@ -1309,7 +1309,7 @@ const QUESTION_BANKS = {
       {
         label: "Abandon intensity-based carbon regulation and rely on technology mandates and direct public investment in green hydrogen and CCS; regulatory carbon pricing disadvantages Australian trade-exposed industries relative to competitors without equivalent schemes.",
         x: 0.5,
-        y: 0.3
+        y: -0.3
       }
     ]
   },
@@ -1326,7 +1326,7 @@ const QUESTION_BANKS = {
       {
         label: "Reform PRRT uplift rates to approximate Treasury bond rates (removing the current 12.5–17.5% uplift), increasing revenue capture without deterring marginal projects; pair with an RBA mandate to monitor resource-sector exchange rate effects.",
         x: -0.3,
-        y: 0.4
+        y: 0.1
       },
       {
         label: "Maintain current PRRT settings; the rent tax collects substantially more in boom periods by design, and radical reform risks delaying final investment decisions on $50bn+ of LNG expansion projects that provide long-run employment and export earnings.",
@@ -1377,7 +1377,7 @@ const QUESTION_BANKS = {
       {
         label: "Implement a partial UBI of $600/fortnight as a floor income for all adults 18–65, taxable above a threshold, replacing JobSeeker and most categorical payments; fund through a land value tax and higher super earnings tax, with a phased 5-year implementation.",
         x: -0.7,
-        y: 0.3
+        y: -0.1
       },
       {
         label: "Raise JobSeeker to 90% of the Henderson poverty line (~$1,100/fortnight) and retain mutual obligation requirements but replace compliance-based suspensions with positive incentive structures and intensive employment services for the long-term unemployed.",
@@ -1392,7 +1392,7 @@ const QUESTION_BANKS = {
       {
         label: "Index JobSeeker to 50% of median wages but tighten activity testing requirements; income support should incentivise labour market attachment and the compliance regime, while imperfect, prevents moral hazard in a tight labour market.",
         x: 0.5,
-        y: 0.3
+        y: -0.2
       }
     ]
   },
@@ -1419,7 +1419,7 @@ const QUESTION_BANKS = {
       {
         label: "Rely on award modernisation and equal pay orders via the Fair Work Commission rather than sector-wide legislative intervention; government-mandated pay increases in care sectors risk cost inflation and workforce substitution via technology or service rationing.",
         x: 0.4,
-        y: 0.0
+        y: -0.3
       }
     ]
   },
@@ -1475,7 +1475,7 @@ const QUESTION_BANKS = {
       {
         label: "Transition the NDIS to a social insurance model with lifetime entitlement caps and co-contribution requirements above median income; Australia cannot sustain a universal uncapped disability entitlement within a fiscally responsible framework.",
         x: 0.7,
-        y: 0.0
+        y: -0.3
       }
     ]
   },
@@ -1502,7 +1502,7 @@ const QUESTION_BANKS = {
       {
         label: "Allow co-payments for non-concessional patients with means-testing, redirect savings to fund the GP workforce pipeline; price signals reduce low-acuity demand and cross-subsidise rural and underserved communities where market failure is genuine.",
         x: 0.6,
-        y: 0.0
+        y: -0.3
       }
     ]
   },
@@ -1524,12 +1524,12 @@ const QUESTION_BANKS = {
       {
         label: "Introduce value-based pricing with outcomes-linked payment models; pharmaceutical companies should bear the financial risk of efficacy uncertainty rather than transferring it to taxpayers via upfront listing at speculative QALY estimates.",
         x: -0.3,
-        y: 0.3
+        y: 0.0
       },
       {
         label: "Hold the QALY threshold at current levels to constrain PBS expenditure growth; with fiscal pressures from NDIS and ageing demographics, extending the threshold risks crowding out more cost-effective community health spending with marginal benefit therapies.",
         x: 0.4,
-        y: 0.2
+        y: -0.2
       }
     ]
   },
@@ -1863,7 +1863,7 @@ const QUESTION_BANKS = {
       {
         label: "Establish a dedicated financial crimes court with specialist prosecutors and fast-track asset forfeiture; detection capacity is adequate but prosecution failure rates reflect judicial and procedural constraints, not reporting deficiencies.",
         x: 0.5,
-        y: 0.5
+        y: -0.1
       }
     ]
   },
@@ -1887,7 +1887,7 @@ const QUESTION_BANKS = {
       {
         label: "Mandate proactive legal risk certification by the Solicitor-General for all mass automated decision-making programmes before implementation, with binding legal opinion publication; parliamentary scrutiny of algorithm-based welfare administration must precede, not follow, deployment.",
         x: -0.1,
-        y: 0.5
+        y: -0.2
       },
       {
         label: "Strengthen merits review tribunal capacity in the AAT (now Administrative Review Tribunal) and fund free legal representation for welfare recipients facing automated debt decisions; individual access to justice is the most reliable check on administrative overreach.",
@@ -2033,7 +2033,7 @@ const QUESTION_BANKS = {
       {
         label: "Focus on practical programmes in health, education, housing, and economic development with rigorous evaluation; constitutional and treaty processes are important but must not divert political capital from service delivery where the mortality and wellbeing gaps are most acute.",
         x: 0.4,
-        y: 0.4
+        y: -0.2
       }
     ]
   },
@@ -2108,12 +2108,12 @@ const QUESTION_BANKS = {
       {
         label: "Reform enterprise agreement approval processes to reduce the Better Off Overall Test compliance cost by 60%, and allow productivity-linked pay components beyond the current NES floor; enterprise-level bargaining better aligns incentives for firm-level investment and innovation.",
         x: 0.5,
-        y: 0.1
+        y: -0.3
       },
       {
         label: "Implement a Worker Capital programme allowing super funds to co-invest in workplace training and technology adoption as part of enterprise agreement packages; capital deepening is the primary productivity lever and industrial relations reform is second-order.",
         x: -0.2,
-        y: 0.3
+        y: 0.0
       },
       {
         label: "Move to a sector-bargaining model for low-wage industries with a minimum productivity growth clause; this combines the coverage benefits of industry-wide bargaining with the productivity incentive absent from current award structures.",

@@ -515,10 +515,6 @@
   background: var(--color-primary-glow);
 }
 
-.option-info-btn {
-  align-self: center;
-}
-
 .question-info-btn {
   flex-shrink: 0;
   margin-top: var(--space-1);
@@ -556,11 +552,6 @@
   margin-bottom: var(--space-1);
 }
 
-.option-tooltip {
-  width: 100%;
-  margin-top: 0;
-}
-
 @keyframes tooltipIn {
   from { opacity: 0; transform: translateY(-4px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -586,97 +577,6 @@
 .back-question-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-}
-
-/* ===== NAME ENTRY ===== */
-.name-input-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  width: 100%;
-}
-
-.name-input {
-  width: 100%;
-  padding: var(--space-4) var(--space-5);
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: 500;
-  color: var(--color-text);
-  outline: none;
-  transition: border-color var(--transition-interactive);
-}
-
-.name-input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-glow);
-}
-
-.name-input::placeholder {
-  color: var(--color-text-faint);
-}
-
-.name-hint {
-  font-size: var(--text-xs);
-  color: var(--color-accent);
-  min-height: 1.2em;
-}
-
-/* ===== COMMUNITY SCREEN ===== */
-.community-compass-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 1;
-  margin: 0 auto;
-}
-
-.community-compass-wrapper canvas {
-  width: 100%; height: 100%;
-}
-
-.community-list {
-  width: 100%;
-  margin-top: var(--space-4);
-}
-
-.community-list-title {
-  font-size: var(--text-sm);
-  font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: var(--space-3);
-}
-
-.community-entries {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.community-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-
-.community-name {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.community-meta {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
 }
 
 /* ===== MODAL ===== */
@@ -928,7 +828,6 @@ details[open] .topic-toggle::before { content: '▾ '; }
   .mode-grid { grid-template-columns: 1fr; }
   .mode-card { min-height: auto; }
   .compass-wrapper { max-width: 320px; }
-  .community-compass-wrapper { max-width: 320px; }
   .axis-label { font-size: 0.6rem; }
   .result-actions { flex-direction: column; width: 100%; }
   .result-actions .btn-primary,

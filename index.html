@@ -34,9 +34,6 @@
           <button class="menu-btn play-btn" onclick="showModeSelect()">
             <span class="btn-icon">▶</span> Play
           </button>
-          <button class="menu-btn" onclick="showCommunity()">
-            <span class="btn-icon">👥</span> See Others
-          </button>
           <button class="menu-btn" onclick="showScreen('settings')">
             <span class="btn-icon">⚙</span> Settings
           </button>
@@ -50,20 +47,6 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           </button>
         </div>
-      </div>
-    </section>
-
-    <!-- ===== NAME ENTRY ===== -->
-    <section id="name-entry" class="screen">
-      <div class="panel">
-        <button class="back-btn" onclick="showScreen('mode-select')">← Back</button>
-        <h2 class="panel-title">What's Your Name?</h2>
-        <p class="panel-sub">Your name appears on the community compass so others can see where you stand</p>
-        <div class="name-input-group">
-          <input type="text" id="playerNameInput" class="name-input" placeholder="Enter your full name" maxlength="50" autocomplete="name">
-          <p class="name-hint" id="nameHint"></p>
-        </div>
-        <button class="btn-primary" onclick="submitName()" style="align-self:center;margin-top:var(--space-4);">Start Quiz</button>
       </div>
     </section>
 
@@ -168,12 +151,8 @@
             <p><strong>Teen</strong> uses everyday scenarios. <strong>Adult</strong> covers real-world policy. <strong>Academic</strong> brings in political theory. <strong>Economist</strong> uses complex, data-driven dilemmas.</p>
           </div>
           <div class="about-block">
-            <h3>Clarify Buttons</h3>
-            <p>See a <strong>ⓘ</strong> icon? Tap it to get a plain-English explanation of the question or answer option. Useful for harder modes.</p>
-          </div>
-          <div class="about-block">
-            <h3>Community</h3>
-            <p>After finishing, your result is saved (with your name) to the community map. Hit <strong>See Others</strong> from the main menu to view where everyone landed.</p>
+            <h3>Clarify Button</h3>
+            <p>See a <strong>ⓘ</strong> icon next to a question? Tap it to get a plain-English explanation of what the question is really asking.</p>
           </div>
           <div class="about-block">
             <h3>Scoring</h3>
@@ -181,27 +160,6 @@
           </div>
         </div>
         <button class="btn-primary" onclick="showScreen('menu')" style="margin-top:var(--space-6);align-self:center;">Got It</button>
-      </div>
-    </section>
-
-    <!-- ===== COMMUNITY ===== -->
-    <section id="community" class="screen">
-      <div class="panel" style="max-width:640px;">
-        <button class="back-btn" onclick="showScreen('menu')">← Back</button>
-        <h2 class="panel-title">Community Compass</h2>
-        <p class="panel-sub">See where others landed</p>
-        <div class="community-compass-wrapper">
-          <canvas id="communityCanvas" width="400" height="400"></canvas>
-          <div class="axis-labels">
-            <span class="axis-label top">More Government</span>
-            <span class="axis-label bottom">Less Government</span>
-            <span class="axis-label left">Progressive</span>
-            <span class="axis-label right">Traditional</span>
-          </div>
-        </div>
-        <div class="community-list" id="communityList">
-          <p class="panel-sub" style="text-align:center;">Loading...</p>
-        </div>
       </div>
     </section>
 
