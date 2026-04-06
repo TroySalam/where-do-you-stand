@@ -5,19 +5,59 @@
    Z = Restraint ↔ Expansionism (expansion)
    ═══════════════════════════════════════════════ */
 
-let compass3d = null; // { scene, camera, renderer, controls, dot, animId }
+let compass3d = null; // { scene, camera, renderer, controls, animId, resizeHandler, alive }
 let savedScores3d = null;
+
+/* ─── Thorough cleanup to prevent WebGL context leaks ─── */
+function destroyCompass3D() {
+  if (!compass3d) return;
+
+  // Stop the animation loop first
+  compass3d.alive = false;
+  if (compass3d.animId) {
+    cancelAnimationFrame(compass3d.animId);
+  }
+
+  // Remove the resize listener we added
+  if (compass3d.resizeHandler) {
+    window.removeEventListener('resize', compass3d.resizeHandler);
+  }
+
+  // Dispose controls (removes its internal event listeners from the DOM element)
+  if (compass3d.controls) {
+    compass3d.controls.dispose();
+  }
+
+  // Dispose all geometries, materials, textures in the scene
+  if (compass3d.scene) {
+    compass3d.scene.traverse((obj) => {
+      if (obj.geometry) obj.geometry.dispose();
+      if (obj.material) {
+        if (obj.material.map) obj.material.map.dispose();
+        obj.material.dispose();
+      }
+    });
+  }
+
+  // Dispose renderer and remove its canvas from the DOM
+  if (compass3d.renderer) {
+    compass3d.renderer.dispose();
+    compass3d.renderer.forceContextLoss();          // free the WebGL context immediately
+    const canvas = compass3d.renderer.domElement;
+    if (canvas && canvas.parentNode) {
+      canvas.parentNode.removeChild(canvas);
+    }
+  }
+
+  compass3d = null;
+}
 
 function showCompass2D() {
   document.getElementById('compass2dView').style.display = '';
   document.getElementById('compass3dView').style.display = 'none';
   document.getElementById('btn2d').classList.add('active');
   document.getElementById('btn3d').classList.remove('active');
-  if (compass3d) {
-    cancelAnimationFrame(compass3d.animId);
-    compass3d.renderer.dispose();
-    compass3d = null;
-  }
+  destroyCompass3D();
 }
 
 function showCompass3D() {
@@ -34,14 +74,9 @@ function initCompass3D(scores) {
   savedScores3d = scores;
   const container = document.getElementById('compass3dContainer');
 
-  // Clean up previous
-  if (compass3d) {
-    cancelAnimationFrame(compass3d.animId);
-    compass3d.renderer.dispose();
-    compass3d.controls.dispose();
-    container.innerHTML = '';
-    compass3d = null;
-  }
+  // Clean up any previous instance completely
+  destroyCompass3D();
+  container.innerHTML = '';
 
   const w = Math.min(container.clientWidth || 380, 420);
   const h = w;
@@ -196,9 +231,24 @@ function initCompass3D(scores) {
   // Ambient light (not really needed for MeshBasic but keeps consistent)
   scene.add(new THREE.AmbientLight(0xffffff, 1));
 
+  // ─── Store instance BEFORE starting animation ───
+  const resizeHandler = () => {
+    if (!compass3d || !compass3d.alive) return;
+    const newW = Math.min(container.clientWidth || 380, 420);
+    const newH = newW;
+    camera.aspect = newW / newH;
+    camera.updateProjectionMatrix();
+    renderer.setSize(newW, newH);
+  };
+  window.addEventListener('resize', resizeHandler);
+
+  compass3d = { scene, camera, renderer, controls, dot, animId: 0, resizeHandler, alive: true };
+
   // ─── Animation loop ───
   function animate() {
-    const id = requestAnimationFrame(animate);
+    if (!compass3d || !compass3d.alive) return;   // stop if destroyed
+
+    compass3d.animId = requestAnimationFrame(animate);
     controls.update();
 
     // Pulse the glow
@@ -207,21 +257,9 @@ function initCompass3D(scores) {
     glow.material.opacity = 0.3 + Math.sin(t) * 0.1;
 
     renderer.render(scene, camera);
-    compass3d.animId = id;
   }
 
-  compass3d = { scene, camera, renderer, controls, dot, animId: 0 };
   animate();
-
-  // Resize handler
-  const resizeHandler = () => {
-    const newW = Math.min(container.clientWidth || 380, 420);
-    const newH = newW;
-    camera.aspect = newW / newH;
-    camera.updateProjectionMatrix();
-    renderer.setSize(newW, newH);
-  };
-  window.addEventListener('resize', resizeHandler);
 }
 
 // ─── Helpers ───
