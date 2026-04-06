@@ -77,18 +77,28 @@
         <p id="questionText" class="question-text"></p>
       </div>
 
-      <div class="answer-scale">
-        <span class="scale-label">Strongly disagree</span>
-        <div class="scale-buttons">
-          <button class="scale-btn" data-value="1">1</button>
-          <button class="scale-btn" data-value="2">2</button>
-          <button class="scale-btn" data-value="3">3</button>
-          <button class="scale-btn" data-value="4">4</button>
-          <button class="scale-btn" data-value="5">5</button>
+      <div class="answer-scale vertical">
+        <div class="scale-row" data-value="5">
+          <button class="scale-btn" data-value="5"><span class="dot-fill"></span></button>
+          <span class="scale-row-label">Strongly agree</span>
         </div>
-        <span class="scale-label">Strongly agree</span>
+        <div class="scale-row" data-value="4">
+          <button class="scale-btn" data-value="4"><span class="dot-fill"></span></button>
+          <span class="scale-row-label">Agree</span>
+        </div>
+        <div class="scale-row" data-value="3">
+          <button class="scale-btn" data-value="3"><span class="dot-fill"></span></button>
+          <span class="scale-row-label">Neutral</span>
+        </div>
+        <div class="scale-row" data-value="2">
+          <button class="scale-btn" data-value="2"><span class="dot-fill"></span></button>
+          <span class="scale-row-label">Disagree</span>
+        </div>
+        <div class="scale-row" data-value="1">
+          <button class="scale-btn" data-value="1"><span class="dot-fill"></span></button>
+          <span class="scale-row-label">Strongly disagree</span>
+        </div>
       </div>
-      <div class="neutral-label" id="neutralLabel">Neutral</div>
 
       <div class="quiz-footer">
         <a id="prevBtn" class="nav-link disabled" onclick="prevQuestion()">← Previous</a>

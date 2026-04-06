@@ -78,14 +78,6 @@ function renderQuestion() {
     }
   });
 
-  // Neutral label
-  const neutralLabel = document.getElementById('neutralLabel');
-  if (answers[currentQ] === 3) {
-    neutralLabel.classList.add('visible');
-  } else {
-    neutralLabel.classList.remove('visible');
-  }
-
   // Nav buttons
   document.getElementById('prevBtn').classList.toggle('disabled', currentQ === 0);
   document.getElementById('nextBtn').classList.toggle('disabled', answers[currentQ] === null);
@@ -139,10 +131,6 @@ function selectAnswer(value) {
     btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
   });
 
-  // Neutral label
-  const neutralLabel = document.getElementById('neutralLabel');
-  neutralLabel.classList.toggle('visible', value === 3);
-
   // Enable next
   document.getElementById('nextBtn').classList.remove('disabled');
 
@@ -176,9 +164,15 @@ function prevQuestion() {
   }
 }
 
-// Event listeners for scale buttons
+// Event listeners for scale rows (click anywhere on the row)
+document.querySelectorAll('.scale-row').forEach(row => {
+  row.addEventListener('click', () => {
+    selectAnswer(parseInt(row.dataset.value));
+  });
+});
 document.querySelectorAll('.scale-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
     selectAnswer(parseInt(btn.dataset.value));
   });
 });

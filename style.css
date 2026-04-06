@@ -267,68 +267,65 @@ a:hover { color: var(--text); }
   letter-spacing: -0.01em;
 }
 
-/* Answer scale */
-.answer-scale {
+/* Answer scale — vertical dots */
+.answer-scale.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 10px;
+}
+.scale-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  cursor: pointer;
+  width: 220px;
+}
+.scale-row:hover .scale-btn {
+  border-color: var(--accent);
+}
+.scale-row:hover .scale-row-label {
+  color: var(--text-muted);
+}
+.scale-btn {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 6px;
+  padding: 0;
 }
-.scale-label {
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  min-width: 90px;
-  text-align: center;
-}
-.scale-buttons {
-  display: flex;
-  gap: 10px;
-}
-.scale-btn {
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-card);
-  border: 1.5px solid var(--border);
-  color: var(--text);
-  font-size: 1.2rem;
-  font-weight: 600;
-  font-family: var(--font);
-  cursor: pointer;
+.scale-btn .dot-fill {
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--teal);
   transition: all 0.15s;
-  position: relative;
 }
 .scale-btn:hover {
   border-color: var(--accent);
-  background: var(--bg-card-hover);
 }
 .scale-btn.selected {
   border-color: var(--teal);
-  background: rgba(20, 184, 166, 0.12);
-  box-shadow: 0 0 0 1px var(--teal);
 }
-.scale-btn.selected::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--teal);
+.scale-btn.selected .dot-fill {
+  width: 14px;
+  height: 14px;
 }
-
-.neutral-label {
-  text-align: center;
-  font-size: 0.75rem;
+.scale-row-label {
+  font-size: 0.88rem;
   color: var(--text-dim);
-  margin-bottom: 32px;
-  opacity: 0;
-  transition: opacity 0.2s;
+  transition: color 0.15s;
+  user-select: none;
 }
-.neutral-label.visible { opacity: 1; }
 
 /* Quiz navigation */
 .quiz-footer {
@@ -610,10 +607,8 @@ a:hover { color: var(--text); }
   .hero h1 { font-size: 1.8rem; }
   .subtitle { font-size: 0.95rem; }
   .meta-row { flex-direction: column; gap: 6px; align-items: center; }
-  .answer-scale { flex-direction: column; gap: 8px; }
-  .scale-label { min-width: auto; }
-  .scale-buttons { gap: 8px; }
-  .scale-btn { width: 52px; height: 52px; font-size: 1.05rem; }
+  .scale-row { width: 200px; }
+  .scale-btn { width: 26px; height: 26px; min-width: 26px; }
   .radar-section { grid-template-columns: 1fr; gap: 28px; }
   .radar-canvas-wrap { max-width: 280px; }
   .axis-bar-row { grid-template-columns: 1fr; gap: 4px; text-align: center; }
