@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Where Do You Stand? — Political Test</title>
-  <meta name="description" content="Discover your political profile across 6 dimensions. 54 questions, ~6 minutes. Find your closest country match.">
+  <meta name="description" content="Discover your political profile across 5 core dimensions plus an expansion outlook. 54 questions, ~6 minutes. Find your closest country match.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
 
     <main class="hero">
       <h1>Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
-      <p class="subtitle">Discover your political profile across 6 dimensions — economy, society, governance, universality, environment, and expansion. Find the country and figures that match your views.</p>
+      <p class="subtitle">Discover your political profile across 5 core dimensions and an expansion outlook — economy, society, governance, universality, environment, plus space, technology, bioethics, and growth. Find the country and figures that match your views.</p>
       <button class="btn-primary" onclick="startQuiz()">
         Begin the exploration <span class="arrow">→</span>
       </button>
@@ -41,7 +41,7 @@
 
     <section class="info-section">
       <h3>How it works</h3>
-      <p>You'll rate 54 statements on a scale from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a 6-axis profile that gets compared against real country profiles and political figures.</p>
+      <p>You'll rate 54 statements on a scale from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile that gets compared against real country profiles and political figures.</p>
       <div class="axes-preview">
         <div class="axis-chip"><span class="dot" style="background:var(--c-economy)"></span> Economy</div>
         <div class="axis-chip"><span class="dot" style="background:var(--c-society)"></span> Society</div>
@@ -139,6 +139,15 @@
           <h3 class="radar-title right">Right-Leaning Trends</h3>
           <div class="radar-canvas-wrap">
             <canvas id="radarRight" width="300" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="radar-section expansion-radar-section">
+        <div class="radar-col radar-col-full">
+          <h3 class="radar-title expansion">Expansion Outlook</h3>
+          <div class="radar-canvas-wrap">
+            <canvas id="radarExpansion" width="300" height="300"></canvas>
           </div>
         </div>
       </div>

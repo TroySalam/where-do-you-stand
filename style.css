@@ -414,6 +414,19 @@ a:hover { color: var(--text); }
 }
 .radar-title.left { color: var(--radar-left); }
 .radar-title.right { color: var(--radar-right); }
+.radar-title.expansion { color: #F472B6; }
+
+/* Expansion radar — single centered chart */
+.expansion-radar-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.expansion-radar-section .radar-col-full {
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+}
 .radar-subtitle {
   font-size: 0.82rem;
   color: var(--text-dim);
@@ -610,6 +623,7 @@ a:hover { color: var(--text); }
   .scale-row { width: 200px; }
   .scale-btn { width: 26px; height: 26px; min-width: 26px; }
   .radar-section { grid-template-columns: 1fr; gap: 28px; }
+  .expansion-radar-section { grid-template-columns: 1fr; }
   .radar-canvas-wrap { max-width: 280px; }
   .axis-bar-row { grid-template-columns: 1fr; gap: 4px; text-align: center; }
   .axis-bar-left, .axis-bar-right { text-align: center; }

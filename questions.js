@@ -251,50 +251,61 @@ const QUESTIONS = [
     pole: "left"
   },
 
-  // ── EXPANSION (9 questions) ──────────────────────────────────────────
+  // ── EXPANSION (9 questions, sub-categorised) ─────────────────────────
+  // sub: "space" | "technology" | "bioethics" | "growth"
+  // The 5th pentagon corner ("Expansion") is the average of these four.
   {
     text: "Humanity should prioritise becoming a multi-planetary species within this century.",
     axis: "expansion",
+    sub: "space",
     pole: "left" // agree → Expansionism
   },
   {
     text: "We should fix the problems on Earth before spending resources on space colonisation.",
     axis: "expansion",
+    sub: "space",
     pole: "right" // agree → Restraint
   },
   {
     text: "Developing artificial general intelligence is one of the most important goals of our time.",
     axis: "expansion",
+    sub: "technology",
     pole: "left"
   },
   {
     text: "There should be strict limits on how fast AI systems are allowed to advance.",
     axis: "expansion",
+    sub: "technology",
     pole: "right"
   },
   {
     text: "Human genetic enhancement and life extension research should be aggressively funded.",
     axis: "expansion",
+    sub: "bioethics",
     pole: "left"
   },
   {
     text: "Pursuing endless economic and technological growth is unsustainable and dangerous.",
     axis: "expansion",
+    sub: "growth",
     pole: "right"
   },
   {
     text: "Large-scale geoengineering projects are a reasonable response to climate change.",
     axis: "expansion",
+    sub: "growth",
     pole: "left"
   },
   {
     text: "Societies should focus on living within natural limits rather than engineering their way out.",
     axis: "expansion",
+    sub: "bioethics",
     pole: "right"
   },
   {
     text: "The long-term survival of the human species depends on expanding beyond Earth.",
     axis: "expansion",
+    sub: "space",
     pole: "left"
   }
 ];
