@@ -156,13 +156,15 @@
 
       <!-- Classic 2D Political Compass -->
       <div class="compass-section">
-        <h3 class="compass-heading">Political Compass</h3>
         <div class="compass-wrap">
-          <span class="compass-label compass-label-top">Authoritarian</span>
-          <span class="compass-label compass-label-bottom">Libertarian</span>
-          <span class="compass-label compass-label-left">Left</span>
-          <span class="compass-label compass-label-right">Right</span>
-          <canvas id="compassCanvas" width="360" height="360"></canvas>
+          <h3 class="compass-heading">Political Compass</h3>
+          <span class="compass-label-block">Authoritarian</span>
+          <div class="compass-grid">
+            <span class="compass-label compass-label-left">Left</span>
+            <canvas id="compassCanvas" width="360" height="360"></canvas>
+            <span class="compass-label compass-label-right">Right</span>
+          </div>
+          <span class="compass-label-block">Libertarian</span>
           <div class="compass-coords" id="compassCoords"></div>
         </div>
       </div>

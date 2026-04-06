@@ -398,24 +398,39 @@ a:hover { color: var(--text); }
 /* ─── 2D POLITICAL COMPASS ────────────────────── */
 .compass-section {
   margin-bottom: 48px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.compass-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 380px;
+  width: 100%;
 }
 .compass-heading {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 20px;
+  margin-bottom: 6px;
   letter-spacing: -0.01em;
 }
-.compass-wrap {
-  position: relative;
-  display: inline-block;
-  max-width: 380px;
-  width: calc(100% - 80px);
-  margin: 0 auto;
-  padding: 28px 0;
+.compass-label-block {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 4px 0;
 }
-.compass-wrap canvas {
+.compass-grid {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.compass-grid canvas {
+  flex: 1;
   width: 100%;
   height: auto;
   aspect-ratio: 1;
@@ -423,44 +438,23 @@ a:hover { color: var(--text); }
   border-radius: var(--radius);
 }
 .compass-label {
-  position: absolute;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  pointer-events: none;
-}
-.compass-label-top {
-  top: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.compass-label-bottom {
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.compass-label-left {
-  left: -8px;
-  top: 50%;
-  transform: translate(-100%, -50%);
-}
-.compass-label-right {
-  right: -8px;
-  top: 50%;
-  transform: translate(100%, -50%);
+  flex-shrink: 0;
 }
 .compass-coords {
-  margin-top: 14px;
+  margin-top: 6px;
   font-size: 0.82rem;
   color: var(--text-dim);
 }
 
 @media (max-width: 640px) {
-  .compass-wrap { max-width: 300px; }
-  .compass-label-left { left: 0; transform: translate(-110%, -50%); }
-  .compass-label-right { right: 0; transform: translate(110%, -50%); }
+  .compass-section { margin-left: -8px; margin-right: -8px; }
+  .compass-wrap { max-width: 340px; }
+  .compass-label { font-size: 0.7rem; }
 }
 
 /* Radar section */
