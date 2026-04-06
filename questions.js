@@ -1,5 +1,5 @@
 // ============================================================
-// 45 QUESTIONS — 9 per dimension, Likert 1-5 scale
+// 54 QUESTIONS — 9 per dimension, Likert 1-5 scale
 // Each question is a statement. The user rates 1 (Strongly disagree) to 5 (Strongly agree).
 // "direction" tells us which end "agree" maps to:
 //   axis: which of the 5 axes this belongs to
@@ -11,6 +11,7 @@
 //   governance:    Liberty ↔ Authority
 //   universality:  Internationalism ↔ Nationalism
 //   environment:   Ecology ↔ Productivism
+//   expansion:     Expansionism ↔ Restraint
 // ============================================================
 
 const QUESTIONS = [
@@ -247,6 +248,53 @@ const QUESTIONS = [
   {
     text: "Protecting endangered species should take priority over local economic interests.",
     axis: "environment",
+    pole: "left"
+  },
+
+  // ── EXPANSION (9 questions) ──────────────────────────────────────────
+  {
+    text: "Humanity should prioritise becoming a multi-planetary species within this century.",
+    axis: "expansion",
+    pole: "left" // agree → Expansionism
+  },
+  {
+    text: "We should fix the problems on Earth before spending resources on space colonisation.",
+    axis: "expansion",
+    pole: "right" // agree → Restraint
+  },
+  {
+    text: "Developing artificial general intelligence is one of the most important goals of our time.",
+    axis: "expansion",
+    pole: "left"
+  },
+  {
+    text: "There should be strict limits on how fast AI systems are allowed to advance.",
+    axis: "expansion",
+    pole: "right"
+  },
+  {
+    text: "Human genetic enhancement and life extension research should be aggressively funded.",
+    axis: "expansion",
+    pole: "left"
+  },
+  {
+    text: "Pursuing endless economic and technological growth is unsustainable and dangerous.",
+    axis: "expansion",
+    pole: "right"
+  },
+  {
+    text: "Large-scale geoengineering projects are a reasonable response to climate change.",
+    axis: "expansion",
+    pole: "left"
+  },
+  {
+    text: "Societies should focus on living within natural limits rather than engineering their way out.",
+    axis: "expansion",
+    pole: "right"
+  },
+  {
+    text: "The long-term survival of the human species depends on expanding beyond Earth.",
+    axis: "expansion",
     pole: "left"
   }
 ];

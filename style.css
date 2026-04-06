@@ -22,6 +22,7 @@
   --c-governance: #F59E0B;
   --c-universality: #3B82F6;
   --c-environment: #22C55E;
+  --c-expansion: #F472B6;
 
   /* Radar colors */
   --radar-left: #14B8A6;
@@ -249,6 +250,7 @@ a:hover { color: var(--text); }
 .segment[data-axis="governance"] .segment-fill { background: var(--c-governance); }
 .segment[data-axis="universality"] .segment-fill { background: var(--c-universality); }
 .segment[data-axis="environment"] .segment-fill { background: var(--c-environment); }
+.segment[data-axis="expansion"] .segment-fill { background: var(--c-expansion); }
 
 /* Question card */
 .question-card {

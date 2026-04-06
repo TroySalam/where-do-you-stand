@@ -6,13 +6,14 @@
 let currentQ = 0;
 let answers = new Array(QUESTIONS.length).fill(null); // 1-5 or null
 
-const AXES = ['economy', 'society', 'governance', 'universality', 'environment'];
+const AXES = ['economy', 'society', 'governance', 'universality', 'environment', 'expansion'];
 const AXIS_LABELS = {
   economy:       { left: 'Statism',           right: 'Free-market' },
   society:       { left: 'Progressivism',     right: 'Conservatism' },
   governance:    { left: 'Liberty',           right: 'Authority' },
   universality:  { left: 'Internationalism',  right: 'Nationalism' },
-  environment:   { left: 'Ecology',           right: 'Productivism' }
+  environment:   { left: 'Ecology',           right: 'Productivism' },
+  expansion:     { left: 'Expansionism',      right: 'Restraint' }
 };
 
 const AXIS_COLORS = {
@@ -20,10 +21,11 @@ const AXIS_COLORS = {
   society: '#14B8A6',
   governance: '#F59E0B',
   universality: '#3B82F6',
-  environment: '#22C55E'
+  environment: '#22C55E',
+  expansion: '#F472B6'
 };
 
-const BAR_COLORS = ['#EF4444', '#22C55E', '#3B82F6', '#A78BFA', '#14B8A6'];
+const BAR_COLORS = ['#EF4444', '#22C55E', '#3B82F6', '#A78BFA', '#14B8A6', '#F472B6'];
 
 // ─── Navigation ──────────────────────────────
 function show(id) {
@@ -254,19 +256,19 @@ function drawRadar(canvasId, scores, side) {
   const padding = 20; // minimal padding — labels are now HTML
   const maxR = size / 2 - padding;
 
-  // Pentagon labels
+  // Hexagon labels (6 axes)
   const labels = side === 'left'
-    ? ['Progressivism', 'Civil liberties', 'Ecology', 'Internationalism', 'Statism']
-    : ['Conservatism', 'Authority', 'Productivism', 'Nationalism', 'Free market'];
+    ? ['Progressivism', 'Civil liberties', 'Ecology', 'Expansionism', 'Internationalism', 'Statism']
+    : ['Conservatism', 'Authority', 'Productivism', 'Restraint', 'Nationalism', 'Free market'];
 
   // Map scores to values (0-1) for each vertex
-  const axisOrder = ['society', 'governance', 'environment', 'universality', 'economy'];
+  const axisOrder = ['society', 'governance', 'environment', 'expansion', 'universality', 'economy'];
   const values = axisOrder.map(axis => {
     const s = scores[axis] / 100;
     return side === 'left' ? (1 - s) : s;
   });
 
-  const n = 5;
+  const n = 6;
   const angleStep = (Math.PI * 2) / n;
   const startAngle = -Math.PI / 2;
 
@@ -474,8 +476,8 @@ function calcSimilarity(scores, profile) {
     const diff = scores[axis] - profile[axis];
     sumSqDiff += diff * diff;
   });
-  // Max possible distance = sqrt(5 * 100^2) = ~223.6
-  const maxDist = Math.sqrt(5 * 100 * 100);
+  // Max possible distance = sqrt(6 * 100^2) = ~244.9
+  const maxDist = Math.sqrt(6 * 100 * 100);
   const dist = Math.sqrt(sumSqDiff);
   return Math.max(0, (1 - dist / maxDist) * 100);
 }
