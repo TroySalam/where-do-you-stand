@@ -1,242 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Where Do You Stand?</title>
-  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=cabinet-grotesk@700,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./base.css">
+  <title>Where Do You Stand? — Political Test</title>
+  <meta name="description" content="Discover your political profile across 5 dimensions. 45 questions, ~5 minutes. Find your closest country match.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div id="app">
+  <!-- ═══════ LANDING ═══════ -->
+  <div id="landing" class="screen active">
+    <header class="nav">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Where Do You Stand logo">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+          <circle cx="16" cy="16" r="8" stroke="var(--accent)" stroke-width="1.5"/>
+          <line x1="16" y1="4" x2="16" y2="28" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+          <line x1="4" y1="16" x2="28" y2="16" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+          <circle cx="16" cy="16" r="2.5" fill="var(--accent)"/>
+        </svg>
+        <span>where do you stand?</span>
+      </div>
+    </header>
 
-    <!-- ===== MAIN MENU ===== -->
-    <section id="menu" class="screen active">
-      <div class="menu-content">
-        <div class="menu-logo">
-          <svg viewBox="0 0 64 64" width="72" height="72" fill="none" aria-label="Compass logo">
-            <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="2"/>
-            <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-            <line x1="32" y1="4" x2="32" y2="60" stroke="currentColor" stroke-width="1" opacity="0.2"/>
-            <line x1="4" y1="32" x2="60" y2="32" stroke="currentColor" stroke-width="1" opacity="0.2"/>
-            <polygon points="32,8 34.5,24 32,27 29.5,24" fill="var(--color-primary)"/>
-            <polygon points="32,56 29.5,40 32,37 34.5,40" fill="var(--color-text-muted)" opacity="0.4"/>
-            <polygon points="8,32 24,29.5 27,32 24,34.5" fill="var(--color-accent)" opacity="0.5"/>
-            <polygon points="56,32 40,34.5 37,32 40,29.5" fill="var(--color-accent)" opacity="0.5"/>
-            <circle cx="32" cy="32" r="3" fill="currentColor"/>
-          </svg>
-        </div>
-        <h1 class="menu-title">Where Do You Stand?</h1>
-        <p class="menu-sub">Find your place on the political compass</p>
+    <main class="hero">
+      <h1>Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
+      <p class="subtitle">Discover your political profile across 5 dimensions — economy, society, governance, universality, and environment. Find the country and figures that match your views.</p>
+      <button class="btn-primary" onclick="startQuiz()">
+        Begin the exploration <span class="arrow">→</span>
+      </button>
+      <div class="meta-row">
+        <span>⏱ ~5 minutes</span>
+        <span>📋 45 questions</span>
+        <span>🌍 Country matching</span>
+      </div>
+    </main>
 
-        <div class="menu-actions">
-          <button class="menu-btn play-btn" onclick="showModeSelect()">
-            <span class="btn-icon">▶</span> Play
-          </button>
-          <button class="menu-btn" onclick="showScreen('settings')">
-            <span class="btn-icon">⚙</span> Settings
-          </button>
-          <button class="menu-btn" onclick="showScreen('about')">
-            <span class="btn-icon">?</span> How It Works
-          </button>
-        </div>
-
-        <div class="menu-footer">
-          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-          </button>
-        </div>
+    <section class="info-section">
+      <h3>How it works</h3>
+      <p>You'll rate 45 statements on a scale from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a 5-axis profile that gets compared against real country profiles and political figures.</p>
+      <div class="axes-preview">
+        <div class="axis-chip"><span class="dot" style="background:var(--c-economy)"></span> Economy</div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-society)"></span> Society</div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-governance)"></span> Governance</div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-universality)"></span> Universality</div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-environment)"></span> Environment</div>
       </div>
     </section>
+  </div>
 
-    <!-- ===== MODE SELECT ===== -->
-    <section id="mode-select" class="screen">
-      <div class="panel">
-        <button class="back-btn" onclick="showScreen('menu')">← Back</button>
-        <h2 class="panel-title">Choose Your Mode</h2>
-        <p class="panel-sub">Pick the difficulty that fits you best</p>
-        <div class="mode-grid">
-          <button class="mode-card" onclick="selectMode('teen')">
-            <span class="mode-emoji">🎒</span>
-            <span class="mode-name">Teen</span>
-            <span class="mode-desc">Real stuff from your world — school, social media, part-time jobs</span>
-            <span class="mode-difficulty">Easy</span>
-          </button>
-          <button class="mode-card" onclick="selectMode('adult')">
-            <span class="mode-emoji">💼</span>
-            <span class="mode-name">Adult</span>
-            <span class="mode-desc">Mortgages, tax, healthcare, workplace rights, family costs</span>
-            <span class="mode-difficulty">Medium</span>
-          </button>
-          <button class="mode-card" onclick="selectMode('academic')">
-            <span class="mode-emoji">🎓</span>
-            <span class="mode-name">Academic</span>
-            <span class="mode-desc">Political theory, policy frameworks, constitutional questions</span>
-            <span class="mode-difficulty">Hard</span>
-          </button>
-          <button class="mode-card" onclick="selectMode('economist')">
-            <span class="mode-emoji">📊</span>
-            <span class="mode-name">Economist</span>
-            <span class="mode-desc">Complex trade-offs, real policy data, international comparisons</span>
-            <span class="mode-difficulty">Expert</span>
-          </button>
+  <!-- ═══════ QUIZ ═══════ -->
+  <div id="quiz" class="screen">
+    <header class="nav quiz-nav">
+      <a class="home-link" onclick="goHome()">🏠 Home</a>
+    </header>
+
+    <div class="quiz-container">
+      <div class="progress-header">
+        <span id="qCounter">Question 1 of 45</span>
+        <span id="axisBadge" class="axis-badge">Economy</span>
+      </div>
+      <div class="segment-bar">
+        <div class="segment" data-axis="economy"><div class="segment-fill"></div></div>
+        <div class="segment" data-axis="society"><div class="segment-fill"></div></div>
+        <div class="segment" data-axis="governance"><div class="segment-fill"></div></div>
+        <div class="segment" data-axis="universality"><div class="segment-fill"></div></div>
+        <div class="segment" data-axis="environment"><div class="segment-fill"></div></div>
+      </div>
+
+      <div class="question-card">
+        <p id="questionText" class="question-text"></p>
+      </div>
+
+      <div class="answer-scale">
+        <span class="scale-label">Strongly disagree</span>
+        <div class="scale-buttons">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+        </div>
+        <span class="scale-label">Strongly agree</span>
+      </div>
+      <div class="neutral-label" id="neutralLabel">Neutral</div>
+
+      <div class="quiz-footer">
+        <a id="prevBtn" class="nav-link disabled" onclick="prevQuestion()">← Previous</a>
+        <a id="nextBtn" class="nav-link disabled" onclick="nextQuestion()">Next →</a>
+      </div>
+
+      <div class="dot-progress" id="dotProgress"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ RESULTS ═══════ -->
+  <div id="results" class="screen">
+    <header class="nav">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Logo">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+          <circle cx="16" cy="16" r="8" stroke="var(--accent)" stroke-width="1.5"/>
+          <circle cx="16" cy="16" r="2.5" fill="var(--accent)"/>
+        </svg>
+        <span>where do you stand?</span>
+      </div>
+    </header>
+
+    <div class="results-container">
+      <div class="profile-header">
+        <span class="profile-label">MY PROFILE:</span>
+        <h2 id="profileType">You are a Social Democrat</h2>
+      </div>
+
+      <div class="radar-section">
+        <div class="radar-col">
+          <h3 class="radar-title left">Left-Leaning Trends</h3>
+          <div class="radar-canvas-wrap">
+            <canvas id="radarLeft" width="300" height="300"></canvas>
+          </div>
+        </div>
+        <div class="radar-col">
+          <h3 class="radar-title right">Right-Leaning Trends</h3>
+          <div class="radar-canvas-wrap">
+            <canvas id="radarRight" width="300" height="300"></canvas>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- ===== SETTINGS ===== -->
-    <section id="settings" class="screen">
-      <div class="panel">
-        <button class="back-btn" onclick="showScreen('menu')">← Back</button>
-        <h2 class="panel-title">Settings</h2>
+      <div class="axis-bars" id="axisBars"></div>
 
-        <div class="setting-group">
-          <label class="setting-label">Number of Questions</label>
-          <div class="slider-row">
-            <input type="range" id="qCountSlider" min="10" max="35" value="20" class="slider" oninput="updateSliderLabel()">
-            <span class="slider-val" id="qCountLabel">20</span>
+      <div class="country-card" id="countryCard">
+        <span class="country-label">YOUR CLOSEST COUNTRY</span>
+        <div class="country-row">
+          <div class="country-info">
+            <span class="country-code" id="countryCode">AU</span>
+            <span class="country-name" id="countryName">Australia</span>
           </div>
-          <p class="setting-hint">More questions = more accurate results</p>
-        </div>
-
-        <div class="setting-group">
-          <label class="setting-label">Default Mode</label>
-          <select id="defaultMode" class="select-input">
-            <option value="teen">Teen</option>
-            <option value="adult">Adult</option>
-            <option value="academic">Academic</option>
-            <option value="economist">Economist</option>
-          </select>
-        </div>
-
-        <div class="setting-group">
-          <label class="setting-label">Shuffle Options</label>
-          <div class="toggle-row">
-            <span class="toggle-desc">Randomise answer order each question</span>
-            <label class="toggle">
-              <input type="checkbox" id="shuffleToggle" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting-group">
-          <label class="setting-label">Show Topic Tags</label>
-          <div class="toggle-row">
-            <span class="toggle-desc">Display the topic category on each question</span>
-            <label class="toggle">
-              <input type="checkbox" id="topicToggle" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <button class="btn-primary" onclick="showScreen('menu')" style="margin-top:var(--space-6);align-self:center;">Save & Back</button>
-      </div>
-    </section>
-
-    <!-- ===== ABOUT ===== -->
-    <section id="about" class="screen">
-      <div class="panel">
-        <button class="back-btn" onclick="showScreen('menu')">← Back</button>
-        <h2 class="panel-title">How It Works</h2>
-        <div class="about-content">
-          <div class="about-block">
-            <h3>The Grid</h3>
-            <p>Your answers map to two axes — <strong>Progressive ↔ Traditional</strong> (left-right) and <strong>More Government ↔ Less Government</strong> (up-down). Your final position is a single dot on this grid.</p>
-          </div>
-          <div class="about-block">
-            <h3>Modes</h3>
-            <p><strong>Teen</strong> uses everyday scenarios. <strong>Adult</strong> covers real-world policy. <strong>Academic</strong> brings in political theory. <strong>Economist</strong> uses complex, data-driven dilemmas.</p>
-          </div>
-          <div class="about-block">
-            <h3>Clarify Button</h3>
-            <p>See a <strong>ⓘ</strong> icon next to a question? Tap it to get a plain-English explanation of what the question is really asking.</p>
-          </div>
-          <div class="about-block">
-            <h3>Scoring</h3>
-            <p>Each answer nudges your dot in a direction. More questions = more accurate placement. We also track 12 separate topic scores behind the scenes so you can see where you lean on each issue.</p>
-          </div>
-        </div>
-        <button class="btn-primary" onclick="showScreen('menu')" style="margin-top:var(--space-6);align-self:center;">Got It</button>
-      </div>
-    </section>
-
-    <!-- ===== QUIZ ===== -->
-    <section id="quiz" class="screen">
-      <div class="quiz-container">
-        <div class="quiz-header">
-          <button class="quit-btn" onclick="confirmQuit()" title="Quit quiz">✕</button>
-          <button class="back-question-btn" id="backQuestionBtn" onclick="goBackQuestion()" title="Previous question" disabled>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-          </button>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <span class="progress-text" id="progressText">1 / 20</span>
-        </div>
-        <div class="question-area" id="questionArea">
-          <div class="question-header-row">
-            <p class="topic-tag" id="topicTag"></p>
-          </div>
-          <div class="question-with-info">
-            <h2 class="question-text" id="questionText"></h2>
-            <button class="info-btn question-info-btn" id="questionInfoBtn" onclick="toggleQuestionInfo()" title="Explain this question">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            </button>
-          </div>
-          <div class="info-tooltip question-tooltip" id="questionTooltip"></div>
-          <div class="options" id="optionsContainer"></div>
+          <span class="country-pct" id="countryPct">85%</span>
         </div>
       </div>
-    </section>
 
-    <!-- ===== RESULT ===== -->
-    <section id="result" class="screen">
-      <div class="result-container">
-        <h2 class="result-heading">Your Compass</h2>
-
-        <div class="compass-wrapper">
-          <canvas id="compassCanvas" width="400" height="400"></canvas>
-          <div class="axis-labels">
-            <span class="axis-label top">More Government</span>
-            <span class="axis-label bottom">Less Government</span>
-            <span class="axis-label left">Progressive</span>
-            <span class="axis-label right">Traditional</span>
-          </div>
-        </div>
-
-        <div class="profile-card" id="profileCard"></div>
-
-        <details class="topic-details">
-          <summary class="topic-toggle">View Topic Breakdown</summary>
-          <div class="topic-scores" id="topicScores"></div>
-        </details>
-
-        <div class="result-actions">
-          <button class="btn-primary" onclick="resetToMenu()">Play Again</button>
-          <button class="btn-secondary" onclick="showScreen('menu')">Main Menu</button>
-        </div>
+      <div class="figures-section" id="figuresSection">
+        <h3>Closest Figures</h3>
+        <div class="figures-grid" id="closestFigures"></div>
+        <h3>Most Distant Figures</h3>
+        <div class="figures-grid" id="distantFigures"></div>
       </div>
-    </section>
 
-    <!-- ===== QUIT CONFIRM MODAL ===== -->
-    <div class="modal-overlay" id="quitModal">
-      <div class="modal">
-        <h3>Quit Quiz?</h3>
-        <p>Your progress will be lost.</p>
-        <div class="modal-actions">
-          <button class="btn-secondary" onclick="closeModal()">Keep Going</button>
-          <button class="btn-danger" onclick="quitQuiz()">Quit</button>
-        </div>
+      <div class="share-text">
+        I found where I stand! Take the test at <strong>where-do-you-stand</strong>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn-primary" onclick="retakeQuiz()">Retake Test</button>
+        <button class="btn-secondary" onclick="goHome()">Home</button>
       </div>
     </div>
   </div>
 
   <script src="./questions.js"></script>
-  <script src="./clarifications.js"></script>
-  <script src="./summaries.js"></script>
+  <script src="./countries.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

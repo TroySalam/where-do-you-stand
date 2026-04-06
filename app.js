@@ -1,441 +1,481 @@
-/* ===== POLITICAL COMPASS QUIZ v4 — GAME ENGINE ===== */
+/* ═══════════════════════════════════════════════
+   WHERE DO YOU STAND — App Logic
+   ═══════════════════════════════════════════════ */
 
-// ===== STATE =====
-let currentMode = 'teen';
+// ─── State ───────────────────────────────────
 let currentQ = 0;
-let questions = [];
-let answers = [];
-let topicScores = {};
-let settings = {
-  questionCount: 20,
-  shuffle: true,
-  showTopics: true,
+let answers = new Array(QUESTIONS.length).fill(null); // 1-5 or null
+
+const AXES = ['economy', 'society', 'governance', 'universality', 'environment'];
+const AXIS_LABELS = {
+  economy:       { left: 'Statism',           right: 'Free-market' },
+  society:       { left: 'Progressivism',     right: 'Conservatism' },
+  governance:    { left: 'Liberty',           right: 'Authority' },
+  universality:  { left: 'Internationalism',  right: 'Nationalism' },
+  environment:   { left: 'Ecology',           right: 'Productivism' }
 };
 
-// ===== THEME =====
-(function initTheme() {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  updateThemeIcon();
-})();
+const AXIS_COLORS = {
+  economy: '#8B5CF6',
+  society: '#14B8A6',
+  governance: '#F59E0B',
+  universality: '#3B82F6',
+  environment: '#22C55E'
+};
 
-const themeBtn = document.querySelector('[data-theme-toggle]');
-if (themeBtn) {
-  themeBtn.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    updateThemeIcon();
-  });
-}
+const BAR_COLORS = ['#EF4444', '#22C55E', '#3B82F6', '#A78BFA', '#14B8A6'];
 
-function updateThemeIcon() {
-  const btn = document.querySelector('[data-theme-toggle]');
-  if (!btn) return;
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  btn.innerHTML = isDark
-    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-}
-
-// ===== NAVIGATION =====
-function showScreen(id) {
+// ─── Navigation ──────────────────────────────
+function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
 
-function showModeSelect() {
-  showScreen('mode-select');
-}
+function goHome() { show('landing'); }
 
-function selectMode(mode) {
-  currentMode = mode;
-  // Skip name entry — go straight to quiz
-  startQuiz(mode);
-}
-
-// ===== SETTINGS =====
-function updateSliderLabel() {
-  const slider = document.getElementById('qCountSlider');
-  const label = document.getElementById('qCountLabel');
-  if (slider && label) label.textContent = slider.value;
-}
-
-function readSettings() {
-  const slider = document.getElementById('qCountSlider');
-  const defaultMode = document.getElementById('defaultMode');
-  const shuffleToggle = document.getElementById('shuffleToggle');
-  const topicToggle = document.getElementById('topicToggle');
-  settings.questionCount = slider ? parseInt(slider.value) : 20;
-  settings.shuffle = shuffleToggle ? shuffleToggle.checked : true;
-  settings.showTopics = topicToggle ? topicToggle.checked : true;
-  if (defaultMode) currentMode = defaultMode.value;
-}
-
-// ===== QUIZ =====
-function startQuiz(explicitMode) {
-  readSettings();
-  // If a mode was explicitly chosen from the mode-select screen, use it
-  // (readSettings may have overwritten currentMode with the dropdown default)
-  if (explicitMode) currentMode = explicitMode;
+function startQuiz() {
   currentQ = 0;
-  answers = [];
-  topicScores = {};
-
-  // Get questions for this mode
-  const bank = QUESTION_BANKS[currentMode] || QUESTION_BANKS.teen;
-
-  // Shuffle bank and take the requested number
-  const shuffled = [...bank].sort(() => Math.random() - 0.5);
-  const count = Math.min(settings.questionCount, bank.length);
-  questions = shuffled.slice(0, count);
-
-  showScreen('quiz');
+  answers = new Array(QUESTIONS.length).fill(null);
+  buildDotProgress();
   renderQuestion();
+  show('quiz');
 }
 
+function retakeQuiz() {
+  startQuiz();
+}
+
+// ─── Quiz Logic ──────────────────────────────
 function renderQuestion() {
-  const q = questions[currentQ];
-  const topicTag = document.getElementById('topicTag');
-  const questionText = document.getElementById('questionText');
-  const progressText = document.getElementById('progressText');
-  const progressFill = document.getElementById('progressFill');
+  const q = QUESTIONS[currentQ];
 
-  topicTag.textContent = q.topic;
-  topicTag.className = 'topic-tag' + (settings.showTopics ? '' : ' hidden');
-  questionText.textContent = q.text;
-  progressText.textContent = `${currentQ + 1} / ${questions.length}`;
-  progressFill.style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+  // Question text with animation
+  const card = document.querySelector('.question-card');
+  card.style.animation = 'none';
+  card.offsetHeight; // reflow
+  card.style.animation = '';
+  document.getElementById('questionText').textContent = q.text;
 
-  // Update back button state
-  const backBtn = document.getElementById('backQuestionBtn');
-  if (backBtn) {
-    backBtn.disabled = currentQ === 0;
+  // Counter
+  document.getElementById('qCounter').textContent = `Question ${currentQ + 1} of ${QUESTIONS.length}`;
+
+  // Axis badge
+  const badge = document.getElementById('axisBadge');
+  badge.textContent = q.axis.charAt(0).toUpperCase() + q.axis.slice(1);
+  badge.style.background = AXIS_COLORS[q.axis];
+
+  // Segment bar progress
+  updateSegmentBar();
+
+  // Scale buttons
+  document.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    if (answers[currentQ] !== null && parseInt(btn.dataset.value) === answers[currentQ]) {
+      btn.classList.add('selected');
+    }
+  });
+
+  // Neutral label
+  const neutralLabel = document.getElementById('neutralLabel');
+  if (answers[currentQ] === 3) {
+    neutralLabel.classList.add('visible');
+  } else {
+    neutralLabel.classList.remove('visible');
   }
 
-  // Close any open tooltips
-  hideQuestionInfo();
+  // Nav buttons
+  document.getElementById('prevBtn').classList.toggle('disabled', currentQ === 0);
+  document.getElementById('nextBtn').classList.toggle('disabled', answers[currentQ] === null);
 
-  // Update question tooltip content
-  const qKey = q.text.slice(0, 80);
-  const clar = typeof CLARIFICATIONS !== 'undefined' ? CLARIFICATIONS[qKey] : null;
-  const tooltip = document.getElementById('questionTooltip');
-  if (tooltip) {
-    tooltip.textContent = clar ? clar.question : 'Think about what this question is really asking and which answer feels right to you.';
-  }
+  // Dot progress
+  updateDotProgress();
+}
 
-  const container = document.getElementById('optionsContainer');
-  container.innerHTML = '';
+function updateSegmentBar() {
+  // Count questions per axis and how many are answered
+  const axisCounts = {};
+  const axisAnswered = {};
+  AXES.forEach(a => { axisCounts[a] = 0; axisAnswered[a] = 0; });
+  QUESTIONS.forEach((q, i) => {
+    axisCounts[q.axis]++;
+    if (answers[i] !== null) axisAnswered[q.axis]++;
+  });
 
-  const opts = settings.shuffle
-    ? [...q.options].sort(() => Math.random() - 0.5)
-    : [...q.options];
-
-  opts.forEach((opt) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'option-wrapper';
-
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.textContent = opt.label;
-    btn.addEventListener('click', () => selectAnswer(opt));
-
-    wrapper.appendChild(btn);
-    container.appendChild(wrapper);
+  AXES.forEach(axis => {
+    const fill = document.querySelector(`.segment[data-axis="${axis}"] .segment-fill`);
+    if (fill) {
+      const pct = axisCounts[axis] > 0 ? (axisAnswered[axis] / axisCounts[axis]) * 100 : 0;
+      fill.style.width = pct + '%';
+    }
   });
 }
 
-function selectAnswer(opt) {
-  const q = questions[currentQ];
-  answers.push({ topic: q.topic, x: opt.x, y: opt.y });
-
-  if (!topicScores[q.topic]) topicScores[q.topic] = { x: 0, y: 0, count: 0 };
-  topicScores[q.topic].x += opt.x;
-  topicScores[q.topic].y += opt.y;
-  topicScores[q.topic].count += 1;
-
-  currentQ++;
-  if (currentQ < questions.length) {
-    // Fix highlight bug: blur and disable pointer events until user actually moves mouse
-    if (document.activeElement) document.activeElement.blur();
-    const container = document.getElementById('optionsContainer');
-    container.classList.add('no-hover');
-
-    const area = document.getElementById('questionArea');
-    area.style.opacity = '0';
-    area.style.transform = 'translateY(8px)';
-    setTimeout(() => {
-      renderQuestion();
-      container.classList.add('no-hover');
-      area.style.opacity = '1';
-      area.style.transform = 'translateY(0)';
-      // Only re-enable hover when user actually moves mouse (proves intent)
-      const enableHover = () => {
-        container.classList.remove('no-hover');
-        document.removeEventListener('mousemove', enableHover);
-        document.removeEventListener('touchstart', enableHover);
-      };
-      document.addEventListener('mousemove', enableHover, { once: true });
-      document.addEventListener('touchstart', enableHover, { once: true });
-    }, 180);
-  } else {
-    showResults();
+function buildDotProgress() {
+  const container = document.getElementById('dotProgress');
+  container.innerHTML = '';
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    container.appendChild(dot);
   }
 }
 
-// ===== BACK BUTTON (previous question) =====
-function goBackQuestion() {
-  if (currentQ <= 0) return;
+function updateDotProgress() {
+  const dots = document.querySelectorAll('#dotProgress .dot');
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('answered', answers[i] !== null);
+    dot.classList.toggle('current', i === currentQ);
+  });
+}
 
-  // Remove last answer
-  const lastAnswer = answers.pop();
-  if (lastAnswer) {
-    const ts = topicScores[lastAnswer.topic];
-    if (ts) {
-      ts.x -= lastAnswer.x;
-      ts.y -= lastAnswer.y;
-      ts.count -= 1;
-      if (ts.count <= 0) delete topicScores[lastAnswer.topic];
-    }
-  }
+function selectAnswer(value) {
+  answers[currentQ] = value;
 
-  currentQ--;
-  const area = document.getElementById('questionArea');
-  area.style.opacity = '0';
-  area.style.transform = 'translateY(-8px)';
+  // Update button states
+  document.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
+  });
+
+  // Neutral label
+  const neutralLabel = document.getElementById('neutralLabel');
+  neutralLabel.classList.toggle('visible', value === 3);
+
+  // Enable next
+  document.getElementById('nextBtn').classList.remove('disabled');
+
+  updateDotProgress();
+  updateSegmentBar();
+
+  // Auto-advance after a short delay
   setTimeout(() => {
-    renderQuestion();
-    area.style.opacity = '1';
-    area.style.transform = 'translateY(0)';
-  }, 180);
+    if (currentQ < QUESTIONS.length - 1) {
+      nextQuestion();
+    } else {
+      calculateResults();
+    }
+  }, 350);
 }
 
-// ===== QUESTION INFO TOOLTIP =====
-function toggleQuestionInfo() {
-  const tooltip = document.getElementById('questionTooltip');
-  const isOpen = tooltip.classList.contains('open');
-
-  // Close all tooltips first
-  document.querySelectorAll('.info-tooltip.open').forEach(t => t.classList.remove('open'));
-
-  if (!isOpen) {
-    tooltip.classList.add('open');
+function nextQuestion() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    calculateResults();
   }
 }
 
-function hideQuestionInfo() {
-  document.querySelectorAll('.info-tooltip.open').forEach(t => t.classList.remove('open'));
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
 }
 
-// ===== QUIT MODAL =====
-function confirmQuit() {
-  document.getElementById('quitModal').classList.add('active');
+// Event listeners for scale buttons
+document.querySelectorAll('.scale-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    selectAnswer(parseInt(btn.dataset.value));
+  });
+});
+
+// ─── Scoring ─────────────────────────────────
+function calculateResults() {
+  // For each axis, compute a 0-100 score where 0 = full left pole, 100 = full right pole
+  const axisScores = {};
+
+  AXES.forEach(axis => {
+    const axisQs = QUESTIONS.map((q, i) => ({ q, answer: answers[i] })).filter(x => x.q.axis === axis);
+    let totalRight = 0;
+    let count = axisQs.length;
+
+    axisQs.forEach(({ q, answer }) => {
+      if (answer === null) return;
+      // answer is 1-5. Convert to 0-4.
+      const normalized = (answer - 1) / 4; // 0 to 1, where 1 = strongly agree
+      if (q.pole === 'right') {
+        // Agreeing → right pole
+        totalRight += normalized;
+      } else {
+        // Agreeing → left pole, so invert for right score
+        totalRight += (1 - normalized);
+      }
+    });
+
+    axisScores[axis] = count > 0 ? Math.round((totalRight / count) * 100) : 50;
+  });
+
+  renderResults(axisScores);
+  show('results');
 }
 
-function closeModal() {
-  document.getElementById('quitModal').classList.remove('active');
+// ─── Results Rendering ───────────────────────
+function renderResults(scores) {
+  // Political type
+  const type = POLITICAL_TYPES.find(t => t.condition(scores));
+  document.getElementById('profileType').textContent = `You are ${type.label.toLowerCase().match(/^[aeiou]/i) ? 'an' : 'a'} ${type.label}`;
+
+  // Radar charts
+  drawRadar('radarLeft', scores, 'left');
+  drawRadar('radarRight', scores, 'right');
+
+  // Axis bars
+  renderAxisBars(scores);
+
+  // Country match
+  renderCountryMatch(scores);
+
+  // Figures
+  renderFigures(scores);
 }
 
-function quitQuiz() {
-  closeModal();
-  showScreen('menu');
-}
+function drawRadar(canvasId, scores, side) {
+  const canvas = document.getElementById(canvasId);
+  const container = canvas.parentElement;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
 
-function resetToMenu() {
-  showScreen('mode-select');
-}
+  // Remove old HTML labels
+  container.querySelectorAll('.radar-label').forEach(el => el.remove());
 
-// ===== RESULTS =====
-function showResults() {
-  const totalX = answers.reduce((s, a) => s + a.x, 0);
-  const totalY = answers.reduce((s, a) => s + a.y, 0);
-  const avgX = totalX / answers.length;
-  const avgY = totalY / answers.length;
-
-  showScreen('result');
-
-  // Draw compass
-  setTimeout(() => drawCompass(avgX, avgY), 50);
-
-  // Render profile
-  renderProfile(avgX, avgY);
-
-  // Render topic scores
-  renderTopicScores();
-}
-
-function drawCompass(px, py) {
-  const canvas = document.getElementById('compassCanvas');
-  const wrapper = canvas.parentElement;
-  const rect = wrapper.getBoundingClientRect();
-  const size = Math.min(rect.width, rect.height);
-  canvas.width = size * 2;
-  canvas.height = size * 2;
+  // Set canvas size — get actual rendered width
+  const rect = canvas.getBoundingClientRect();
+  const size = Math.max(rect.width, 280);
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
   canvas.style.width = size + 'px';
   canvas.style.height = size + 'px';
-  const ctx = canvas.getContext('2d');
-  ctx.scale(2, 2);
+  ctx.scale(dpr, dpr);
 
-  const pad = 36;
-  const gridSize = size - pad * 2;
   const cx = size / 2;
   const cy = size / 2;
+  const padding = 20; // minimal padding — labels are now HTML
+  const maxR = size / 2 - padding;
 
-  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-  const styles = getComputedStyle(document.documentElement);
+  // Pentagon labels
+  const labels = side === 'left'
+    ? ['Progressivism', 'Civil liberties', 'Ecology', 'Internationalism', 'Statism']
+    : ['Conservatism', 'Authority', 'Productivism', 'Nationalism', 'Free market'];
 
-  // Quadrant fills
-  const quadrants = [
-    { x: 0, y: 0, c: styles.getPropertyValue('--color-quadrant-al').trim() },
-    { x: 1, y: 0, c: styles.getPropertyValue('--color-quadrant-ar').trim() },
-    { x: 0, y: 1, c: styles.getPropertyValue('--color-quadrant-ll').trim() },
-    { x: 1, y: 1, c: styles.getPropertyValue('--color-quadrant-lr').trim() },
-  ];
-
-  quadrants.forEach(q => {
-    ctx.fillStyle = q.c;
-    ctx.globalAlpha = isDark ? 0.12 : 0.08;
-    ctx.fillRect(
-      pad + q.x * (gridSize / 2),
-      pad + q.y * (gridSize / 2),
-      gridSize / 2,
-      gridSize / 2
-    );
+  // Map scores to values (0-1) for each vertex
+  const axisOrder = ['society', 'governance', 'environment', 'universality', 'economy'];
+  const values = axisOrder.map(axis => {
+    const s = scores[axis] / 100;
+    return side === 'left' ? (1 - s) : s;
   });
-  ctx.globalAlpha = 1;
 
-  // Grid lines
-  const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
-  ctx.strokeStyle = gridColor;
-  ctx.lineWidth = 1;
+  const n = 5;
+  const angleStep = (Math.PI * 2) / n;
+  const startAngle = -Math.PI / 2;
 
-  for (let i = 0; i <= 8; i++) {
-    const pos = pad + (gridSize / 8) * i;
-    ctx.globalAlpha = (i === 4) ? 1 : 0.5;
-    ctx.strokeStyle = gridColor;
-    ctx.beginPath(); ctx.moveTo(pos, pad); ctx.lineTo(pos, pad + gridSize); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(pad, pos); ctx.lineTo(pad + gridSize, pos); ctx.stroke();
-  }
-  ctx.globalAlpha = 1;
+  // Clear
+  ctx.clearRect(0, 0, size, size);
 
-  // Center axes (prominent)
-  ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.18)';
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(cx, pad); ctx.lineTo(cx, pad + gridSize); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(pad, cy); ctx.lineTo(pad + gridSize, cy); ctx.stroke();
-
-  // Outer border
-  ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.12)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(pad, pad, gridSize, gridSize);
-
-  // Quadrant labels
-  ctx.font = `600 ${Math.max(9, size * 0.022)}px 'General Sans', sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  const labelAlpha = isDark ? 0.25 : 0.18;
-
-  const labels = [
-    { text: 'AUTH LEFT', x: pad + gridSize * 0.25, y: pad + gridSize * 0.12, c: styles.getPropertyValue('--color-quadrant-al').trim() },
-    { text: 'AUTH RIGHT', x: pad + gridSize * 0.75, y: pad + gridSize * 0.12, c: styles.getPropertyValue('--color-quadrant-ar').trim() },
-    { text: 'LIB LEFT', x: pad + gridSize * 0.25, y: pad + gridSize * 0.88, c: styles.getPropertyValue('--color-quadrant-ll').trim() },
-    { text: 'LIB RIGHT', x: pad + gridSize * 0.75, y: pad + gridSize * 0.88, c: styles.getPropertyValue('--color-quadrant-lr').trim() },
-  ];
-
-  labels.forEach(l => {
-    ctx.globalAlpha = labelAlpha;
-    ctx.fillStyle = l.c;
-    ctx.fillText(l.text, l.x, l.y);
-  });
-  ctx.globalAlpha = 1;
-
-  // Plot the dot
-  const dotX = cx + px * (gridSize / 2);
-  const dotY = cy - py * (gridSize / 2);
-
-  // Glow ring
-  const primaryColor = styles.getPropertyValue('--color-primary').trim();
-  const glowGrad = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 28);
-  glowGrad.addColorStop(0, primaryColor + '55');
-  glowGrad.addColorStop(1, primaryColor + '00');
-  ctx.fillStyle = glowGrad;
-  ctx.beginPath();
-  ctx.arc(dotX, dotY, 28, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Outer dot
-  ctx.fillStyle = primaryColor;
-  ctx.beginPath();
-  ctx.arc(dotX, dotY, 8, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Inner dot
-  ctx.fillStyle = isDark ? '#0c0b14' : '#ffffff';
-  ctx.beginPath();
-  ctx.arc(dotX, dotY, 3.5, 0, Math.PI * 2);
-  ctx.fill();
-}
-
-function renderProfile(x, y) {
-  const card = document.getElementById('profileCard');
-
-  if (typeof getDetailedSummary === 'function') {
-    card.innerHTML = getDetailedSummary(x, y, topicScores);
-  } else {
-    // Fallback if summaries.js not loaded
-    const profile = typeof getProfile === 'function' ? getProfile(x, y) : null;
-    if (profile) {
-      card.innerHTML = `
-        <div class="profile-header">
-          <span class="profile-emoji">${profile.emoji}</span>
-          <div>
-            <div class="profile-name">${profile.name}</div>
-            <div class="profile-tagline">${profile.teen_description}</div>
-          </div>
-        </div>
-      `;
+  // Grid lines (3 levels)
+  for (let level = 1; level <= 3; level++) {
+    const r = maxR * (level / 3);
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const angle = startAngle + i * angleStep;
+      const x = cx + Math.cos(angle) * r;
+      const y = cy + Math.sin(angle) * r;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
   }
+
+  // Spokes
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * maxR, cy + Math.sin(angle) * maxR);
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Data polygon
+  const fillColor = side === 'left' ? 'rgba(20, 184, 166, 0.25)' : 'rgba(139, 92, 246, 0.25)';
+  const strokeColor = side === 'left' ? '#14B8A6' : '#8B5CF6';
+
+  ctx.beginPath();
+  values.forEach((v, i) => {
+    const r = maxR * Math.max(v, 0.05);
+    const angle = startAngle + i * angleStep;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = fillColor;
+  ctx.fill();
+  ctx.strokeStyle = strokeColor;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Vertices (dots)
+  values.forEach((v, i) => {
+    const r = maxR * Math.max(v, 0.05);
+    const angle = startAngle + i * angleStep;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = strokeColor;
+    ctx.fill();
+  });
+
+  // HTML labels positioned outside the canvas — never clipped
+  const canvasRect = canvas.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+  const offsetX = canvasRect.left - containerRect.left;
+  const offsetY = canvasRect.top - containerRect.top;
+  const fontSize = Math.max(10, Math.round(size * 0.032));
+
+  labels.forEach((label, i) => {
+    const angle = startAngle + i * angleStep;
+    const lr = maxR + 18;
+    const x = cx + Math.cos(angle) * lr;
+    const y = cy + Math.sin(angle) * lr;
+
+    const el = document.createElement('span');
+    el.className = 'radar-label';
+    el.textContent = label;
+
+    el.style.position = 'absolute';
+    el.style.left = (offsetX + x) + 'px';
+    el.style.top = (offsetY + y) + 'px';
+    el.style.fontSize = fontSize + 'px';
+    el.style.color = 'rgba(255,255,255,0.55)';
+    el.style.whiteSpace = 'nowrap';
+    el.style.pointerEvents = 'none';
+    el.style.fontFamily = 'Inter, sans-serif';
+    el.style.lineHeight = '1';
+
+    // Alignment transforms based on angle position
+    if (Math.abs(Math.cos(angle)) < 0.1) {
+      el.style.transform = 'translate(-50%, ' + (Math.sin(angle) < 0 ? '-100%' : '0') + ')';
+    } else if (Math.cos(angle) > 0) {
+      el.style.transform = 'translate(0, -50%)';
+    } else {
+      el.style.transform = 'translate(-100%, -50%)';
+    }
+
+    container.appendChild(el);
+
+    // Post-append: clamp to viewport bounds
+    const labelRect = el.getBoundingClientRect();
+    if (labelRect.left < 4) {
+      // Overflowing left — push right
+      el.style.transform = 'translate(0, -50%)';
+    } else if (labelRect.right > window.innerWidth - 4) {
+      // Overflowing right — push left
+      el.style.transform = 'translate(-100%, -50%)';
+    }
+  });
 }
 
-function renderTopicScores() {
-  const container = document.getElementById('topicScores');
+function renderAxisBars(scores) {
+  const container = document.getElementById('axisBars');
   container.innerHTML = '';
 
-  const styles = getComputedStyle(document.documentElement);
-  const primaryColor = styles.getPropertyValue('--color-primary').trim();
-  const accentColor = styles.getPropertyValue('--color-accent').trim();
+  AXES.forEach((axis, idx) => {
+    const leftPct = 100 - scores[axis];
+    const rightPct = scores[axis];
+    const labels = AXIS_LABELS[axis];
+    const color = BAR_COLORS[idx];
 
-  const topicOrder = ["Economy", "Environment", "Social", "Education", "Technology",
-    "Digital Rights", "Healthcare", "Justice", "Immigration", "Culture", "Work", "Housing"];
-
-  topicOrder.forEach(topic => {
-    if (!topicScores[topic]) return;
-    const t = topicScores[topic];
-    const avgX = t.x / t.count;
-    const barPosX = ((avgX + 1) / 2) * 100;
-
-    const xLabel = avgX < -0.15 ? "Progressive" : avgX > 0.15 ? "Traditional" : "Centre";
-    const avgY = t.y / t.count;
-    const yLabel = avgY < -0.15 ? "Less Gov" : avgY > 0.15 ? "More Gov" : "Moderate";
+    // Determine fill direction and width
+    const markerPos = scores[axis]; // 0 = left, 100 = right
 
     const row = document.createElement('div');
-    row.className = 'topic-row';
+    row.className = 'axis-bar-row';
     row.innerHTML = `
-      <div class="topic-row-header">
-        <span class="topic-name">${topic}</span>
-        <span class="topic-value">${xLabel} · ${yLabel}</span>
+      <div class="axis-bar-left">
+        <span class="axis-bar-label">${labels.left}</span>
+        <span class="axis-bar-pct">${leftPct}%</span>
       </div>
-      <div class="topic-bar">
-        <div class="topic-bar-center"></div>
-        <div class="topic-bar-fill" style="
-          width: ${Math.abs(barPosX - 50) * 2}%;
-          margin-left: ${barPosX < 50 ? barPosX : 50}%;
-          background: ${barPosX < 50 ? primaryColor : accentColor};
+      <div class="bar-track">
+        <div class="bar-fill" style="
+          left: ${Math.min(markerPos, 50)}%;
+          width: ${Math.abs(markerPos - 50)}%;
+          background: ${color};
+          border-radius: 4px;
         "></div>
+        <div class="bar-marker" style="left: ${markerPos}%;"></div>
+      </div>
+      <div class="axis-bar-right">
+        <span class="axis-bar-pct">${rightPct}%</span>
+        <span class="axis-bar-label">${labels.right}</span>
       </div>
     `;
     container.appendChild(row);
   });
+}
+
+function renderCountryMatch(scores) {
+  let bestCountry = null;
+  let bestSimilarity = -1;
+
+  COUNTRIES.forEach(country => {
+    const similarity = calcSimilarity(scores, country);
+    if (similarity > bestSimilarity) {
+      bestSimilarity = similarity;
+      bestCountry = country;
+    }
+  });
+
+  document.getElementById('countryCode').textContent = bestCountry.code;
+  document.getElementById('countryName').textContent = `${bestCountry.flag} ${bestCountry.name}`;
+  document.getElementById('countryPct').textContent = `${Math.round(bestSimilarity)}%`;
+}
+
+function renderFigures(scores) {
+  // Calculate similarity for all figures
+  const figured = FIGURES.map(f => ({
+    ...f,
+    similarity: calcSimilarity(scores, f)
+  }));
+
+  // Sort by similarity
+  figured.sort((a, b) => b.similarity - a.similarity);
+
+  // Closest 4
+  const closest = figured.slice(0, 4);
+  const closestEl = document.getElementById('closestFigures');
+  closestEl.innerHTML = closest.map(f => `
+    <div class="figure-card">
+      <span class="figure-name">${f.name}</span>
+      <span class="figure-pct">${Math.round(f.similarity)}%</span>
+    </div>
+  `).join('');
+
+  // Most distant 4
+  const distant = figured.slice(-4).reverse();
+  const distantEl = document.getElementById('distantFigures');
+  distantEl.innerHTML = distant.map(f => `
+    <div class="figure-card">
+      <span class="figure-name">${f.name}</span>
+      <span class="figure-pct">${Math.round(f.similarity)}%</span>
+    </div>
+  `).join('');
+}
+
+function calcSimilarity(scores, profile) {
+  // Euclidean distance across 5 axes, converted to percentage similarity
+  let sumSqDiff = 0;
+  AXES.forEach(axis => {
+    const diff = scores[axis] - profile[axis];
+    sumSqDiff += diff * diff;
+  });
+  // Max possible distance = sqrt(5 * 100^2) = ~223.6
+  const maxDist = Math.sqrt(5 * 100 * 100);
+  const dist = Math.sqrt(sumSqDiff);
+  return Math.max(0, (1 - dist / maxDist) * 100);
 }
