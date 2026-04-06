@@ -61,14 +61,18 @@ function initCompass3D(scores) {
   container.appendChild(renderer.domElement);
   renderer.domElement.style.borderRadius = '12px';
 
-  // Controls
+  // Controls — drag to rotate only, scroll passes through to page
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.enablePan = false;
+  controls.enableZoom = false;   // let scroll events pass through to page
   controls.minDistance = 2;
   controls.maxDistance = 7;
   controls.target.set(0, 0, 0);
+
+  // Prevent the canvas from blocking touch scrolling on mobile
+  renderer.domElement.style.touchAction = 'pan-y';
 
   // ─── Build the 3D cube ───
   const S = 1; // half-size of the cube
