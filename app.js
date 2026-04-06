@@ -256,6 +256,9 @@ function renderResults(scores) {
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
   document.getElementById('profileType').textContent = `You are ${type.label.toLowerCase().match(/^[aeiou]/i) ? 'an' : 'a'} ${type.label}`;
 
+  // Classic 2D political compass
+  drawCompass(scores);
+
   // Pentagon radar charts (5 main axes)
   drawRadar('radarLeft', scores, 'left');
   drawRadar('radarRight', scores, 'right');
@@ -271,6 +274,110 @@ function renderResults(scores) {
 
   // Figures
   renderFigures(scores);
+}
+
+function drawCompass(scores) {
+  const canvas = document.getElementById('compassCanvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  const rect = canvas.getBoundingClientRect();
+  const size = Math.max(rect.width, 280);
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  ctx.scale(dpr, dpr);
+
+  const pad = 2;
+  const gridSize = size - pad * 2;
+  const half = gridSize / 2;
+  const cx = pad + half;
+  const cy = pad + half;
+
+  // Clear
+  ctx.clearRect(0, 0, size, size);
+
+  // 4 quadrant fills
+  // Top-left: Authoritarian Left (red)
+  ctx.fillStyle = 'rgba(239, 68, 68, 0.18)';
+  ctx.fillRect(pad, pad, half, half);
+  // Top-right: Authoritarian Right (blue)
+  ctx.fillStyle = 'rgba(59, 130, 246, 0.18)';
+  ctx.fillRect(cx, pad, half, half);
+  // Bottom-left: Libertarian Left (green)
+  ctx.fillStyle = 'rgba(34, 197, 94, 0.18)';
+  ctx.fillRect(pad, cy, half, half);
+  // Bottom-right: Libertarian Right (purple)
+  ctx.fillStyle = 'rgba(168, 85, 247, 0.18)';
+  ctx.fillRect(cx, cy, half, half);
+
+  // Grid lines (subtle)
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  for (let i = 1; i < 4; i++) {
+    // Vertical
+    const x = pad + (gridSize * i) / 4;
+    ctx.beginPath();
+    ctx.moveTo(x, pad);
+    ctx.lineTo(x, pad + gridSize);
+    ctx.stroke();
+    // Horizontal
+    const y = pad + (gridSize * i) / 4;
+    ctx.beginPath();
+    ctx.moveTo(pad, y);
+    ctx.lineTo(pad + gridSize, y);
+    ctx.stroke();
+  }
+
+  // Center cross (thicker)
+  ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+  ctx.lineWidth = 1.5;
+  // Vertical center
+  ctx.beginPath();
+  ctx.moveTo(cx, pad);
+  ctx.lineTo(cx, pad + gridSize);
+  ctx.stroke();
+  // Horizontal center
+  ctx.beginPath();
+  ctx.moveTo(pad, cy);
+  ctx.lineTo(pad + gridSize, cy);
+  ctx.stroke();
+
+  // Border
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(pad, pad, gridSize, gridSize);
+
+  // User's position
+  // X: economy score 0=left, 100=right
+  // Y: governance score 0=top (libertarian), 100=bottom (authoritarian)
+  // But compass convention: top = authoritarian, so Y is governance directly
+  const userX = pad + (scores.economy / 100) * gridSize;
+  const userY = pad + (scores.governance / 100) * gridSize;
+
+  // Glow
+  ctx.beginPath();
+  ctx.arc(userX, userY, 12, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(139, 92, 246, 0.35)';
+  ctx.fill();
+
+  // Dot
+  ctx.beginPath();
+  ctx.arc(userX, userY, 6, 0, Math.PI * 2);
+  ctx.fillStyle = '#8B5CF6';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Coordinates text
+  const ecoLabel = scores.economy < 50 ? 'Left' : scores.economy > 50 ? 'Right' : 'Centre';
+  const govLabel = scores.governance < 50 ? 'Libertarian' : scores.governance > 50 ? 'Authoritarian' : 'Centre';
+  const ecoVal = Math.abs(scores.economy - 50) * 2; // 0-100 scale from centre
+  const govVal = Math.abs(scores.governance - 50) * 2;
+  document.getElementById('compassCoords').textContent =
+    `Economic: ${ecoVal.toFixed(0)}% ${ecoLabel}  ·  Social: ${govVal.toFixed(0)}% ${govLabel}`;
 }
 
 function drawRadar(canvasId, scores, side) {

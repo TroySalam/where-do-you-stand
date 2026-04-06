@@ -395,6 +395,73 @@ a:hover { color: var(--text); }
   letter-spacing: -0.03em;
 }
 
+/* ─── 2D POLITICAL COMPASS ────────────────────── */
+.compass-section {
+  margin-bottom: 48px;
+  text-align: center;
+}
+.compass-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+.compass-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 380px;
+  width: 100%;
+  margin: 0 auto;
+}
+.compass-wrap canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  display: block;
+  border-radius: var(--radius);
+}
+.compass-label {
+  position: absolute;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+.compass-label-top {
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.compass-label-bottom {
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.compass-label-left {
+  left: -8px;
+  top: 50%;
+  transform: translate(-100%, -50%);
+}
+.compass-label-right {
+  right: -8px;
+  top: 50%;
+  transform: translate(100%, -50%);
+}
+.compass-coords {
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+@media (max-width: 640px) {
+  .compass-wrap { max-width: 300px; }
+  .compass-label-left { left: 0; transform: translate(-110%, -50%); }
+  .compass-label-right { right: 0; transform: translate(110%, -50%); }
+}
+
 /* Radar section */
 .radar-section {
   display: grid;
