@@ -350,11 +350,12 @@ function drawCompass(scores) {
   ctx.strokeRect(pad, pad, gridSize, gridSize);
 
   // User's position
-  // X: economy score 0=left, 100=right
-  // Y: governance score 0=top (libertarian), 100=bottom (authoritarian)
-  // But compass convention: top = authoritarian, so Y is governance directly
+  // X: economy score 0=Statism(left), 100=Free-market(right)
+  // Y: governance score 0=Liberty(bottom), 100=Authority(top)
+  // Compass: top = Authoritarian, bottom = Libertarian
+  // So high governance → top (small Y), low governance → bottom (large Y)
   const userX = pad + (scores.economy / 100) * gridSize;
-  const userY = pad + (scores.governance / 100) * gridSize;
+  const userY = pad + (1 - scores.governance / 100) * gridSize;
 
   // Glow
   ctx.beginPath();
