@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Where Do You Stand? — Political Test</title>
+  <title>Troy's Political Test — Where Do You Stand?</title>
   <meta name="description" content="Discover your political profile across 5 core dimensions plus an expansion outlook. 54 questions, ~6 minutes. Find your closest country match.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,10 +27,10 @@
     </header>
 
     <main class="hero">
-      <h1>Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
+      <h1>Troy's Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
       <p class="subtitle">Discover your political profile across 5 core dimensions and an expansion outlook — economy, society, governance, universality, environment, plus space, technology, bioethics, and growth. Find the country and figures that match your views.</p>
       <button class="btn-primary" onclick="startQuiz()">
-        Begin the exploration <span class="arrow">→</span>
+        Test Yourself <span class="arrow">→</span>
       </button>
       <div class="meta-row">
         <span>⏱ ~6 minutes</span>
@@ -154,18 +154,35 @@
 
       <div class="axis-bars" id="axisBars"></div>
 
-      <!-- Classic 2D Political Compass -->
+      <!-- Political Compass (2D / 3D toggle) -->
       <div class="compass-section">
         <div class="compass-wrap">
-          <h3 class="compass-heading">Political Compass</h3>
-          <span class="compass-label-block">Authoritarian</span>
-          <div class="compass-grid">
-            <span class="compass-label compass-label-left">Left</span>
-            <canvas id="compassCanvas" width="360" height="360"></canvas>
-            <span class="compass-label compass-label-right">Right</span>
+          <div class="compass-header">
+            <h3 class="compass-heading">Political Compass</h3>
+            <div class="compass-toggle">
+              <button class="toggle-btn active" id="btn2d" onclick="showCompass2D()">2D</button>
+              <button class="toggle-btn" id="btn3d" onclick="showCompass3D()">3D</button>
+            </div>
           </div>
-          <span class="compass-label-block">Libertarian</span>
-          <div class="compass-coords" id="compassCoords"></div>
+
+          <!-- 2D view -->
+          <div id="compass2dView">
+            <span class="compass-label-block">Authoritarian</span>
+            <div class="compass-grid">
+              <span class="compass-label compass-label-left">Left</span>
+              <canvas id="compassCanvas" width="360" height="360"></canvas>
+              <span class="compass-label compass-label-right">Right</span>
+            </div>
+            <span class="compass-label-block">Libertarian</span>
+            <div class="compass-coords" id="compassCoords"></div>
+          </div>
+
+          <!-- 3D view -->
+          <div id="compass3dView" style="display:none;">
+            <div id="compass3dContainer"></div>
+            <div class="compass-3d-hint">Drag to rotate · Scroll to zoom</div>
+            <div class="compass-coords" id="compassCoords3d"></div>
+          </div>
         </div>
       </div>
 
@@ -198,8 +215,11 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="./questions.js"></script>
   <script src="./countries.js"></script>
   <script src="./app.js"></script>
+  <script src="./compass3d.js"></script>
 </body>
 </html>

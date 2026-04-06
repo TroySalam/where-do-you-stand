@@ -256,8 +256,9 @@ function renderResults(scores) {
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
   document.getElementById('profileType').textContent = `You are ${type.label.toLowerCase().match(/^[aeiou]/i) ? 'an' : 'a'} ${type.label}`;
 
-  // Classic 2D political compass
+  // Classic 2D political compass + prep 3D
   drawCompass(scores);
+  savedScores3d = scores; // store for 3D toggle
 
   // Pentagon radar charts (5 main axes)
   drawRadar('radarLeft', scores, 'left');

@@ -405,15 +405,68 @@ a:hover { color: var(--text); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 380px;
+  max-width: 440px;
   width: 100%;
+}
+.compass-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
 }
 .compass-heading {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 6px;
   letter-spacing: -0.01em;
+  margin: 0;
+}
+.compass-toggle {
+  display: flex;
+  gap: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 2px;
+}
+.toggle-btn {
+  padding: 5px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.toggle-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+.toggle-btn:hover:not(.active) {
+  background: rgba(255,255,255,0.08);
+}
+
+#compass3dView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#compass3dContainer {
+  width: 420px;
+  height: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+#compass3dContainer canvas {
+  border-radius: 12px;
+}
+.compass-3d-hint {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  opacity: 0.6;
 }
 .compass-label-block {
   font-size: 0.78rem;
@@ -455,6 +508,7 @@ a:hover { color: var(--text); }
   .compass-section { margin-left: -8px; margin-right: -8px; }
   .compass-wrap { max-width: 340px; }
   .compass-label { font-size: 0.7rem; }
+  #compass3dContainer { width: 320px; height: 320px; }
 }
 
 /* Radar section */
