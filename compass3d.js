@@ -2,7 +2,7 @@
    3D POLITICAL COMPASS — Three.js
    X = Left ↔ Right (economy)
    Y = Libertarian ↔ Authoritarian (governance)
-   Z = Restraint ↔ Expansionism (expansion)
+   Z = Progressive ↔ Traditional (society)
    ═══════════════════════════════════════════════ */
 
 let compass3d = null; // { scene, camera, renderer, controls, animId, resizeHandler, alive }
@@ -114,14 +114,14 @@ function initCompass3D(scores) {
 
   // 8 octant semi-transparent boxes
   const octantColors = [
-    { pos: [-0.5, 0.5, -0.5], color: 0xEF4444 },  // Auth-Left-Restraint (red)
-    { pos: [0.5, 0.5, -0.5],  color: 0x3B82F6 },   // Auth-Right-Restraint (blue)
-    { pos: [-0.5, -0.5, -0.5], color: 0x22C55E },   // Lib-Left-Restraint (green)
-    { pos: [0.5, -0.5, -0.5], color: 0xA855F7 },    // Lib-Right-Restraint (purple)
-    { pos: [-0.5, 0.5, 0.5],  color: 0xF97316 },    // Auth-Left-Expansion (orange)
-    { pos: [0.5, 0.5, 0.5],   color: 0x6366F1 },    // Auth-Right-Expansion (indigo)
-    { pos: [-0.5, -0.5, 0.5], color: 0x14B8A6 },    // Lib-Left-Expansion (teal)
-    { pos: [0.5, -0.5, 0.5],  color: 0xF472B6 },    // Lib-Right-Expansion (pink)
+    { pos: [-0.5, 0.5, -0.5], color: 0xEF4444 },  // Auth-Left-Progressive (red)
+    { pos: [0.5, 0.5, -0.5],  color: 0x3B82F6 },   // Auth-Right-Progressive (blue)
+    { pos: [-0.5, -0.5, -0.5], color: 0x22C55E },   // Lib-Left-Progressive (green)
+    { pos: [0.5, -0.5, -0.5], color: 0xA855F7 },    // Lib-Right-Progressive (purple)
+    { pos: [-0.5, 0.5, 0.5],  color: 0xF97316 },    // Auth-Left-Traditional (orange)
+    { pos: [0.5, 0.5, 0.5],   color: 0x6366F1 },    // Auth-Right-Traditional (indigo)
+    { pos: [-0.5, -0.5, 0.5], color: 0x14B8A6 },    // Lib-Left-Traditional (teal)
+    { pos: [0.5, -0.5, 0.5],  color: 0xF472B6 },    // Lib-Right-Traditional (pink)
   ];
 
   octantColors.forEach(({ pos, color }) => {
@@ -153,7 +153,7 @@ function initCompass3D(scores) {
   addLine(scene, [-S, 0, 0], [S, 0, 0], axisMat);
   // Y axis (Lib-Auth)
   addLine(scene, [0, -S, 0], [0, S, 0], axisMat);
-  // Z axis (Restraint-Expansion)
+  // Z axis (Progressive-Traditional)
   addLine(scene, [0, 0, -S], [0, 0, S], axisMat);
 
   // Grid lines on each face (subtle)
@@ -172,8 +172,8 @@ function initCompass3D(scores) {
     { text: 'Left', pos: [-S - 0.2, 0, 0], color: '#8B5CF6' },
     { text: 'Authoritarian', pos: [0, S + 0.2, 0], color: '#F59E0B' },
     { text: 'Libertarian', pos: [0, -S - 0.2, 0], color: '#F59E0B' },
-    { text: 'Expansionism', pos: [0, 0, S + 0.25], color: '#F472B6' },
-    { text: 'Restraint', pos: [0, 0, -S - 0.25], color: '#F472B6' },
+    { text: 'Traditional', pos: [0, 0, S + 0.25], color: '#14B8A6' },
+    { text: 'Progressive', pos: [0, 0, -S - 0.25], color: '#14B8A6' },
   ];
 
   labels.forEach(({ text, pos, color }) => {
@@ -186,7 +186,7 @@ function initCompass3D(scores) {
   // Map scores to 3D coordinates (-1 to 1)
   const ux = ((scores.economy / 100) * 2 - 1) * S;    // 0=left(-1), 100=right(+1)
   const uy = ((scores.governance / 100) * 2 - 1) * S;  // 0=lib(-1), 100=auth(+1)
-  const uz = ((1 - scores.expansion / 100) * 2 - 1) * S; // 0=expansion(+1), 100=restraint(-1)
+  const uz = ((scores.society / 100) * 2 - 1) * S;       // 0=progressive(-1), 100=traditional(+1)
 
   // Glow sphere
   const glowGeo = new THREE.SphereGeometry(0.12, 32, 32);
@@ -221,12 +221,12 @@ function initCompass3D(scores) {
   // Coordinates text
   const ecoLabel = scores.economy < 50 ? 'Left' : scores.economy > 50 ? 'Right' : 'Centre';
   const govLabel = scores.governance < 50 ? 'Libertarian' : scores.governance > 50 ? 'Authoritarian' : 'Centre';
-  const expLabel = scores.expansion < 50 ? 'Expansionist' : scores.expansion > 50 ? 'Restrained' : 'Balanced';
+  const socLabel = scores.society < 50 ? 'Progressive' : scores.society > 50 ? 'Traditional' : 'Centre';
   const ecoVal = Math.abs(scores.economy - 50) * 2;
   const govVal = Math.abs(scores.governance - 50) * 2;
-  const expVal = Math.abs(scores.expansion - 50) * 2;
+  const socVal = Math.abs(scores.society - 50) * 2;
   document.getElementById('compassCoords3d').textContent =
-    `${ecoVal.toFixed(0)}% ${ecoLabel}  ·  ${govVal.toFixed(0)}% ${govLabel}  ·  ${expVal.toFixed(0)}% ${expLabel}`;
+    `${ecoVal.toFixed(0)}% ${ecoLabel}  ·  ${govVal.toFixed(0)}% ${govLabel}  ·  ${socVal.toFixed(0)}% ${socLabel}`;
 
   // Ambient light (not really needed for MeshBasic but keeps consistent)
   scene.add(new THREE.AmbientLight(0xffffff, 1));
