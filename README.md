@@ -53,7 +53,7 @@ After completing the test, you get:
 - **Expansion Outlook Pentagon** — your stance across space, technology, bioethics, and growth
 - **6 Axis Bars** — percentage breakdown for each dimension
 - **2D Political Compass** — classic 4-quadrant grid (Economy × Governance)
-- **3D Interactive Compass** — Three.js powered cube (Economy × Governance × Expansion) with drag-to-rotate
+- **3D Interactive Compass** — Three.js powered cube (Economy × Governance × Society) with drag-to-rotate
 - **Closest Country Match** — compared against 48 real country profiles using 9-dimensional Euclidean distance
 - **Top 4 Closest Figures** — matched against 20 political figures from across the spectrum
 
@@ -71,15 +71,15 @@ The interactive 3D compass maps your position inside a cube with 8 colour-coded 
         │ / Auth-Left / Auth-Right
         │/───────────/───────────┐
         │  Orange   /  Indigo   /
-        │ Auth-L-Exp/ Auth-R-Exp/
+        │ Auth-L-Tr / Auth-R-Tr /
   ──────┼──────────┼──────────/────── X (Right)
        /│  Green  /  Purple  /
       / │ Lib-Left/ Lib-Right/
      /  │/───────/──────────/
     /   │  Teal  /  Pink   /
-   /    │Lib-L-Exp/Lib-R-Exp/
+   /    │Lib-L-Tr /Lib-R-Tr /
   Z     └───────────────────┘
-(Expansion)     │
+(Traditional)   │
                 │
           (Libertarian)
 ```
