@@ -248,6 +248,7 @@ function calculateResults() {
 
   renderResults(axisScores);
   show('results');
+  animateResultsReveal();
 }
 
 // ─── Results Rendering ───────────────────────
@@ -760,4 +761,31 @@ function calcSimilarity(scores, profile) {
   const maxDist = Math.sqrt(allDims.length * 100 * 100);
   const dist = Math.sqrt(sumSqDiff);
   return Math.max(0, (1 - dist / maxDist) * 100);
+}
+
+// ─── Results Reveal Animations ─────────────────
+function animateResultsReveal() {
+  // Reset all reveal elements
+  const reveals = document.querySelectorAll('#results [data-reveal]');
+  reveals.forEach(el => el.classList.remove('revealed'));
+
+  // Reset figure cards
+  const figureCards = document.querySelectorAll('#results .figure-card');
+  figureCards.forEach(el => el.classList.remove('revealed'));
+
+  // Stagger each section with increasing delay
+  const baseDelay = 150; // ms between each section
+  reveals.forEach((el, i) => {
+    setTimeout(() => {
+      el.classList.add('revealed');
+
+      // If this is the figures section, stagger individual cards after it reveals
+      if (el.id === 'figuresSection') {
+        const cards = el.querySelectorAll('.figure-card');
+        cards.forEach((card, j) => {
+          setTimeout(() => card.classList.add('revealed'), j * 80);
+        });
+      }
+    }, i * baseDelay);
+  });
 }

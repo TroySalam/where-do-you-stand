@@ -731,6 +731,69 @@ a:hover { color: var(--text); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ─── RESULTS REVEAL ANIMATIONS ─────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+}
+[data-reveal].revealed {
+  animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Radar charts scale in */
+[data-reveal="radar"].revealed {
+  animation: revealScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes revealScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Country card glow pulse on reveal */
+[data-reveal="country"].revealed {
+  animation: revealGlow 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes revealGlow {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    box-shadow: 0 0 0 rgba(139, 92, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.35);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+/* Figure cards stagger in from JS */
+.figure-card {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.figure-card.revealed {
+  animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* ─── RESPONSIVE ──────────────────────────────── */
 @media (max-width: 640px) {
   .hero h1 { font-size: 1.8rem; }
