@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Troy's Political Test — Where Do You Stand?</title>
-  <meta name="description" content="Discover your political profile across 5 core dimensions plus an expansion outlook. 54 questions, ~6 minutes. Find your closest country match.">
+  <title>Where Do You Stand?</title>
+  <meta name="description" content="Map your political identity across 6 dimensions. 54 questions, ~5 minutes. Find your closest country match and political figures.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <!-- ═══════ LANDING ═══════ -->
   <div id="landing" class="screen active">
     <canvas id="particleCanvas"></canvas>
-    <div class="dot-grid-overlay"></div>
 
     <header class="nav">
       <div class="logo">
@@ -35,44 +34,74 @@
       </button>
     </header>
 
-
-
     <main class="hero">
-      <h1>Troy's Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
-      <p class="subtitle">Discover your political profile across 5 core dimensions and an expansion outlook — economy, society, governance, universality, environment, plus space, technology, bioethics, and growth. Find the country and figures that match your views.</p>
-
-      <div class="speed-toggle-wrap">
-        <button class="speed-toggle" id="speedToggle" onclick="toggleSpeedMode()">
-          <span class="speed-toggle-track">
-            <span class="speed-toggle-thumb"></span>
-          </span>
-          <span class="speed-toggle-label" id="speedLabel">Speed Mode ⚡</span>
-        </button>
+      <!-- Animated Compass SVG Centerpiece -->
+      <div class="compass-centerpiece">
+        <svg viewBox="0 0 200 200" fill="none" class="compass-svg" aria-label="Political compass visualization">
+          <!-- Outer ring with tick marks -->
+          <circle cx="100" cy="100" r="90" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="80" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" stroke-dasharray="2 4"/>
+          <!-- Tick marks around outer ring -->
+          <g class="tick-marks" stroke="rgba(255,255,255,0.12)" stroke-width="1">
+            <line x1="100" y1="5" x2="100" y2="14"/>
+            <line x1="100" y1="186" x2="100" y2="195"/>
+            <line x1="5" y1="100" x2="14" y2="100"/>
+            <line x1="186" y1="100" x2="195" y2="100"/>
+            <!-- Diagonal ticks -->
+            <line x1="163.6" y1="36.4" x2="157.3" y2="42.7" opacity="0.5"/>
+            <line x1="36.4" y1="36.4" x2="42.7" y2="42.7" opacity="0.5"/>
+            <line x1="36.4" y1="163.6" x2="42.7" y2="157.3" opacity="0.5"/>
+            <line x1="163.6" y1="163.6" x2="157.3" y2="157.3" opacity="0.5"/>
+          </g>
+          <!-- Axes with gradient -->
+          <line x1="100" y1="20" x2="100" y2="180" stroke="url(#axisGradV)" stroke-width="1"/>
+          <line x1="20" y1="100" x2="180" y2="100" stroke="url(#axisGradH)" stroke-width="1"/>
+          <!-- Quadrant labels -->
+          <text x="100" y="32" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Grotesk, sans-serif" font-weight="600">Auth</text>
+          <text x="100" y="175" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Grotesk, sans-serif" font-weight="600">Lib</text>
+          <text x="28" y="103" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Grotesk, sans-serif" font-weight="600">Left</text>
+          <text x="172" y="103" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Space Grotesk, sans-serif" font-weight="600">Right</text>
+          <!-- Inner ring -->
+          <circle cx="100" cy="100" r="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+          <!-- Pulsing center dot -->
+          <circle cx="100" cy="100" r="6" fill="var(--accent)" opacity="0.2" class="pulse-ring"/>
+          <circle cx="100" cy="100" r="3" fill="var(--accent)" class="center-dot"/>
+          <!-- Gradients -->
+          <defs>
+            <linearGradient id="axisGradV" x1="100" y1="20" x2="100" y2="180" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+              <stop offset="50%" stop-color="rgba(255,255,255,0.04)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.15)"/>
+            </linearGradient>
+            <linearGradient id="axisGradH" x1="20" y1="100" x2="180" y2="100" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+              <stop offset="50%" stop-color="rgba(255,255,255,0.04)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.15)"/>
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
 
-      <button class="btn-primary" onclick="startQuiz()">
-        Test Yourself <span class="arrow">→</span>
+      <h1>Where Do You Stand?</h1>
+      <p class="subtitle">Map your political identity across 6 dimensions. 54 questions. 5 minutes.</p>
+
+      <button class="btn-primary btn-cta" onclick="startQuiz()">
+        Begin <span class="arrow">→</span>
       </button>
 
-      <div class="stat-counters">
-        <div class="stat-item">
-          <span class="stat-num" data-target="54">0</span>
-          <span class="stat-label">Questions</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="48">0</span>
-          <span class="stat-label">Countries</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="20">0</span>
-          <span class="stat-label">Figures</span>
-        </div>
+      <div class="stat-pills">
+        <span class="stat-pill">54 questions</span>
+        <span class="stat-pill-sep">·</span>
+        <span class="stat-pill">48 countries</span>
+        <span class="stat-pill-sep">·</span>
+        <span class="stat-pill">20 figures</span>
       </div>
     </main>
 
     <section class="info-section">
+      <div class="info-divider"></div>
       <h3>How it works</h3>
-      <p>You'll rate 54 statements on a scale from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile that gets compared against real country profiles and political figures.</p>
+      <p>Rate 54 statements from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile compared against real countries and political figures.</p>
       <div class="axes-preview">
         <div class="axis-chip"><span class="dot" style="background:var(--c-economy)"></span> Economy</div>
         <div class="axis-chip"><span class="dot" style="background:var(--c-society)"></span> Society</div>
@@ -99,17 +128,8 @@
 
     <div class="quiz-container">
       <div class="progress-header">
-        <span id="qCounter">Question 1 of 54</span>
-        <div class="timer-badge-wrap">
-          <div id="timerWrap" class="timer-wrap hidden">
-            <svg class="timer-ring" viewBox="0 0 40 40">
-              <circle class="timer-ring-bg" cx="20" cy="20" r="17" />
-              <circle class="timer-ring-fg" id="timerRingFg" cx="20" cy="20" r="17" />
-            </svg>
-            <span class="timer-num" id="timerNum">5</span>
-          </div>
-          <span id="axisBadge" class="axis-badge">Economy</span>
-        </div>
+        <span id="qCounter" class="q-counter">01 / 54</span>
+        <span id="axisBadge" class="axis-badge">Economy</span>
       </div>
       <div class="segment-bar">
         <div class="segment" data-axis="economy"><div class="segment-fill"></div></div>
@@ -148,8 +168,8 @@
       </div>
 
       <div class="quiz-footer">
-        <a id="prevBtn" class="nav-link disabled" onclick="prevQuestion()">← Previous</a>
-        <a id="nextBtn" class="nav-link disabled" onclick="nextQuestion()">Next →</a>
+        <button id="prevBtn" class="nav-btn disabled" onclick="prevQuestion()">← Previous</button>
+        <button id="nextBtn" class="nav-btn disabled" onclick="nextQuestion()">Next →</button>
       </div>
 
       <div class="dot-progress" id="dotProgress"></div>
@@ -162,9 +182,6 @@
         <div class="interstitial-emoji" id="interEmoji">👀</div>
         <p class="interstitial-msg" id="interMsg">Starting to look like...</p>
         <h2 class="interstitial-name" id="interName">Nelson Mandela</h2>
-        <div class="interstitial-bar">
-          <div class="interstitial-bar-fill" id="interBarFill"></div>
-        </div>
         <p class="interstitial-sub" id="interSub">1 of 6 sections done</p>
         <button class="btn-primary interstitial-btn" id="interContinueBtn">Keep Going →</button>
       </div>
@@ -193,7 +210,6 @@
 
     <div class="results-container">
 
-
       <!-- 1. Political type -->
       <div class="profile-header" data-reveal>
         <span class="profile-label">MY PROFILE:</span>
@@ -203,12 +219,6 @@
         </div>
 
         <p class="profile-description" id="profileDescription"></p>
-      </div>
-
-      <!-- Speed mode time display -->
-      <div id="speedResult" class="speed-result hidden" data-reveal>
-        <span class="speed-result-icon">⚡</span>
-        <span class="speed-result-text" id="speedResultText">Completed in 0:00</span>
       </div>
 
       <!-- 2. Ideology Breakdown -->

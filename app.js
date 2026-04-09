@@ -54,14 +54,6 @@ const EXPANSION_LABELS = {
   growth:     { left: 'Unlimited growth', right: 'Degrowth' }
 };
 
-// Speed mode state
-let speedMode = false;
-let speedTimerId = null;
-let speedStartTime = 0;
-let speedEndTime = 0;
-let timerAnimId = null;
-let timerStartTs = 0;
-const SPEED_TIME = 5000; // 5 seconds
 
 // Compare mode
 let friendScores = null;
@@ -95,7 +87,6 @@ function show(id) {
 }
 
 function goHome() {
-  stopTimer();
   show('landing');
   initParticles();
 }
@@ -111,11 +102,6 @@ function startQuiz() {
   buildDotProgress();
   renderQuestion();
   show('quiz');
-
-  if (speedMode) {
-    speedStartTime = Date.now();
-    startTimer();
-  }
 
   playSound('click');
 }
@@ -245,80 +231,6 @@ function playSound(type) {
   } catch (e) { /* ignore audio errors */ }
 }
 
-// ─── 4. Speed Mode Timer ──────────────────────
-function toggleSpeedMode() {
-  speedMode = !speedMode;
-  document.getElementById('speedToggle').classList.toggle('active', speedMode);
-}
-
-function startTimer() {
-  const wrap = document.getElementById('timerWrap');
-  wrap.classList.remove('hidden');
-  timerStartTs = Date.now();
-  clearTimeout(speedTimerId);
-  animateTimer();
-  speedTimerId = setTimeout(onTimerExpire, SPEED_TIME);
-}
-
-function stopTimer() {
-  clearTimeout(speedTimerId);
-  cancelAnimationFrame(timerAnimId);
-  const wrap = document.getElementById('timerWrap');
-  if (wrap) wrap.classList.add('hidden');
-}
-
-function animateTimer() {
-  const elapsed = Date.now() - timerStartTs;
-  const remaining = Math.max(0, SPEED_TIME - elapsed);
-  const pct = remaining / SPEED_TIME;
-  const circumference = 2 * Math.PI * 17; // r=17
-  const fg = document.getElementById('timerRingFg');
-  const num = document.getElementById('timerNum');
-  if (fg) {
-    fg.style.strokeDashoffset = circumference * (1 - pct);
-    fg.classList.toggle('warning', pct < 0.3);
-  }
-  if (num) num.textContent = Math.ceil(remaining / 1000);
-  if (remaining > 0) {
-    timerAnimId = requestAnimationFrame(animateTimer);
-  }
-}
-
-function onTimerExpire() {
-  playSound('timeout');
-  // Auto-answer neutral
-  answers[currentQ] = 3;
-  document.querySelectorAll('.scale-btn').forEach(btn => {
-    btn.classList.toggle('selected', parseInt(btn.dataset.value) === 3);
-  });
-  updateDotProgress();
-  updateSegmentBar();
-
-  setTimeout(() => {
-    if (currentQ >= QUESTIONS.length - 1) {
-      speedEndTime = Date.now();
-      stopTimer();
-      calculateResults();
-      return;
-    }
-    const boundary = getSectionBoundary(currentQ);
-    if (boundary) {
-      stopTimer();
-      showSectionInterstitial(boundary, () => {
-        currentQ++;
-        renderQuestion();
-        startTimer();
-      });
-    } else {
-      currentQ++;
-      renderQuestion();
-      // restart timer
-      timerStartTs = Date.now();
-      clearTimeout(speedTimerId);
-      speedTimerId = setTimeout(onTimerExpire, SPEED_TIME);
-    }
-  }, 250);
-}
 
 // ─── 5. Quiz Rendering + Answer Logic ─────────
 function renderQuestion() {
@@ -330,11 +242,20 @@ function renderQuestion() {
   card.style.animation = '';
   document.getElementById('questionText').textContent = q.text;
 
-  document.getElementById('qCounter').textContent = `Q.${String(currentQ + 1).padStart(2, '0')} // ${QUESTIONS.length}`;
+  document.getElementById('qCounter').textContent = `${String(currentQ + 1).padStart(2, '0')} / ${QUESTIONS.length}`;
 
   const badge = document.getElementById('axisBadge');
   badge.textContent = q.axis.charAt(0).toUpperCase() + q.axis.slice(1);
   badge.style.background = ALL_Q_COLORS[q.axis];
+
+  // Set current axis color for CSS theming
+  const quizEl = document.getElementById('quiz');
+  quizEl.style.setProperty('--current-axis-color', ALL_Q_COLORS[q.axis]);
+
+  // Highlight current segment
+  document.querySelectorAll('.segment').forEach(seg => seg.classList.remove('active-segment'));
+  const activeSeg = document.querySelector(`.segment[data-axis="${q.axis}"]`);
+  if (activeSeg) activeSeg.classList.add('active-segment');
 
   updateSegmentBar();
 
@@ -350,14 +271,6 @@ function renderQuestion() {
 
   updateDotProgress();
 
-  // Reset timer for speed mode
-  if (speedMode && document.getElementById('quiz').classList.contains('active')) {
-    timerStartTs = Date.now();
-    clearTimeout(speedTimerId);
-    cancelAnimationFrame(timerAnimId);
-    animateTimer();
-    speedTimerId = setTimeout(onTimerExpire, SPEED_TIME);
-  }
 }
 
 function updateSegmentBar() {
@@ -517,7 +430,7 @@ function showSectionInterstitial(sectionInfo, callback) {
 
   const pct = (sectionInfo.sectionNum / sectionInfo.total) * 100;
   const barFill = document.getElementById('interBarFill');
-  barFill.style.width = '0%';
+  if (barFill) barFill.style.width = '0%';
 
   overlay.classList.remove('hidden');
 
@@ -526,7 +439,7 @@ function showSectionInterstitial(sectionInfo, callback) {
   void card.offsetHeight;
   card.classList.add('inter-enter');
 
-  setTimeout(() => { barFill.style.width = pct + '%'; }, 400);
+  if (barFill) setTimeout(() => { barFill.style.width = pct + '%'; }, 400);
 
   const btn = document.getElementById('interContinueBtn');
   const handler = () => {
@@ -556,29 +469,17 @@ function selectAnswer(value) {
 
   playSound('click');
 
-  // In speed mode, stop current timer
-  if (speedMode) {
-    clearTimeout(speedTimerId);
-    cancelAnimationFrame(timerAnimId);
-  }
-
   setTimeout(() => {
     if (currentQ >= QUESTIONS.length - 1) {
-      if (speedMode) {
-        speedEndTime = Date.now();
-        stopTimer();
-      }
       calculateResults();
       return;
     }
 
     const boundary = getSectionBoundary(currentQ);
     if (boundary) {
-      if (speedMode) stopTimer();
       showSectionInterstitial(boundary, () => {
         currentQ++;
         renderQuestion();
-        if (speedMode) startTimer();
       });
     } else {
       currentQ++;
@@ -592,18 +493,15 @@ function nextQuestion() {
   if (currentQ < QUESTIONS.length - 1) {
     const boundary = getSectionBoundary(currentQ);
     if (boundary) {
-      if (speedMode) stopTimer();
       showSectionInterstitial(boundary, () => {
         currentQ++;
         renderQuestion();
-        if (speedMode) startTimer();
       });
     } else {
       currentQ++;
       renderQuestion();
     }
   } else {
-    if (speedMode) { speedEndTime = Date.now(); stopTimer(); }
     calculateResults();
   }
 }
@@ -698,17 +596,6 @@ function renderResults(scores) {
   document.getElementById('profileEmoji').textContent = meta.emoji;
   document.getElementById('profileType').textContent = `You are ${type.label.toLowerCase().match(/^[aeiou]/i) ? 'an' : 'a'} ${type.label}`;
   document.getElementById('profileDescription').textContent = meta.desc;
-
-  // Speed mode result
-  if (speedMode && speedEndTime > 0) {
-    const elapsed = speedEndTime - speedStartTime;
-    const mins = Math.floor(elapsed / 60000);
-    const secs = Math.floor((elapsed % 60000) / 1000);
-    document.getElementById('speedResultText').textContent = `Speed Mode — Completed in ${mins}:${secs.toString().padStart(2, '0')}`;
-    document.getElementById('speedResult').classList.remove('hidden');
-  } else {
-    document.getElementById('speedResult').classList.add('hidden');
-  }
 
   // Classic 2D political compass
   drawCompass(scores);
@@ -1559,7 +1446,7 @@ function saveToHistory(scores) {
     scores: { ...scores },
     type: type.label,
     closestFigure: figured[0].name,
-    speedMode: speedMode
+    speedMode: false
   };
 
   history.unshift(entry);
@@ -1597,7 +1484,7 @@ function renderHistorySection() {
       <div class="history-item">
         <div>
           <div class="history-type">${entry.type}</div>
-          <div class="history-date">${date}${entry.speedMode ? ' ⚡' : ''}</div>
+          <div class="history-date">${date}</div>
         </div>
         <div class="history-figure">${entry.closestFigure}</div>
       </div>
@@ -2093,7 +1980,7 @@ function initParticles() {
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       r: Math.random() * 2 + 1,
-      color: Math.random() > 0.5 ? 'rgba(139, 92, 246, 0.15)' : 'rgba(20, 184, 166, 0.15)'
+      color: Math.random() > 0.5 ? 'rgba(139, 92, 246, 0.25)' : 'rgba(20, 184, 166, 0.25)'
     });
   }
 
@@ -2124,7 +2011,7 @@ function initParticles() {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - dist / 120)})`;
+          ctx.strokeStyle = `rgba(139, 92, 246, ${0.08 * (1 - dist / 120)})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -2159,7 +2046,6 @@ function animateStatCounters() {
 // ─── Init ─────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initParticles();
-  animateStatCounters();
 
   // Check mute state
   if (!soundEnabled) {
