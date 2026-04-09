@@ -1,5 +1,16 @@
 /* ═══════════════════════════════════════════════
-   WHERE DO YOU STAND — App Logic (Mega Upgrade)
+   WHERE DO YOU STAND — App Logic
+   ═══════════════════════════════════════════════ */
+
+// Safe localStorage wrapper (falls back to in-memory for iframe previews)
+const _memStore = {};
+const safeStorage = {
+  getItem(k) { try { return safeStorage.getItem(k); } catch(e) { return _memStore[k] || null; } },
+  setItem(k,v) { try { safeStorage.setItem(k,v); } catch(e) { _memStore[k] = v; } },
+  removeItem(k) { try { safeStorage.removeItem(k); } catch(e) { delete _memStore[k]; } }
+};
+
+/* (Mega Upgrade)
    ═══════════════════════════════════════════════ */
 
 // ─── 1. State + Constants ─────────────────────
@@ -116,7 +127,7 @@ function retakeQuiz() {
 // ─── 3. Sound Effects System ──────────────────
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
-let soundEnabled = localStorage.getItem('wdys_sound') !== 'false';
+let soundEnabled = safeStorage.getItem('wdys_sound') !== 'false';
 
 function initAudio() {
   if (!audioCtx) audioCtx = new AudioCtx();
@@ -125,7 +136,7 @@ function initAudio() {
 
 function toggleMute() {
   soundEnabled = !soundEnabled;
-  localStorage.setItem('wdys_sound', soundEnabled);
+  safeStorage.setItem('wdys_sound', soundEnabled);
   document.querySelectorAll('.mute-btn').forEach(btn => {
     btn.classList.toggle('muted', !soundEnabled);
   });
@@ -1521,7 +1532,7 @@ function renderCompare(myScores, theirScores) {
 
 // ─── 12. History Management ───────────────────
 function saveToHistory(scores) {
-  const history = JSON.parse(localStorage.getItem('wdys_history') || '[]');
+  const history = JSON.parse(safeStorage.getItem('wdys_history') || '[]');
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
   const figured = FIGURES.map(f => ({ name: f.name, similarity: calcSimilarity(scores, f) }));
   figured.sort((a, b) => b.similarity - a.similarity);
@@ -1536,11 +1547,11 @@ function saveToHistory(scores) {
 
   history.unshift(entry);
   if (history.length > 20) history.pop();
-  localStorage.setItem('wdys_history', JSON.stringify(history));
+  safeStorage.setItem('wdys_history', JSON.stringify(history));
 }
 
 function renderHistorySection() {
-  const history = JSON.parse(localStorage.getItem('wdys_history') || '[]');
+  const history = JSON.parse(safeStorage.getItem('wdys_history') || '[]');
   const content = document.getElementById('historyContent');
 
   if (history.length === 0) {
@@ -1581,8 +1592,8 @@ function renderHistorySection() {
 }
 
 function clearHistory() {
-  localStorage.removeItem('wdys_history');
-  localStorage.removeItem('wdys_badges');
+  safeStorage.removeItem('wdys_history');
+  safeStorage.removeItem('wdys_badges');
   renderHistorySection();
 }
 
@@ -1602,14 +1613,14 @@ const BADGE_DEFS = [
   { id: 'speed_demon', icon: '⚡', name: 'Speed Demon', desc: 'Completed in Speed Mode', check: () => speedMode },
   { id: 'balanced', icon: '🧘', name: 'Balanced', desc: 'All main axes within 5% of each other', check: (s) => { const vals = AXES.map(a => s[a]); return Math.max(...vals) - Math.min(...vals) <= 5; } },
   { id: 'contrarian', icon: '🎭', name: 'Contrarian', desc: 'Most distant figure match < 30%', check: (s) => { const sims = FIGURES.map(f => calcSimilarity(s, f)); return Math.min(...sims) < 30; } },
-  { id: 'repeat_voter', icon: '🔄', name: 'Repeat Voter', desc: 'Taken quiz 3+ times', check: () => { const h = JSON.parse(localStorage.getItem('wdys_history') || '[]'); return h.length >= 3; } },
-  { id: 'flip_flopper', icon: '🔀', name: 'Flip Flopper', desc: 'Type changed from last attempt', check: (s, typeName) => { const h = JSON.parse(localStorage.getItem('wdys_history') || '[]'); return h.length >= 2 && h[1].type !== typeName; } },
+  { id: 'repeat_voter', icon: '🔄', name: 'Repeat Voter', desc: 'Taken quiz 3+ times', check: () => { const h = JSON.parse(safeStorage.getItem('wdys_history') || '[]'); return h.length >= 3; } },
+  { id: 'flip_flopper', icon: '🔀', name: 'Flip Flopper', desc: 'Type changed from last attempt', check: (s, typeName) => { const h = JSON.parse(safeStorage.getItem('wdys_history') || '[]'); return h.length >= 2 && h[1].type !== typeName; } },
   { id: 'deep_thinker', icon: '🧠', name: 'Deep Thinker', desc: 'No neutral answers', check: () => answers.every(a => a !== null && a !== 3) },
 ];
 
 function renderBadges(scores, typeName) {
   const grid = document.getElementById('badgesGrid');
-  const earned = JSON.parse(localStorage.getItem('wdys_badges') || '[]');
+  const earned = JSON.parse(safeStorage.getItem('wdys_badges') || '[]');
   let newBadges = [];
 
   let html = '';
@@ -1632,7 +1643,7 @@ function renderBadges(scores, typeName) {
   // Save newly earned badges
   if (newBadges.length > 0) {
     const allBadges = [...new Set([...earned, ...newBadges])];
-    localStorage.setItem('wdys_badges', JSON.stringify(allBadges));
+    safeStorage.setItem('wdys_badges', JSON.stringify(allBadges));
     newBadges.forEach(() => playSound('sparkle'));
   }
 }
