@@ -750,8 +750,8 @@ function renderResults(scores) {
   // Figures (with "Why This Figure" breakdown)
   renderFigures(scores);
 
-  // Achievement badges
-  renderBadges(scores, type.label);
+  // Ideology breakdown (Political DNA)
+  renderIdeologyBreakdown(scores);
 
   // Impact analysis (sensitivity)
   renderImpactAnalysis(scores);
@@ -1643,48 +1643,105 @@ function toggleHistorySection() {
   toggle.classList.toggle('open');
 }
 
-// ─── 13. Badge System ─────────────────────────
-const BADGE_DEFS = [
-  { id: 'centrist', icon: '⚖️', name: 'Centrist', desc: 'All 5 main axes within 35-65%', check: (s) => AXES.every(a => s[a] >= 35 && s[a] <= 65) },
-  { id: 'extremist', icon: '🔥', name: 'Extremist', desc: 'Any axis above 90% or below 10%', check: (s) => AXES.some(a => s[a] > 90 || s[a] < 10) },
-  { id: 'figure_twin', icon: '🪞', name: 'Figure Twin', desc: '95%+ match with any figure', check: (s) => FIGURES.some(f => calcSimilarity(s, f) >= 95) },
-  { id: 'world_citizen', icon: '🌍', name: 'World Citizen', desc: '90%+ match with any country', check: (s) => COUNTRIES.some(c => calcSimilarity(s, c) >= 90) },
-  { id: 'speed_demon', icon: '⚡', name: 'Speed Demon', desc: 'Completed in Speed Mode', check: () => speedMode },
-  { id: 'balanced', icon: '🧘', name: 'Balanced', desc: 'All main axes within 5% of each other', check: (s) => { const vals = AXES.map(a => s[a]); return Math.max(...vals) - Math.min(...vals) <= 5; } },
-  { id: 'contrarian', icon: '🎭', name: 'Contrarian', desc: 'Most distant figure match < 30%', check: (s) => { const sims = FIGURES.map(f => calcSimilarity(s, f)); return Math.min(...sims) < 30; } },
-  { id: 'repeat_voter', icon: '🔄', name: 'Repeat Voter', desc: 'Taken quiz 3+ times', check: () => { const h = JSON.parse(safeStorage.getItem('wdys_history') || '[]'); return h.length >= 3; } },
-  { id: 'flip_flopper', icon: '🔀', name: 'Flip Flopper', desc: 'Type changed from last attempt', check: (s, typeName) => { const h = JSON.parse(safeStorage.getItem('wdys_history') || '[]'); return h.length >= 2 && h[1].type !== typeName; } },
-  { id: 'deep_thinker', icon: '🧠', name: 'Deep Thinker', desc: 'No neutral answers', check: () => answers.every(a => a !== null && a !== 3) },
-];
+// ─── 13. Ideology Breakdown (Political DNA) ──
+const IDEOLOGY_MAP = {
+  economy: [
+    { max: 15, label: 'Communist',           color: '#EF4444', desc: 'Full state ownership of production and resources' },
+    { max: 30, label: 'Democratic Socialist', color: '#F97316', desc: 'Major industries publicly owned, strong redistribution' },
+    { max: 45, label: 'Social Democrat',      color: '#F59E0B', desc: 'Regulated capitalism with a strong welfare state' },
+    { max: 55, label: 'Centrist',             color: '#A78BFA', desc: 'Mixed economy balancing markets and public services' },
+    { max: 70, label: 'Classical Liberal',    color: '#3B82F6', desc: 'Free markets with light regulation and low taxes' },
+    { max: 85, label: 'Free-Market Conservative', color: '#14B8A6', desc: 'Minimal state role, privatisation, fiscal discipline' },
+    { max: 101, label: 'Laissez-Faire Capitalist', color: '#22C55E', desc: 'Near-zero government interference in markets' },
+  ],
+  society: [
+    { max: 15, label: 'Radical Progressive',  color: '#F472B6', desc: 'Fundamental transformation of social norms and structures' },
+    { max: 30, label: 'Progressive',           color: '#A78BFA', desc: 'Active reform toward equality and social liberation' },
+    { max: 45, label: 'Social Liberal',        color: '#8B5CF6', desc: 'Personal freedoms first, gradual social change' },
+    { max: 55, label: 'Moderate',              color: '#6B7280', desc: 'Balanced views on tradition and progress' },
+    { max: 70, label: 'Cultural Conservative', color: '#3B82F6', desc: 'Preserving existing social institutions and norms' },
+    { max: 85, label: 'Traditionalist',        color: '#F59E0B', desc: 'Strong commitment to heritage, religion, and customs' },
+    { max: 101, label: 'Reactionary',          color: '#EF4444', desc: 'Restoring society to a previous moral framework' },
+  ],
+  governance: [
+    { max: 15, label: 'Anarchist',             color: '#22C55E', desc: 'Voluntary associations, no centralised authority' },
+    { max: 30, label: 'Libertarian',            color: '#14B8A6', desc: 'Maximum personal freedom, minimal government power' },
+    { max: 45, label: 'Civil Libertarian',      color: '#3B82F6', desc: 'Strong civil rights protections, limited state reach' },
+    { max: 55, label: 'Moderate Statist',       color: '#A78BFA', desc: 'Balanced governance with checks and freedoms' },
+    { max: 70, label: 'Statist',                color: '#F59E0B', desc: 'Government should play a strong guiding role' },
+    { max: 85, label: 'Authoritarian',          color: '#F97316', desc: 'Centralised control for order and national strength' },
+    { max: 101, label: 'Totalitarian',          color: '#EF4444', desc: 'Absolute state power over all aspects of life' },
+  ],
+  universality: [
+    { max: 15, label: 'Globalist',              color: '#8B5CF6', desc: 'Borderless cooperation, supranational governance' },
+    { max: 30, label: 'Internationalist',        color: '#3B82F6', desc: 'Strong global institutions and open borders' },
+    { max: 45, label: 'Multilateralist',         color: '#14B8A6', desc: 'International cooperation with national sovereignty' },
+    { max: 55, label: 'Moderate',                color: '#6B7280', desc: 'Pragmatic balance of national and global interests' },
+    { max: 70, label: 'Patriot',                 color: '#F59E0B', desc: 'National interests first but open to cooperation' },
+    { max: 85, label: 'Nationalist',             color: '#F97316', desc: 'Strong national identity, strict borders and sovereignty' },
+    { max: 101, label: 'Ethno-Nationalist',      color: '#EF4444', desc: 'Nation defined by shared heritage and cultural unity' },
+  ],
+  environment: [
+    { max: 15, label: 'Deep Ecologist',          color: '#22C55E', desc: 'Nature has intrinsic value above human economic needs' },
+    { max: 30, label: 'Green Activist',          color: '#14B8A6', desc: 'Radical restructuring of economy around sustainability' },
+    { max: 45, label: 'Environmentalist',        color: '#3B82F6', desc: 'Strong climate policy and renewable energy investment' },
+    { max: 55, label: 'Balanced',                color: '#6B7280', desc: 'Weighing environmental and economic priorities equally' },
+    { max: 70, label: 'Growth-Oriented',         color: '#F59E0B', desc: 'Economic growth as priority, pragmatic green measures' },
+    { max: 85, label: 'Productivist',            color: '#F97316', desc: 'Industry and output over environmental regulation' },
+    { max: 101, label: 'Resource Exploitationist', color: '#EF4444', desc: 'Unrestricted resource extraction for prosperity' },
+  ],
+  expansion: [
+    { max: 15, label: 'Hyper-Expansionist',      color: '#8B5CF6', desc: 'Push every frontier — space, AI, biotech, unlimited growth' },
+    { max: 30, label: 'Tech Accelerationist',    color: '#3B82F6', desc: 'Embrace rapid technological and scientific progress' },
+    { max: 45, label: 'Tech Optimist',           color: '#14B8A6', desc: 'Innovation-positive with sensible guardrails' },
+    { max: 55, label: 'Moderate',                color: '#6B7280', desc: 'Case-by-case approach to technological expansion' },
+    { max: 70, label: 'Cautious Pragmatist',     color: '#F59E0B', desc: 'Slow, careful adoption with strong precautions' },
+    { max: 85, label: 'Restraint Advocate',      color: '#F97316', desc: 'Technology needs strict limits to prevent harm' },
+    { max: 101, label: 'Neo-Luddite',            color: '#EF4444', desc: 'Technology has gone too far — scale back significantly' },
+  ]
+};
 
-function renderBadges(scores, typeName) {
-  const grid = document.getElementById('badgesGrid');
-  const earned = JSON.parse(safeStorage.getItem('wdys_badges') || '[]');
-  let newBadges = [];
+function getIdeologyType(axis, score) {
+  const map = IDEOLOGY_MAP[axis];
+  for (const tier of map) {
+    if (score < tier.max) return tier;
+  }
+  return map[map.length - 1];
+}
+
+function renderIdeologyBreakdown(scores) {
+  const grid = document.getElementById('ideologyGrid');
+  const allAxes = [...AXES, 'expansion'];
+  const axisIcons = {
+    economy: '💰', society: '🏛️', governance: '⚖️',
+    universality: '🌐', environment: '🌿', expansion: '🚀'
+  };
+  const axisNames = {
+    economy: 'Economy', society: 'Society', governance: 'Governance',
+    universality: 'Universality', environment: 'Environment', expansion: 'Expansion'
+  };
 
   let html = '';
-  BADGE_DEFS.forEach(badge => {
-    const isUnlocked = badge.check(scores, typeName);
-    if (isUnlocked && !earned.includes(badge.id)) {
-      newBadges.push(badge.id);
-    }
-    const unlocked = isUnlocked || earned.includes(badge.id);
+  allAxes.forEach((axis, i) => {
+    const score = scores[axis];
+    const type = getIdeologyType(axis, score);
     html += `
-      <div class="badge-item ${unlocked ? 'unlocked' : 'locked'}">
-        <span class="badge-icon">${badge.icon}</span>
-        <span class="badge-name">${badge.name}</span>
-        <span class="badge-desc">${badge.desc}</span>
+      <div class="ideology-card" style="animation-delay: ${i * 80}ms">
+        <div class="ideology-card-top">
+          <span class="ideology-icon">${axisIcons[axis]}</span>
+          <span class="ideology-axis">${axisNames[axis]}</span>
+          <span class="ideology-score" style="color: ${type.color}">${score}%</span>
+        </div>
+        <div class="ideology-label" style="color: ${type.color}">${type.label}</div>
+        <div class="ideology-bar">
+          <div class="ideology-bar-fill" style="width: ${score}%; background: ${type.color}"></div>
+          <div class="ideology-bar-marker" style="left: ${score}%"></div>
+        </div>
+        <div class="ideology-desc">${type.desc}</div>
       </div>
     `;
   });
   grid.innerHTML = html;
-
-  // Save newly earned badges
-  if (newBadges.length > 0) {
-    const allBadges = [...new Set([...earned, ...newBadges])];
-    safeStorage.setItem('wdys_badges', JSON.stringify(allBadges));
-    newBadges.forEach(() => playSound('sparkle'));
-  }
 }
 
 // ─── 14. Figure Breakdown ("Why This Figure") ─
@@ -1958,6 +2015,14 @@ function animateResultsReveal() {
   reveals.forEach((el, i) => {
     setTimeout(() => {
       el.classList.add('revealed');
+
+      // Ideology cards — stagger reveal
+      if (el.id === 'ideologySection') {
+        const cards = el.querySelectorAll('.ideology-card');
+        cards.forEach((card, j) => {
+          setTimeout(() => card.classList.add('revealed'), j * 100);
+        });
+      }
 
       // Figures section — stagger cards then trigger gauges
       if (el.id === 'figuresSection') {
