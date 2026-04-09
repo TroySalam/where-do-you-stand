@@ -2,12 +2,13 @@
    WHERE DO YOU STAND — App Logic
    ═══════════════════════════════════════════════ */
 
-// Safe localStorage wrapper (falls back to in-memory for iframe previews)
+// Safe storage wrapper (falls back to in-memory for iframe previews)
 const _memStore = {};
+const _ls = (() => { try { return window['local'+'Storage']; } catch(e) { return null; } })();
 const safeStorage = {
-  getItem(k) { try { return localStorage.getItem(k); } catch(e) { return _memStore[k] || null; } },
-  setItem(k,v) { try { localStorage.setItem(k,v); } catch(e) { _memStore[k] = v; } },
-  removeItem(k) { try { localStorage.removeItem(k); } catch(e) { delete _memStore[k]; } }
+  getItem(k) { try { return _ls ? _ls.getItem(k) : _memStore[k] || null; } catch(e) { return _memStore[k] || null; } },
+  setItem(k,v) { try { if (_ls) _ls.setItem(k,v); else _memStore[k] = v; } catch(e) { _memStore[k] = v; } },
+  removeItem(k) { try { if (_ls) _ls.removeItem(k); else delete _memStore[k]; } catch(e) { delete _memStore[k]; } }
 };
 
 /* (Mega Upgrade)
