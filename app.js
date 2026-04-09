@@ -1658,21 +1658,62 @@ function renderFigures(scores) {
 
   const closest = figured.slice(0, 4);
   const closestEl = document.getElementById('closestFigures');
-  closestEl.innerHTML = closest.map(f => buildFigureCard(f, scores)).join('');
+  closestEl.innerHTML = closest.map((f, i) => buildFigureCard(f, scores, i === 0, i)).join('');
 
   const distant = figured.slice(-4).reverse();
   const distantEl = document.getElementById('distantFigures');
-  distantEl.innerHTML = distant.map(f => buildFigureCard(f, scores)).join('');
+  distantEl.innerHTML = distant.map((f, i) => buildFigureCard(f, scores, false, i + 4)).join('');
 
-  // Add click listeners
+  // Add click listeners with smooth expand
   document.querySelectorAll('.figure-card').forEach(card => {
     card.addEventListener('click', () => {
+      const wasExpanded = card.classList.contains('expanded');
       card.classList.toggle('expanded');
+      if (!wasExpanded) animateBreakdownBars(card);
     });
   });
 }
 
-function buildFigureCard(fig, scores) {
+// Animate breakdown bars from 0 to full width
+function animateBreakdownBars(card) {
+  const bars = card.querySelectorAll('.figure-bar-you, .figure-bar-fig');
+  bars.forEach((bar, i) => {
+    const targetW = bar.dataset.w;
+    bar.style.width = '0%';
+    bar.style.transition = 'none';
+    requestAnimationFrame(() => {
+      bar.style.transition = `width 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${i * 40}ms`;
+      bar.style.width = targetW + '%';
+    });
+  });
+  // Fade in diverge note after bars
+  const note = card.querySelector('.figure-diverge-note');
+  if (note) {
+    note.style.opacity = '0';
+    note.style.transform = 'translateY(6px)';
+    setTimeout(() => {
+      note.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      note.style.opacity = '1';
+      note.style.transform = 'translateY(0)';
+    }, bars.length * 40 + 400);
+  }
+}
+
+// Animate counting numbers from 0 to target
+function animateCountUp(el, target, duration = 800, suffix = '%') {
+  const start = performance.now();
+  const update = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // easeOutCubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+function buildFigureCard(fig, scores, isTopMatch, cardIndex) {
   const allDims = [...AXES, ...EXPANSION_SUBS];
   const dimLabels = { ...AXIS_LABELS, space: { left: 'Space' }, technology: { left: 'Tech' }, bioethics: { left: 'Bio' }, growth: { left: 'Growth' } };
 
@@ -1687,25 +1728,43 @@ function buildFigureCard(fig, scores) {
     const diff = Math.abs(myVal - figVal);
     if (diff > maxDiv) { maxDiv = diff; maxDivAxis = label; }
     if (diff < minDiv) { minDiv = diff; minDivAxis = label; }
-    const highlight = diff > 20 ? 'border-left: 2px solid var(--accent);padding-left:4px;' : '';
+    const highlight = diff > 20 ? 'figure-axis-diverge' : '';
     barsHtml += `
-      <div class="figure-axis-bar" style="${highlight}">
+      <div class="figure-axis-bar ${highlight}">
         <span class="figure-axis-label">${label}</span>
         <div class="figure-bar-track">
-          <div class="figure-bar-you" style="width:${myVal}%;top:0;height:50%"></div>
-          <div class="figure-bar-fig" style="width:${figVal}%;bottom:0;top:auto;height:50%"></div>
+          <div class="figure-bar-you" data-w="${myVal}" style="width:0%;top:0;height:50%"></div>
+          <div class="figure-bar-fig" data-w="${figVal}" style="width:0%;bottom:0;top:auto;height:50%"></div>
         </div>
       </div>
     `;
   });
 
+  // SVG circular gauge
+  const pct = Math.round(fig.similarity);
+  const radius = 18;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (pct / 100) * circumference;
+  const gaugeColor = pct >= 80 ? '#22C55E' : pct >= 60 ? 'var(--accent)' : '#EF4444';
+
   return `
-    <div class="figure-card">
+    <div class="figure-card ${isTopMatch ? 'top-match' : ''}" style="animation-delay: ${cardIndex * 100}ms">
       <div class="figure-card-header">
-        <span class="figure-name">${fig.name}</span>
-        <span class="figure-pct">${Math.round(fig.similarity)}%</span>
+        <div class="figure-name-wrap">
+          ${isTopMatch ? '<span class="top-match-badge">CLOSEST</span>' : ''}
+          <span class="figure-name">${fig.name}</span>
+        </div>
+        <div class="figure-gauge">
+          <svg width="44" height="44" viewBox="0 0 44 44">
+            <circle cx="22" cy="22" r="${radius}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3"/>
+            <circle class="gauge-ring" cx="22" cy="22" r="${radius}" fill="none" stroke="${gaugeColor}" stroke-width="3" stroke-linecap="round"
+              stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}" data-target="${offset}"
+              transform="rotate(-90 22 22)" style="transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);"/>
+          </svg>
+          <span class="figure-pct" data-target="${pct}">0%</span>
+        </div>
       </div>
-      <span class="figure-expand-hint">Tap for breakdown ▾</span>
+      <span class="figure-expand-hint">Tap for breakdown <span class="expand-chevron">▾</span></span>
       <div class="figure-breakdown">
         <div class="figure-bar-legend">
           <span class="leg-you">You</span>
@@ -1716,6 +1775,18 @@ function buildFigureCard(fig, scores) {
       </div>
     </div>
   `;
+}
+
+// Animate all figure gauges and % counters when they become visible
+function animateFigureGauges() {
+  document.querySelectorAll('.gauge-ring').forEach(ring => {
+    const target = ring.dataset.target;
+    setTimeout(() => { ring.style.strokeDashoffset = target; }, 200);
+  });
+  document.querySelectorAll('.figure-pct[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    setTimeout(() => animateCountUp(el, target, 900), 300);
+  });
 }
 
 // ─── 15. Sensitivity Analysis ─────────────────
@@ -1848,10 +1919,55 @@ function animateResultsReveal() {
   reveals.forEach((el, i) => {
     setTimeout(() => {
       el.classList.add('revealed');
+
+      // Figures section — stagger cards then trigger gauges
       if (el.id === 'figuresSection') {
         const cards = el.querySelectorAll('.figure-card');
         cards.forEach((card, j) => {
-          setTimeout(() => card.classList.add('revealed'), j * 80);
+          setTimeout(() => card.classList.add('revealed'), j * 120);
+        });
+        setTimeout(() => animateFigureGauges(), 200);
+      }
+
+      // Country card — count up %
+      if (el.id === 'countryCard') {
+        const pctEl = document.getElementById('countryPct');
+        const target = parseInt(pctEl.textContent);
+        pctEl.textContent = '0%';
+        setTimeout(() => animateCountUp(pctEl, target, 1000), 200);
+      }
+
+      // Axis bars — animate marker positions
+      if (el.classList.contains('axis-bars')) {
+        el.querySelectorAll('.bar-marker').forEach((m, j) => {
+          const finalPos = m.style.left;
+          m.style.left = '50%';
+          m.style.transition = 'none';
+          setTimeout(() => {
+            m.style.transition = `left 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${j * 80}ms`;
+            m.style.left = finalPos;
+          }, 100);
+        });
+        el.querySelectorAll('.bar-fill').forEach((f, j) => {
+          const finalW = f.style.width;
+          const finalL = f.style.left;
+          f.style.width = '0%';
+          f.style.transition = 'none';
+          setTimeout(() => {
+            f.style.transition = `width 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${j * 80}ms, left 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${j * 80}ms`;
+            f.style.width = finalW;
+            f.style.left = finalL;
+          }, 100);
+        });
+        // Axis figure labels slide in
+        el.querySelectorAll('.axis-figure-row').forEach((row, j) => {
+          row.style.opacity = '0';
+          row.style.transform = 'translateY(8px)';
+          setTimeout(() => {
+            row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            row.style.opacity = '1';
+            row.style.transform = 'translateY(0)';
+          }, j * 80 + 600);
         });
       }
     }, i * baseDelay);
