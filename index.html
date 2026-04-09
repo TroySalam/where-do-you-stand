@@ -7,12 +7,15 @@
   <meta name="description" content="Discover your political profile across 5 core dimensions plus an expansion outlook. 54 questions, ~6 minutes. Find your closest country match.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <!-- ═══════ LANDING ═══════ -->
   <div id="landing" class="screen active">
+    <canvas id="particleCanvas"></canvas>
+    <div class="dot-grid-overlay"></div>
+
     <header class="nav">
       <div class="logo">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Where Do You Stand logo">
@@ -24,23 +27,49 @@
         </svg>
         <span>where do you stand?</span>
       </div>
+      <button class="mute-btn" id="muteBtn" onclick="toggleMute()" title="Toggle Sound">
+        <svg id="muteIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+          <path class="sound-waves" d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+        </svg>
+      </button>
     </header>
 
     <main class="hero">
-      <h1>Troy's Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
+      <h1 class="gradient-heading">Troy's Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
       <p class="subtitle">Discover your political profile across 5 core dimensions and an expansion outlook — economy, society, governance, universality, environment, plus space, technology, bioethics, and growth. Find the country and figures that match your views.</p>
+
+      <div class="speed-toggle-wrap">
+        <button class="speed-toggle" id="speedToggle" onclick="toggleSpeedMode()">
+          <span class="speed-toggle-track">
+            <span class="speed-toggle-thumb"></span>
+          </span>
+          <span class="speed-toggle-label" id="speedLabel">Speed Mode ⚡</span>
+        </button>
+      </div>
+
       <button class="btn-primary" onclick="startQuiz()">
         Test Yourself <span class="arrow">→</span>
       </button>
-      <div class="meta-row">
-        <span>⏱ ~6 minutes</span>
-        <span>📋 54 questions</span>
-        <span>🌍 Country matching</span>
+
+      <div class="stat-counters">
+        <div class="stat-item">
+          <span class="stat-num" data-target="54">0</span>
+          <span class="stat-label">Questions</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="48">0</span>
+          <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="20">0</span>
+          <span class="stat-label">Figures</span>
+        </div>
       </div>
     </main>
 
     <section class="info-section">
-      <h3>How it works</h3>
+      <h3 class="gradient-heading-sm">How it works</h3>
       <p>You'll rate 54 statements on a scale from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile that gets compared against real country profiles and political figures.</p>
       <div class="axes-preview">
         <div class="axis-chip"><span class="dot" style="background:var(--c-economy)"></span> Economy</div>
@@ -57,12 +86,27 @@
   <div id="quiz" class="screen">
     <header class="nav quiz-nav">
       <a class="home-link" onclick="goHome()">🏠 Home</a>
+      <button class="mute-btn" onclick="toggleMute()" title="Toggle Sound">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+          <path class="sound-waves" d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+        </svg>
+      </button>
     </header>
 
     <div class="quiz-container">
       <div class="progress-header">
-        <span id="qCounter">Question 1 of 45</span>
-        <span id="axisBadge" class="axis-badge">Economy</span>
+        <span id="qCounter">Question 1 of 54</span>
+        <div class="timer-badge-wrap">
+          <div id="timerWrap" class="timer-wrap hidden">
+            <svg class="timer-ring" viewBox="0 0 40 40">
+              <circle class="timer-ring-bg" cx="20" cy="20" r="17" />
+              <circle class="timer-ring-fg" id="timerRingFg" cx="20" cy="20" r="17" />
+            </svg>
+            <span class="timer-num" id="timerNum">5</span>
+          </div>
+          <span id="axisBadge" class="axis-badge">Economy</span>
+        </div>
       </div>
       <div class="segment-bar">
         <div class="segment" data-axis="economy"><div class="segment-fill"></div></div>
@@ -73,7 +117,7 @@
         <div class="segment" data-axis="expansion"><div class="segment-fill"></div></div>
       </div>
 
-      <div class="question-card">
+      <div class="question-card glass-card">
         <p id="questionText" class="question-text"></p>
       </div>
 
@@ -126,6 +170,7 @@
 
   <!-- ═══════ RESULTS ═══════ -->
   <div id="results" class="screen">
+    <div class="scanning-line"></div>
     <header class="nav">
       <div class="logo">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Logo">
@@ -135,14 +180,38 @@
         </svg>
         <span>where do you stand?</span>
       </div>
+      <button class="mute-btn" onclick="toggleMute()" title="Toggle Sound">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+          <path class="sound-waves" d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+        </svg>
+      </button>
     </header>
 
     <div class="results-container">
-      <div class="profile-header" data-reveal>
+      <!-- 1. Political type -->
+      <div class="profile-header glass-card corner-brackets" data-reveal>
         <span class="profile-label">MY PROFILE:</span>
-        <h2 id="profileType">You are a Social Democrat</h2>
+        <div class="profile-type-row">
+          <span class="profile-emoji" id="profileEmoji">⚖️</span>
+          <h2 id="profileType" class="gradient-heading">You are a Social Democrat</h2>
+        </div>
+        <p class="profile-description" id="profileDescription"></p>
       </div>
 
+      <!-- Speed mode time display -->
+      <div id="speedResult" class="speed-result glass-card hidden" data-reveal>
+        <span class="speed-result-icon">⚡</span>
+        <span class="speed-result-text" id="speedResultText">Completed in 0:00</span>
+      </div>
+
+      <!-- 2. Achievement badges -->
+      <div class="badges-section" id="badgesSection" data-reveal>
+        <h3 class="section-heading gradient-heading-sm">Achievements</h3>
+        <div class="badges-grid" id="badgesGrid"></div>
+      </div>
+
+      <!-- 3. Pentagon radars -->
       <div class="radar-section" data-reveal="radar">
         <div class="radar-col">
           <h3 class="radar-title left">Left-Leaning Trends</h3>
@@ -167,20 +236,22 @@
         </div>
       </div>
 
+      <!-- 4. Axis bars -->
+      <div class="glow-divider"></div>
       <div class="axis-bars" id="axisBars" data-reveal></div>
 
-      <!-- Political Compass (2D / 3D toggle) -->
+      <!-- 5. Political Compass -->
+      <div class="glow-divider"></div>
       <div class="compass-section" data-reveal>
         <div class="compass-wrap">
           <div class="compass-header">
-            <h3 class="compass-heading">Political Compass</h3>
+            <h3 class="compass-heading gradient-heading-sm">Political Compass</h3>
             <div class="compass-toggle">
               <button class="toggle-btn active" id="btn2d" onclick="showCompass2D()">2D</button>
               <button class="toggle-btn" id="btn3d" onclick="showCompass3D()">3D</button>
             </div>
           </div>
 
-          <!-- 2D view -->
           <div id="compass2dView">
             <span class="compass-label-block">Authoritarian</span>
             <div class="compass-grid">
@@ -192,7 +263,6 @@
             <div class="compass-coords" id="compassCoords"></div>
           </div>
 
-          <!-- 3D view -->
           <div id="compass3dView" style="display:none;">
             <div id="compass3dContainer"></div>
             <div class="compass-3d-hint">Drag to rotate</div>
@@ -201,7 +271,9 @@
         </div>
       </div>
 
-      <div class="country-card" id="countryCard" data-reveal="country">
+      <!-- 6. Country match -->
+      <div class="glow-divider"></div>
+      <div class="country-card glass-card corner-brackets" id="countryCard" data-reveal="country">
         <span class="country-label">YOUR CLOSEST COUNTRY</span>
         <div class="country-row">
           <div class="country-info">
@@ -212,20 +284,73 @@
         </div>
       </div>
 
+      <!-- 7. Figures -->
       <div class="figures-section" id="figuresSection" data-reveal>
-        <h3>Closest Figures</h3>
+        <h3 class="section-heading gradient-heading-sm">Closest Figures</h3>
         <div class="figures-grid" id="closestFigures"></div>
-        <h3>Most Distant Figures</h3>
+        <h3 class="section-heading gradient-heading-sm">Most Distant Figures</h3>
         <div class="figures-grid" id="distantFigures"></div>
       </div>
 
-      <div class="share-text" data-reveal>
-        I found where I stand! Take the test at <strong>where-do-you-stand</strong>
+      <!-- 8. Impact Analysis (Sensitivity) -->
+      <div class="glow-divider"></div>
+      <div class="impact-section glass-card corner-brackets" id="impactSection" data-reveal>
+        <h3 class="section-heading gradient-heading-sm">Impact Analysis</h3>
+        <p class="section-sub">Questions that shaped your results the most</p>
+        <div id="impactList" class="impact-list"></div>
       </div>
 
+      <!-- 9. Question Review -->
+      <div class="glow-divider"></div>
+      <div class="review-section" id="reviewSection" data-reveal>
+        <button class="review-toggle" id="reviewToggle" onclick="toggleReviewSection()">
+          <span class="gradient-heading-sm">Review Your Answers</span>
+          <span class="review-arrow">▼</span>
+        </button>
+        <div class="review-content hidden" id="reviewContent"></div>
+      </div>
+
+      <!-- 10. History -->
+      <div class="glow-divider"></div>
+      <div class="history-section" id="historySection" data-reveal>
+        <button class="review-toggle" id="historyToggle" onclick="toggleHistorySection()">
+          <span class="gradient-heading-sm">Results History</span>
+          <span class="review-arrow">▼</span>
+        </button>
+        <div class="history-content hidden" id="historyContent"></div>
+      </div>
+
+      <!-- 11. Share / Compare / Retake -->
+      <div class="glow-divider"></div>
       <div class="results-actions" data-reveal>
-        <button class="btn-primary" onclick="retakeQuiz()">Retake Test</button>
-        <button class="btn-secondary" onclick="goHome()">Home</button>
+        <button class="btn-primary neon-btn" onclick="generateShareCard()">📸 Share Results</button>
+        <button class="btn-secondary neon-btn" onclick="challengeFriend()">🔗 Challenge a Friend</button>
+        <button class="btn-secondary neon-btn" onclick="retakeQuiz()">🔄 Retake Test</button>
+        <button class="btn-secondary neon-btn" onclick="goHome()">🏠 Home</button>
+      </div>
+
+      <!-- Compare overlay -->
+      <div id="compareOverlay" class="compare-overlay hidden"></div>
+
+      <!-- Share card canvas (hidden) -->
+      <canvas id="shareCanvas" width="1200" height="630" style="display:none;"></canvas>
+    </div>
+  </div>
+
+  <!-- Download link (hidden) -->
+  <a id="downloadLink" style="display:none;"></a>
+
+  <!-- History Modal -->
+  <div id="historyModal" class="modal-overlay hidden">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3 class="gradient-heading-sm">Results History</h3>
+        <button class="modal-close" onclick="closeHistoryModal()">✕</button>
+      </div>
+      <div class="modal-body" id="historyModalBody"></div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="clearHistory()">Clear History</button>
+        <button class="btn-primary" onclick="closeHistoryModal()">Close</button>
       </div>
     </div>
   </div>

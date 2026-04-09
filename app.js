@@ -1,12 +1,11 @@
 /* ═══════════════════════════════════════════════
-   WHERE DO YOU STAND — App Logic
+   WHERE DO YOU STAND — App Logic (Mega Upgrade)
    ═══════════════════════════════════════════════ */
 
-// ─── State ───────────────────────────────────
+// ─── 1. State + Constants ─────────────────────
 let currentQ = 0;
-let answers = new Array(QUESTIONS.length).fill(null); // 1-5 or null
+let answers = new Array(QUESTIONS.length).fill(null);
 
-// 5 main axes (pentagons 1 & 2)
 const AXES = ['economy', 'society', 'governance', 'universality', 'environment'];
 const AXIS_LABELS = {
   economy:       { left: 'Statism',           right: 'Free-market' },
@@ -24,7 +23,6 @@ const AXIS_COLORS = {
   environment: '#22C55E'
 };
 
-// All 6 question-level axes (includes expansion for segment bar + badge)
 const ALL_Q_AXES = ['economy', 'society', 'governance', 'universality', 'environment', 'expansion'];
 const ALL_Q_COLORS = {
   economy: '#8B5CF6',
@@ -37,9 +35,7 @@ const ALL_Q_COLORS = {
 
 const BAR_COLORS = ['#EF4444', '#22C55E', '#3B82F6', '#A78BFA', '#14B8A6'];
 
-// Expansion sub-dimensions (pentagon 3)
 const EXPANSION_SUBS = ['space', 'technology', 'bioethics', 'growth'];
-// The 5th vertex "Expansion" = average of the 4 subs
 const EXPANSION_LABELS = {
   space:      { left: 'Cosmic ambition', right: 'Earth-focused' },
   technology: { left: 'Tech acceleration', right: 'Tech caution' },
@@ -47,50 +43,290 @@ const EXPANSION_LABELS = {
   growth:     { left: 'Unlimited growth', right: 'Degrowth' }
 };
 
-// ─── Navigation ──────────────────────────────
+// Speed mode state
+let speedMode = false;
+let speedTimerId = null;
+let speedStartTime = 0;
+let speedEndTime = 0;
+let timerAnimId = null;
+let timerStartTs = 0;
+const SPEED_TIME = 5000; // 5 seconds
+
+// Compare mode
+let friendScores = null;
+
+// Enhanced political types with emoji + description
+const POLITICAL_TYPE_META = {
+  'Social Democrat':         { emoji: '🌹', desc: 'You believe in a strong welfare state paired with democratic freedoms. Markets should serve people, not the other way around.' },
+  'Democratic Socialist':    { emoji: '✊', desc: 'You envision an economy fundamentally restructured to prioritize collective ownership and worker empowerment.' },
+  'Progressive Liberal':     { emoji: '🗽', desc: 'You champion social progress and individual rights within a market economy tempered by smart regulation.' },
+  'Green Activist':          { emoji: '🌿', desc: 'The planet comes first. You see ecological sustainability as the foundation all other policy must build upon.' },
+  'Classical Liberal':       { emoji: '📜', desc: 'Individual liberty and free markets are your north stars. The best government is the one that governs least.' },
+  'Libertarian':             { emoji: '🏴', desc: 'Maximum personal freedom, minimum state interference. You trust voluntary association over central authority.' },
+  'Conservative':            { emoji: '🏛️', desc: 'You value tradition, order, and proven institutions. Change should be gradual, guided by accumulated wisdom.' },
+  'Social Conservative':     { emoji: '⛪', desc: 'Traditional social values matter deeply to you, but you also see a role for the state in protecting the vulnerable.' },
+  'Authoritarian':           { emoji: '🔒', desc: 'You believe strong central authority is necessary to maintain order and achieve collective goals efficiently.' },
+  'Nationalist':             { emoji: '🏠', desc: 'Your nation and its people come first. Sovereignty and cultural identity should never be compromised.' },
+  'Internationalist':        { emoji: '🌐', desc: 'Borders are lines on a map. Humanity thrives through cooperation, open exchange, and shared global governance.' },
+  'Centrist':                { emoji: '⚖️', desc: 'You see merit on multiple sides and prefer pragmatic compromise to ideological purity.' },
+  'Egalitarian':             { emoji: '🤝', desc: 'Equality in all dimensions — economic, social, global — is your core commitment.' },
+  'Communitarian':           { emoji: '👥', desc: 'Community bonds and shared identity matter. You value social cohesion alongside economic fairness.' },
+  'Techno-Expansionist':     { emoji: '🚀', desc: 'Technology and expansion are humanity\'s destiny. The future belongs to the bold.' },
+  'Sustainability Advocate': { emoji: '♻️', desc: 'Growth has limits. You champion a sustainable path that respects both ecological and social boundaries.' },
+  'Pragmatist':              { emoji: '🧠', desc: 'You defy easy labels, preferring evidence-based solutions over ideological frameworks.' }
+};
+
+// ─── 2. Navigation + Quiz Start ───────────────
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
 
-function goHome() { show('landing'); }
+function goHome() {
+  stopTimer();
+  show('landing');
+  initParticles();
+}
 
 function startQuiz() {
+  initAudio();
   currentQ = 0;
   answers = new Array(QUESTIONS.length).fill(null);
+
+  // Check for compare mode from URL hash
+  checkCompareHash();
+
   buildDotProgress();
   renderQuestion();
   show('quiz');
+
+  if (speedMode) {
+    speedStartTime = Date.now();
+    startTimer();
+  }
+
+  playSound('click');
 }
 
 function retakeQuiz() {
   startQuiz();
 }
 
-// ─── Quiz Logic ──────────────────────────────
+// ─── 3. Sound Effects System ──────────────────
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+let soundEnabled = localStorage.getItem('wdys_sound') !== 'false';
+
+function initAudio() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function toggleMute() {
+  soundEnabled = !soundEnabled;
+  localStorage.setItem('wdys_sound', soundEnabled);
+  document.querySelectorAll('.mute-btn').forEach(btn => {
+    btn.classList.toggle('muted', !soundEnabled);
+  });
+}
+
+// Initialize mute state
+if (!soundEnabled) {
+  document.querySelectorAll('.mute-btn').forEach(btn => btn.classList.add('muted'));
+}
+
+function playSound(type) {
+  if (!soundEnabled || !audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    switch (type) {
+      case 'click': {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.1);
+        break;
+      }
+      case 'whoosh': {
+        const bufferSize = audioCtx.sampleRate * 0.2;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.03;
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1000, now);
+        filter.frequency.exponentialRampToValueAtTime(300, now + 0.2);
+        filter.Q.value = 2;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        noise.connect(filter).connect(gain).connect(audioCtx.destination);
+        noise.start(now);
+        noise.stop(now + 0.2);
+        break;
+      }
+      case 'reveal': {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.exponentialRampToValueAtTime(1000, now + 0.4);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.4);
+        break;
+      }
+      case 'fanfare': {
+        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0, now + i * 0.15);
+          gain.gain.linearRampToValueAtTime(0.06, now + i * 0.15 + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(now + i * 0.15);
+          osc.stop(now + 0.8);
+        });
+        break;
+      }
+      case 'sparkle': {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(2000, now);
+        osc.frequency.exponentialRampToValueAtTime(3000, now + 0.15);
+        osc.frequency.exponentialRampToValueAtTime(1500, now + 0.3);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.3);
+        break;
+      }
+      case 'timeout': {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.2);
+        gain.gain.setValueAtTime(0.04, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.2);
+        break;
+      }
+    }
+  } catch (e) { /* ignore audio errors */ }
+}
+
+// ─── 4. Speed Mode Timer ──────────────────────
+function toggleSpeedMode() {
+  speedMode = !speedMode;
+  document.getElementById('speedToggle').classList.toggle('active', speedMode);
+}
+
+function startTimer() {
+  const wrap = document.getElementById('timerWrap');
+  wrap.classList.remove('hidden');
+  timerStartTs = Date.now();
+  clearTimeout(speedTimerId);
+  animateTimer();
+  speedTimerId = setTimeout(onTimerExpire, SPEED_TIME);
+}
+
+function stopTimer() {
+  clearTimeout(speedTimerId);
+  cancelAnimationFrame(timerAnimId);
+  const wrap = document.getElementById('timerWrap');
+  if (wrap) wrap.classList.add('hidden');
+}
+
+function animateTimer() {
+  const elapsed = Date.now() - timerStartTs;
+  const remaining = Math.max(0, SPEED_TIME - elapsed);
+  const pct = remaining / SPEED_TIME;
+  const circumference = 2 * Math.PI * 17; // r=17
+  const fg = document.getElementById('timerRingFg');
+  const num = document.getElementById('timerNum');
+  if (fg) {
+    fg.style.strokeDashoffset = circumference * (1 - pct);
+    fg.classList.toggle('warning', pct < 0.3);
+  }
+  if (num) num.textContent = Math.ceil(remaining / 1000);
+  if (remaining > 0) {
+    timerAnimId = requestAnimationFrame(animateTimer);
+  }
+}
+
+function onTimerExpire() {
+  playSound('timeout');
+  // Auto-answer neutral
+  answers[currentQ] = 3;
+  document.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.value) === 3);
+  });
+  updateDotProgress();
+  updateSegmentBar();
+
+  setTimeout(() => {
+    if (currentQ >= QUESTIONS.length - 1) {
+      speedEndTime = Date.now();
+      stopTimer();
+      calculateResults();
+      return;
+    }
+    const boundary = getSectionBoundary(currentQ);
+    if (boundary) {
+      stopTimer();
+      showSectionInterstitial(boundary, () => {
+        currentQ++;
+        renderQuestion();
+        startTimer();
+      });
+    } else {
+      currentQ++;
+      renderQuestion();
+      // restart timer
+      timerStartTs = Date.now();
+      clearTimeout(speedTimerId);
+      speedTimerId = setTimeout(onTimerExpire, SPEED_TIME);
+    }
+  }, 250);
+}
+
+// ─── 5. Quiz Rendering + Answer Logic ─────────
 function renderQuestion() {
   const q = QUESTIONS[currentQ];
 
-  // Question text with animation
   const card = document.querySelector('.question-card');
   card.style.animation = 'none';
-  card.offsetHeight; // reflow
+  card.offsetHeight;
   card.style.animation = '';
   document.getElementById('questionText').textContent = q.text;
 
-  // Counter
   document.getElementById('qCounter').textContent = `Question ${currentQ + 1} of ${QUESTIONS.length}`;
 
-  // Axis badge
   const badge = document.getElementById('axisBadge');
   badge.textContent = q.axis.charAt(0).toUpperCase() + q.axis.slice(1);
   badge.style.background = ALL_Q_COLORS[q.axis];
 
-  // Segment bar progress
   updateSegmentBar();
 
-  // Scale buttons
   document.querySelectorAll('.scale-btn').forEach(btn => {
     btn.classList.remove('selected');
     if (answers[currentQ] !== null && parseInt(btn.dataset.value) === answers[currentQ]) {
@@ -98,16 +334,22 @@ function renderQuestion() {
     }
   });
 
-  // Nav buttons
   document.getElementById('prevBtn').classList.toggle('disabled', currentQ === 0);
   document.getElementById('nextBtn').classList.toggle('disabled', answers[currentQ] === null);
 
-  // Dot progress
   updateDotProgress();
+
+  // Reset timer for speed mode
+  if (speedMode && document.getElementById('quiz').classList.contains('active')) {
+    timerStartTs = Date.now();
+    clearTimeout(speedTimerId);
+    cancelAnimationFrame(timerAnimId);
+    animateTimer();
+    speedTimerId = setTimeout(onTimerExpire, SPEED_TIME);
+  }
 }
 
 function updateSegmentBar() {
-  // Count questions per axis and how many are answered
   const axisCounts = {};
   const axisAnswered = {};
   ALL_Q_AXES.forEach(a => { axisCounts[a] = 0; axisAnswered[a] = 0; });
@@ -115,7 +357,6 @@ function updateSegmentBar() {
     axisCounts[q.axis]++;
     if (answers[i] !== null) axisAnswered[q.axis]++;
   });
-
   ALL_Q_AXES.forEach(axis => {
     const fill = document.querySelector(`.segment[data-axis="${axis}"] .segment-fill`);
     if (fill) {
@@ -143,14 +384,13 @@ function updateDotProgress() {
   });
 }
 
-// ─── Section Interstitials ───────────────────
+// ─── 6. Section Interstitials ─────────────────
 const SECTION_ORDER = ['economy', 'society', 'governance', 'universality', 'environment', 'expansion'];
 const SECTION_NAMES = {
   economy: 'Economy', society: 'Society', governance: 'Governance',
   universality: 'Universality', environment: 'Environment', expansion: 'Expansion'
 };
 
-// Fun message templates
 const INTER_MESSAGES = [
   { emoji: '👀', msg: 'Starting to look a bit like...' },
   { emoji: '🫣', msg: 'Hmm... giving major vibes of...' },
@@ -164,7 +404,6 @@ const INTER_MESSAGES = [
   { emoji: '🧪', msg: 'Lab results are in...' },
 ];
 
-// Compute partial scores from answers so far
 function computePartialScores() {
   const scores = {};
   const answeredAxes = new Set();
@@ -181,7 +420,6 @@ function computePartialScores() {
     scores[axis] = Math.round((totalRight / axisQs.length) * 100);
   });
 
-  // Expansion subs
   const expansionQs = QUESTIONS.map((q, i) => ({ q, answer: answers[i] })).filter(x => x.q.axis === 'expansion' && x.answer !== null);
   if (expansionQs.length > 0) {
     EXPANSION_SUBS.forEach(sub => {
@@ -199,10 +437,8 @@ function computePartialScores() {
   return { scores, answeredAxes };
 }
 
-// Find closest figure from partial scores
 function closestFigurePartial(scores, answeredAxes) {
   let best = null, bestDist = Infinity;
-
   FIGURES.forEach(fig => {
     let sumSq = 0, dims = 0;
     answeredAxes.forEach(axis => {
@@ -212,7 +448,6 @@ function closestFigurePartial(scores, answeredAxes) {
         dims++;
       }
     });
-    // Also include expansion subs if scored
     EXPANSION_SUBS.forEach(sub => {
       if (scores[sub] !== undefined) {
         const diff = scores[sub] - fig[sub];
@@ -224,15 +459,11 @@ function closestFigurePartial(scores, answeredAxes) {
     const dist = Math.sqrt(sumSq / dims);
     if (dist < bestDist) { bestDist = dist; best = fig; }
   });
-
   return best;
 }
 
-// Check if we just finished a section
 function getSectionBoundary(qIndex) {
-  // Find which section this question belongs to
   const thisAxis = QUESTIONS[qIndex].axis;
-  // Check if the next question exists and is a different axis
   if (qIndex < QUESTIONS.length - 1) {
     const nextAxis = QUESTIONS[qIndex + 1].axis;
     if (nextAxis !== thisAxis) {
@@ -249,7 +480,9 @@ function showSectionInterstitial(sectionInfo, callback) {
   interstitialActive = true;
   const { scores, answeredAxes } = computePartialScores();
   const closest = closestFigurePartial(scores, answeredAxes);
-  if (!closest) { callback(); return; }
+  if (!closest) { interstitialActive = false; callback(); return; }
+
+  playSound('reveal');
 
   const pick = Math.floor(Math.random() * INTER_MESSAGES.length);
   const template = INTER_MESSAGES[pick];
@@ -257,7 +490,6 @@ function showSectionInterstitial(sectionInfo, callback) {
   const overlay = document.getElementById('sectionInterstitial');
   document.getElementById('interSectionTag').textContent = `${SECTION_NAMES[sectionInfo.axis]} Complete`;
 
-  // Re-trigger emoji + name animations
   const emojiEl = document.getElementById('interEmoji');
   const nameEl = document.getElementById('interName');
   emojiEl.style.animation = 'none';
@@ -272,27 +504,24 @@ function showSectionInterstitial(sectionInfo, callback) {
   nameEl.style.animation = '';
   document.getElementById('interSub').textContent = `${sectionInfo.sectionNum} of ${sectionInfo.total} sections done`;
 
-  // Progress bar
   const pct = (sectionInfo.sectionNum / sectionInfo.total) * 100;
   const barFill = document.getElementById('interBarFill');
   barFill.style.width = '0%';
 
   overlay.classList.remove('hidden');
 
-  // Trigger card entrance animation
   const card = overlay.querySelector('.interstitial-card');
   card.classList.remove('inter-enter');
   void card.offsetHeight;
   card.classList.add('inter-enter');
 
-  // Animate progress bar after card enters
   setTimeout(() => { barFill.style.width = pct + '%'; }, 400);
 
-  // Continue button
   const btn = document.getElementById('interContinueBtn');
   const handler = () => {
     btn.removeEventListener('click', handler);
     card.classList.add('inter-exit');
+    playSound('click');
     setTimeout(() => {
       overlay.classList.add('hidden');
       card.classList.remove('inter-enter', 'inter-exit');
@@ -306,30 +535,39 @@ function showSectionInterstitial(sectionInfo, callback) {
 function selectAnswer(value) {
   answers[currentQ] = value;
 
-  // Update button states
   document.querySelectorAll('.scale-btn').forEach(btn => {
     btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
   });
 
-  // Enable next
   document.getElementById('nextBtn').classList.remove('disabled');
-
   updateDotProgress();
   updateSegmentBar();
 
-  // Auto-advance after a short delay
+  playSound('click');
+
+  // In speed mode, stop current timer
+  if (speedMode) {
+    clearTimeout(speedTimerId);
+    cancelAnimationFrame(timerAnimId);
+  }
+
   setTimeout(() => {
     if (currentQ >= QUESTIONS.length - 1) {
+      if (speedMode) {
+        speedEndTime = Date.now();
+        stopTimer();
+      }
       calculateResults();
       return;
     }
 
-    // Check for section boundary
     const boundary = getSectionBoundary(currentQ);
     if (boundary) {
+      if (speedMode) stopTimer();
       showSectionInterstitial(boundary, () => {
         currentQ++;
         renderQuestion();
+        if (speedMode) startTimer();
       });
     } else {
       currentQ++;
@@ -343,15 +581,18 @@ function nextQuestion() {
   if (currentQ < QUESTIONS.length - 1) {
     const boundary = getSectionBoundary(currentQ);
     if (boundary) {
+      if (speedMode) stopTimer();
       showSectionInterstitial(boundary, () => {
         currentQ++;
         renderQuestion();
+        if (speedMode) startTimer();
       });
     } else {
       currentQ++;
       renderQuestion();
     }
   } else {
+    if (speedMode) { speedEndTime = Date.now(); stopTimer(); }
     calculateResults();
   }
 }
@@ -363,7 +604,7 @@ function prevQuestion() {
   }
 }
 
-// Event listeners for scale rows (click anywhere on the row)
+// Event listeners for scale rows
 document.querySelectorAll('.scale-row').forEach(row => {
   row.addEventListener('click', () => {
     selectAnswer(parseInt(row.dataset.value));
@@ -376,51 +617,37 @@ document.querySelectorAll('.scale-btn').forEach(btn => {
   });
 });
 
-// ─── Scoring ─────────────────────────────────
+// ─── 7. Scoring ───────────────────────────────
 function calculateResults() {
   const axisScores = {};
 
-  // Score the 5 main axes
   AXES.forEach(axis => {
     const axisQs = QUESTIONS.map((q, i) => ({ q, answer: answers[i] })).filter(x => x.q.axis === axis);
     let totalRight = 0;
     let count = axisQs.length;
-
     axisQs.forEach(({ q, answer }) => {
       if (answer === null) return;
       const normalized = (answer - 1) / 4;
-      if (q.pole === 'right') {
-        totalRight += normalized;
-      } else {
-        totalRight += (1 - normalized);
-      }
+      if (q.pole === 'right') totalRight += normalized;
+      else totalRight += (1 - normalized);
     });
-
     axisScores[axis] = count > 0 ? Math.round((totalRight / count) * 100) : 50;
   });
 
-  // Score the 4 expansion sub-dimensions
   const expansionQs = QUESTIONS.map((q, i) => ({ q, answer: answers[i] })).filter(x => x.q.axis === 'expansion');
-
   EXPANSION_SUBS.forEach(sub => {
     const subQs = expansionQs.filter(x => x.q.sub === sub);
     let totalRight = 0;
     let count = subQs.length;
-
     subQs.forEach(({ q, answer }) => {
       if (answer === null) return;
       const normalized = (answer - 1) / 4;
-      if (q.pole === 'right') {
-        totalRight += normalized;
-      } else {
-        totalRight += (1 - normalized);
-      }
+      if (q.pole === 'right') totalRight += normalized;
+      else totalRight += (1 - normalized);
     });
-
     axisScores[sub] = count > 0 ? Math.round((totalRight / count) * 100) : 50;
   });
 
-  // Derived "expansion" = average of 4 subs (for political type labels + axis bar)
   axisScores.expansion = Math.round(
     EXPANSION_SUBS.reduce((sum, s) => sum + axisScores[s], 0) / EXPANSION_SUBS.length
   );
@@ -428,35 +655,74 @@ function calculateResults() {
   renderResults(axisScores);
   show('results');
   animateResultsReveal();
+
+  // Save to history
+  saveToHistory(axisScores);
+
+  playSound('fanfare');
 }
 
-// ─── Results Rendering ───────────────────────
+// ─── 8. Results Rendering ─────────────────────
 function renderResults(scores) {
-  // Political type
+  // Political type (enhanced)
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
+  const meta = POLITICAL_TYPE_META[type.label] || { emoji: '🧠', desc: '' };
+  document.getElementById('profileEmoji').textContent = meta.emoji;
   document.getElementById('profileType').textContent = `You are ${type.label.toLowerCase().match(/^[aeiou]/i) ? 'an' : 'a'} ${type.label}`;
+  document.getElementById('profileDescription').textContent = meta.desc;
 
-  // Classic 2D political compass + prep 3D
+  // Speed mode result
+  if (speedMode && speedEndTime > 0) {
+    const elapsed = speedEndTime - speedStartTime;
+    const mins = Math.floor(elapsed / 60000);
+    const secs = Math.floor((elapsed % 60000) / 1000);
+    document.getElementById('speedResultText').textContent = `Speed Mode — Completed in ${mins}:${secs.toString().padStart(2, '0')}`;
+    document.getElementById('speedResult').classList.remove('hidden');
+  } else {
+    document.getElementById('speedResult').classList.add('hidden');
+  }
+
+  // Classic 2D political compass
   drawCompass(scores);
-  savedScores3d = scores; // store for 3D toggle
+  savedScores3d = scores;
 
-  // Pentagon radar charts (5 main axes)
+  // Pentagon radar charts
   drawRadar('radarLeft', scores, 'left');
   drawRadar('radarRight', scores, 'right');
-
-  // Expansion pentagon (3rd chart)
   drawRadarExpansion('radarExpansion', scores);
 
-  // Axis bars (5 main + expansion aggregate)
+  // Axis bars
   renderAxisBars(scores);
 
   // Country match
   renderCountryMatch(scores);
 
-  // Figures
+  // Figures (with "Why This Figure" breakdown)
   renderFigures(scores);
+
+  // Achievement badges
+  renderBadges(scores, type.label);
+
+  // Impact analysis (sensitivity)
+  renderImpactAnalysis(scores);
+
+  // Question review
+  renderQuestionReview();
+
+  // History section
+  renderHistorySection();
+
+  // Compare mode
+  if (friendScores) {
+    renderCompare(scores, friendScores);
+  }
+
+  // Store scores globally for share/compare
+  window._lastScores = scores;
+  window._lastType = type.label;
 }
 
+// ─── Draw Compass (with animated dot) ─────────
 function drawCompass(scores) {
   const canvas = document.getElementById('compassCanvas');
   const ctx = canvas.getContext('2d');
@@ -476,90 +742,223 @@ function drawCompass(scores) {
   const cx = pad + half;
   const cy = pad + half;
 
-  // Clear
   ctx.clearRect(0, 0, size, size);
 
   // 4 quadrant fills
-  // Top-left: Authoritarian Left (red)
   ctx.fillStyle = 'rgba(239, 68, 68, 0.18)';
   ctx.fillRect(pad, pad, half, half);
-  // Top-right: Authoritarian Right (blue)
   ctx.fillStyle = 'rgba(59, 130, 246, 0.18)';
   ctx.fillRect(cx, pad, half, half);
-  // Bottom-left: Libertarian Left (green)
   ctx.fillStyle = 'rgba(34, 197, 94, 0.18)';
   ctx.fillRect(pad, cy, half, half);
-  // Bottom-right: Libertarian Right (purple)
   ctx.fillStyle = 'rgba(168, 85, 247, 0.18)';
   ctx.fillRect(cx, cy, half, half);
 
-  // Grid lines (subtle)
+  // Grid lines
   ctx.strokeStyle = 'rgba(255,255,255,0.06)';
   ctx.lineWidth = 1;
   for (let i = 1; i < 4; i++) {
-    // Vertical
     const x = pad + (gridSize * i) / 4;
-    ctx.beginPath();
-    ctx.moveTo(x, pad);
-    ctx.lineTo(x, pad + gridSize);
-    ctx.stroke();
-    // Horizontal
+    ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, pad + gridSize); ctx.stroke();
     const y = pad + (gridSize * i) / 4;
-    ctx.beginPath();
-    ctx.moveTo(pad, y);
-    ctx.lineTo(pad + gridSize, y);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(pad + gridSize, y); ctx.stroke();
   }
 
-  // Center cross (thicker)
+  // Center cross
   ctx.strokeStyle = 'rgba(255,255,255,0.2)';
   ctx.lineWidth = 1.5;
-  // Vertical center
-  ctx.beginPath();
-  ctx.moveTo(cx, pad);
-  ctx.lineTo(cx, pad + gridSize);
-  ctx.stroke();
-  // Horizontal center
-  ctx.beginPath();
-  ctx.moveTo(pad, cy);
-  ctx.lineTo(pad + gridSize, cy);
-  ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, pad); ctx.lineTo(cx, pad + gridSize); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad, cy); ctx.lineTo(pad + gridSize, cy); ctx.stroke();
 
   // Border
   ctx.strokeStyle = 'rgba(255,255,255,0.1)';
   ctx.lineWidth = 1;
   ctx.strokeRect(pad, pad, gridSize, gridSize);
 
-  // User's position
-  // X: economy score 0=Statism(left), 100=Free-market(right)
-  // Y: governance score 0=Liberty(bottom), 100=Authority(top)
-  // Compass: top = Authoritarian, bottom = Libertarian
-  // So high governance → top (small Y), low governance → bottom (large Y)
-  const userX = pad + (scores.economy / 100) * gridSize;
-  const userY = pad + (1 - scores.governance / 100) * gridSize;
+  // Target position
+  const targetX = pad + (scores.economy / 100) * gridSize;
+  const targetY = pad + (1 - scores.governance / 100) * gridSize;
 
-  // Glow
-  ctx.beginPath();
-  ctx.arc(userX, userY, 12, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(139, 92, 246, 0.35)';
-  ctx.fill();
+  // Friend dot (if comparing)
+  if (friendScores) {
+    const fx = pad + (friendScores.economy / 100) * gridSize;
+    const fy = pad + (1 - friendScores.governance / 100) * gridSize;
+    ctx.beginPath();
+    ctx.arc(fx, fy, 10, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(20, 184, 166, 0.3)';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(fx, fy, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#14B8A6';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
 
-  // Dot
-  ctx.beginPath();
-  ctx.arc(userX, userY, 6, 0, Math.PI * 2);
-  ctx.fillStyle = '#8B5CF6';
-  ctx.fill();
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  // Animated compass dot
+  animateCompassDot(ctx, cx, cy, targetX, targetY, size, pad, gridSize, dpr);
 
   // Coordinates text
   const ecoLabel = scores.economy < 50 ? 'Left' : scores.economy > 50 ? 'Right' : 'Centre';
   const govLabel = scores.governance < 50 ? 'Libertarian' : scores.governance > 50 ? 'Authoritarian' : 'Centre';
-  const ecoVal = Math.abs(scores.economy - 50) * 2; // 0-100 scale from centre
+  const ecoVal = Math.abs(scores.economy - 50) * 2;
   const govVal = Math.abs(scores.governance - 50) * 2;
   document.getElementById('compassCoords').textContent =
     `Economic: ${ecoVal.toFixed(0)}% ${ecoLabel}  ·  Social: ${govVal.toFixed(0)}% ${govLabel}`;
+}
+
+// ─── 9. Animated Compass Dot ──────────────────
+function animateCompassDot(ctx, cx, cy, targetX, targetY, size, pad, gridSize, dpr) {
+  const startX = cx;
+  const startY = cy;
+  const duration = 1500;
+  const start = performance.now();
+  const ghostTrail = [];
+
+  function easeOutElastic(t) {
+    const c4 = (2 * Math.PI) / 3;
+    if (t === 0 || t === 1) return t;
+    return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+  }
+
+  function drawFrame(now) {
+    const elapsed = now - start;
+    const t = Math.min(elapsed / duration, 1);
+    const ease = easeOutElastic(t);
+
+    const currentX = startX + (targetX - startX) * ease;
+    const currentY = startY + (targetY - startY) * ease;
+
+    // Save ghost position
+    if (t < 1) {
+      ghostTrail.push({ x: currentX, y: currentY, alpha: 0.3 });
+    }
+
+    // Redraw compass background
+    ctx.save();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, size, size);
+
+    // Quadrants
+    const half = gridSize / 2;
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.18)';
+    ctx.fillRect(pad, pad, half, half);
+    ctx.fillStyle = 'rgba(59, 130, 246, 0.18)';
+    ctx.fillRect(cx, pad, half, half);
+    ctx.fillStyle = 'rgba(34, 197, 94, 0.18)';
+    ctx.fillRect(pad, cy, half, half);
+    ctx.fillStyle = 'rgba(168, 85, 247, 0.18)';
+    ctx.fillRect(cx, cy, half, half);
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 1; i < 4; i++) {
+      const x = pad + (gridSize * i) / 4;
+      ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, pad + gridSize); ctx.stroke();
+      const y = pad + (gridSize * i) / 4;
+      ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(pad + gridSize, y); ctx.stroke();
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(cx, pad); ctx.lineTo(cx, pad + gridSize); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad, cy); ctx.lineTo(pad + gridSize, cy); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(pad, pad, gridSize, gridSize);
+
+    // Friend dot
+    if (friendScores) {
+      const fx = pad + (friendScores.economy / 100) * gridSize;
+      const fy = pad + (1 - friendScores.governance / 100) * gridSize;
+      ctx.beginPath(); ctx.arc(fx, fy, 10, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(20, 184, 166, 0.3)'; ctx.fill();
+      ctx.beginPath(); ctx.arc(fx, fy, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#14B8A6'; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+
+    // Ghost trail
+    ghostTrail.forEach((g, i) => {
+      g.alpha -= 0.008;
+      if (g.alpha > 0) {
+        ctx.beginPath();
+        ctx.arc(g.x, g.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(139, 92, 246, ${g.alpha})`;
+        ctx.fill();
+      }
+    });
+
+    // Current dot
+    const pulseScale = t >= 1 ? 1 + Math.sin(Date.now() * 0.005) * 0.15 : 1;
+    ctx.beginPath();
+    ctx.arc(currentX, currentY, 12 * pulseScale, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(139, 92, 246, 0.35)';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(currentX, currentY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#8B5CF6';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+
+    if (t < 1) {
+      requestAnimationFrame(drawFrame);
+    } else {
+      // Continue pulsing after arrival
+      let pulseCount = 0;
+      function pulse(now2) {
+        pulseCount++;
+        if (pulseCount > 120) return; // pulse for ~2 seconds
+        ctx.save();
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, size, size);
+
+        // Redraw background
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.18)'; ctx.fillRect(pad, pad, half, half);
+        ctx.fillStyle = 'rgba(59, 130, 246, 0.18)'; ctx.fillRect(cx, pad, half, half);
+        ctx.fillStyle = 'rgba(34, 197, 94, 0.18)'; ctx.fillRect(pad, cy, half, half);
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.18)'; ctx.fillRect(cx, cy, half, half);
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+        for (let i = 1; i < 4; i++) {
+          const x = pad + (gridSize * i) / 4;
+          ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, pad + gridSize); ctx.stroke();
+          const y = pad + (gridSize * i) / 4;
+          ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(pad + gridSize, y); ctx.stroke();
+        }
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(cx, pad); ctx.lineTo(cx, pad + gridSize); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(pad, cy); ctx.lineTo(pad + gridSize, cy); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)'; ctx.lineWidth = 1; ctx.strokeRect(pad, pad, gridSize, gridSize);
+
+        if (friendScores) {
+          const fx = pad + (friendScores.economy / 100) * gridSize;
+          const fy = pad + (1 - friendScores.governance / 100) * gridSize;
+          ctx.beginPath(); ctx.arc(fx, fy, 10, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(20, 184, 166, 0.3)'; ctx.fill();
+          ctx.beginPath(); ctx.arc(fx, fy, 5, 0, Math.PI * 2);
+          ctx.fillStyle = '#14B8A6'; ctx.fill();
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+
+        const ps = 1 + Math.sin(now2 * 0.005) * 0.15;
+        ctx.beginPath(); ctx.arc(targetX, targetY, 12 * ps, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(139, 92, 246, 0.35)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(targetX, targetY, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#8B5CF6'; ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.restore();
+        requestAnimationFrame(pulse);
+      }
+      requestAnimationFrame(pulse);
+    }
+  }
+
+  requestAnimationFrame(drawFrame);
 }
 
 function drawRadar(canvasId, scores, side) {
@@ -567,11 +966,7 @@ function drawRadar(canvasId, scores, side) {
   const container = canvas.parentElement;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
-
-  // Remove old HTML labels
   container.querySelectorAll('.radar-label').forEach(el => el.remove());
-
-  // Set canvas size
   const rect = canvas.getBoundingClientRect();
   const size = Math.max(rect.width, 280);
   canvas.width = size * dpr;
@@ -580,17 +975,15 @@ function drawRadar(canvasId, scores, side) {
   canvas.style.height = size + 'px';
   ctx.scale(dpr, dpr);
 
-  const cx = size / 2;
-  const cy = size / 2;
+  const cxR = size / 2;
+  const cyR = size / 2;
   const padding = 20;
   const maxR = size / 2 - padding;
 
-  // Pentagon labels (5 axes — no expansion)
   const labels = side === 'left'
     ? ['Progressivism', 'Ecology', 'Internationalism', 'Statism', 'Civil liberties']
     : ['Conservatism', 'Productivism', 'Nationalism', 'Free market', 'Authority'];
 
-  // Map scores to values (0-1) for each vertex
   const axisOrder = ['society', 'environment', 'universality', 'economy', 'governance'];
   const values = axisOrder.map(axis => {
     const s = scores[axis] / 100;
@@ -601,17 +994,15 @@ function drawRadar(canvasId, scores, side) {
   const angleStep = (Math.PI * 2) / n;
   const startAngle = -Math.PI / 2;
 
-  // Clear
   ctx.clearRect(0, 0, size, size);
 
-  // Grid lines (3 levels)
   for (let level = 1; level <= 3; level++) {
     const r = maxR * (level / 3);
     ctx.beginPath();
     for (let i = 0; i <= n; i++) {
       const angle = startAngle + i * angleStep;
-      const x = cx + Math.cos(angle) * r;
-      const y = cy + Math.sin(angle) * r;
+      const x = cxR + Math.cos(angle) * r;
+      const y = cyR + Math.sin(angle) * r;
       if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     }
     ctx.closePath();
@@ -620,18 +1011,16 @@ function drawRadar(canvasId, scores, side) {
     ctx.stroke();
   }
 
-  // Spokes
   for (let i = 0; i < n; i++) {
     const angle = startAngle + i * angleStep;
     ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + Math.cos(angle) * maxR, cy + Math.sin(angle) * maxR);
+    ctx.moveTo(cxR, cyR);
+    ctx.lineTo(cxR + Math.cos(angle) * maxR, cyR + Math.sin(angle) * maxR);
     ctx.strokeStyle = 'rgba(255,255,255,0.06)';
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
-  // Data polygon
   const fillColor = side === 'left' ? 'rgba(20, 184, 166, 0.25)' : 'rgba(139, 92, 246, 0.25)';
   const strokeColor = side === 'left' ? '#14B8A6' : '#8B5CF6';
 
@@ -639,8 +1028,8 @@ function drawRadar(canvasId, scores, side) {
   values.forEach((v, i) => {
     const r = maxR * Math.max(v, 0.05);
     const angle = startAngle + i * angleStep;
-    const x = cx + Math.cos(angle) * r;
-    const y = cy + Math.sin(angle) * r;
+    const x = cxR + Math.cos(angle) * r;
+    const y = cyR + Math.sin(angle) * r;
     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   });
   ctx.closePath();
@@ -650,20 +1039,18 @@ function drawRadar(canvasId, scores, side) {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Vertices (dots)
   values.forEach((v, i) => {
     const r = maxR * Math.max(v, 0.05);
     const angle = startAngle + i * angleStep;
-    const x = cx + Math.cos(angle) * r;
-    const y = cy + Math.sin(angle) * r;
+    const x = cxR + Math.cos(angle) * r;
+    const y = cyR + Math.sin(angle) * r;
     ctx.beginPath();
     ctx.arc(x, y, 3, 0, Math.PI * 2);
     ctx.fillStyle = strokeColor;
     ctx.fill();
   });
 
-  // HTML labels
-  addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx, cy, maxR, size);
+  addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cxR, cyR, maxR, size);
 }
 
 function drawRadarExpansion(canvasId, scores) {
@@ -671,11 +1058,7 @@ function drawRadarExpansion(canvasId, scores) {
   const container = canvas.parentElement;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
-
-  // Remove old HTML labels
   container.querySelectorAll('.radar-label').forEach(el => el.remove());
-
-  // Set canvas size
   const rect = canvas.getBoundingClientRect();
   const size = Math.max(rect.width, 280);
   canvas.width = size * dpr;
@@ -684,37 +1067,31 @@ function drawRadarExpansion(canvasId, scores) {
   canvas.style.height = size + 'px';
   ctx.scale(dpr, dpr);
 
-  const cx = size / 2;
-  const cy = size / 2;
+  const cxR = size / 2;
+  const cyR = size / 2;
   const padding = 20;
   const maxR = size / 2 - padding;
 
-  // 5 vertices: 4 subs + 1 derived "Expansion" (overall)
-  // Show left-pole labels (expansionist side) — low score = expansionist
   const labels = ['Space', 'Technology', 'Bioethics', 'Growth', 'Expansion'];
   const vertexKeys = ['space', 'technology', 'bioethics', 'growth', 'expansion'];
-
-  // Values: invert so that low score (expansionist) = larger on chart
   const values = vertexKeys.map(key => {
     const s = scores[key] / 100;
-    return 1 - s; // 0 = restraint (small), 1 = expansionist (large)
+    return 1 - s;
   });
 
   const n = 5;
   const angleStep = (Math.PI * 2) / n;
   const startAngle = -Math.PI / 2;
 
-  // Clear
   ctx.clearRect(0, 0, size, size);
 
-  // Grid lines (3 levels)
   for (let level = 1; level <= 3; level++) {
     const r = maxR * (level / 3);
     ctx.beginPath();
     for (let i = 0; i <= n; i++) {
       const angle = startAngle + i * angleStep;
-      const x = cx + Math.cos(angle) * r;
-      const y = cy + Math.sin(angle) * r;
+      const x = cxR + Math.cos(angle) * r;
+      const y = cyR + Math.sin(angle) * r;
       if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     }
     ctx.closePath();
@@ -723,18 +1100,16 @@ function drawRadarExpansion(canvasId, scores) {
     ctx.stroke();
   }
 
-  // Spokes
   for (let i = 0; i < n; i++) {
     const angle = startAngle + i * angleStep;
     ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + Math.cos(angle) * maxR, cy + Math.sin(angle) * maxR);
+    ctx.moveTo(cxR, cyR);
+    ctx.lineTo(cxR + Math.cos(angle) * maxR, cyR + Math.sin(angle) * maxR);
     ctx.strokeStyle = 'rgba(255,255,255,0.06)';
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
-  // Data polygon — pink/rose color
   const fillColor = 'rgba(244, 114, 182, 0.25)';
   const strokeColor = '#F472B6';
 
@@ -742,8 +1117,8 @@ function drawRadarExpansion(canvasId, scores) {
   values.forEach((v, i) => {
     const r = maxR * Math.max(v, 0.05);
     const angle = startAngle + i * angleStep;
-    const x = cx + Math.cos(angle) * r;
-    const y = cy + Math.sin(angle) * r;
+    const x = cxR + Math.cos(angle) * r;
+    const y = cyR + Math.sin(angle) * r;
     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   });
   ctx.closePath();
@@ -753,23 +1128,20 @@ function drawRadarExpansion(canvasId, scores) {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Vertices (dots)
   values.forEach((v, i) => {
     const r = maxR * Math.max(v, 0.05);
     const angle = startAngle + i * angleStep;
-    const x = cx + Math.cos(angle) * r;
-    const y = cy + Math.sin(angle) * r;
+    const x = cxR + Math.cos(angle) * r;
+    const y = cyR + Math.sin(angle) * r;
     ctx.beginPath();
     ctx.arc(x, y, 3, 0, Math.PI * 2);
     ctx.fillStyle = strokeColor;
     ctx.fill();
   });
 
-  // HTML labels
-  addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx, cy, maxR, size);
+  addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cxR, cyR, maxR, size);
 }
 
-// Shared label positioning function
 function addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx, cy, maxR, size) {
   const canvasRect = canvas.getBoundingClientRect();
   const containerRect = container.getBoundingClientRect();
@@ -786,7 +1158,6 @@ function addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx,
     const el = document.createElement('span');
     el.className = 'radar-label';
     el.textContent = label;
-
     el.style.position = 'absolute';
     el.style.left = (offsetX + x) + 'px';
     el.style.top = (offsetY + y) + 'px';
@@ -794,10 +1165,9 @@ function addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx,
     el.style.color = 'rgba(255,255,255,0.55)';
     el.style.whiteSpace = 'nowrap';
     el.style.pointerEvents = 'none';
-    el.style.fontFamily = 'Inter, sans-serif';
+    el.style.fontFamily = "'Space Grotesk', Inter, sans-serif";
     el.style.lineHeight = '1';
 
-    // Alignment transforms based on angle position
     if (Math.abs(Math.cos(angle)) < 0.1) {
       el.style.transform = 'translate(-50%, ' + (Math.sin(angle) < 0 ? '-100%' : '0') + ')';
     } else if (Math.cos(angle) > 0) {
@@ -805,20 +1175,14 @@ function addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx,
     } else {
       el.style.transform = 'translate(-100%, -50%)';
     }
-
     container.appendChild(el);
 
-    // Post-append: clamp to viewport bounds
     const labelRect = el.getBoundingClientRect();
-    if (labelRect.left < 4) {
-      el.style.transform = 'translate(0, -50%)';
-    } else if (labelRect.right > window.innerWidth - 4) {
-      el.style.transform = 'translate(-100%, -50%)';
-    }
+    if (labelRect.left < 4) el.style.transform = 'translate(0, -50%)';
+    else if (labelRect.right > window.innerWidth - 4) el.style.transform = 'translate(-100%, -50%)';
   });
 }
 
-// Find closest + most distant figure for a single axis score
 function getAxisFigureMatch(axisKey, userScore) {
   let closest = null, closestDist = Infinity;
   let distant = null, distantDist = -1;
@@ -838,7 +1202,6 @@ function getAxisFigureMatch(axisKey, userScore) {
   return { closest, distant };
 }
 
-// Build the per-axis figure row HTML
 function axisFigureHTML(axisKey, userScore) {
   const match = getAxisFigureMatch(axisKey, userScore);
   return `
@@ -853,7 +1216,6 @@ function renderAxisBars(scores) {
   const container = document.getElementById('axisBars');
   container.innerHTML = '';
 
-  // 5 main axes
   AXES.forEach((axis, idx) => {
     const leftPct = 100 - scores[axis];
     const rightPct = scores[axis];
@@ -936,66 +1298,545 @@ function renderCountryMatch(scores) {
   document.getElementById('countryPct').textContent = `${Math.round(bestSimilarity)}%`;
 }
 
+// ─── 10. Share Card Generation ────────────────
+function generateShareCard() {
+  const scores = window._lastScores;
+  const typeName = window._lastType;
+  if (!scores) return;
+
+  const canvas = document.getElementById('shareCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1200, H = 630;
+  canvas.width = W;
+  canvas.height = H;
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, '#0B1120');
+  grad.addColorStop(1, '#1a1040');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid pattern
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.05)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // Title
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 28px "Space Grotesk", Inter, sans-serif';
+  ctx.fillText('Where Do You Stand?', 50, 60);
+
+  // Political type
+  const meta = POLITICAL_TYPE_META[typeName] || { emoji: '🧠' };
+  ctx.font = 'bold 42px "Space Grotesk", Inter, sans-serif';
+  ctx.fillStyle = '#8B5CF6';
+  ctx.fillText(`${meta.emoji} ${typeName}`, 50, 120);
+
+  // Axis bars
+  const allAxes = [...AXES, 'expansion'];
+  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
+  const barColors = [...BAR_COLORS, '#F472B6'];
+
+  allAxes.forEach((axis, i) => {
+    const y = 170 + i * 42;
+    const score = axis === 'expansion' ? scores.expansion : scores[axis];
+    const labels = allLabels[axis];
+
+    ctx.font = '14px Inter, sans-serif';
+    ctx.fillStyle = '#7E8CA8';
+    ctx.textAlign = 'right';
+    ctx.fillText(labels.left, 180, y + 4);
+    ctx.textAlign = 'left';
+    ctx.fillText(labels.right, 530, y + 4);
+
+    // Track
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(190, y - 6, 330, 12);
+
+    // Fill
+    ctx.fillStyle = barColors[i];
+    const fillStart = Math.min(score, 50) * 3.3 + 190;
+    const fillWidth = Math.abs(score - 50) * 3.3;
+    ctx.fillRect(fillStart, y - 6, fillWidth, 12);
+
+    // Marker
+    const mx = 190 + score * 3.3;
+    ctx.beginPath();
+    ctx.arc(mx, y, 7, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  });
+
+  // Country match
+  let bestCountry = null, bestSim = -1;
+  COUNTRIES.forEach(c => {
+    const sim = calcSimilarity(scores, c);
+    if (sim > bestSim) { bestSim = sim; bestCountry = c; }
+  });
+  ctx.textAlign = 'left';
+  ctx.font = 'bold 18px "Space Grotesk", Inter, sans-serif';
+  ctx.fillStyle = '#14B8A6';
+  ctx.fillText(`Closest Country: ${bestCountry.flag} ${bestCountry.name} (${Math.round(bestSim)}%)`, 50, 440);
+
+  // Closest figure
+  const figured = FIGURES.map(f => ({ ...f, similarity: calcSimilarity(scores, f) }));
+  figured.sort((a, b) => b.similarity - a.similarity);
+  ctx.fillStyle = '#8B5CF6';
+  ctx.fillText(`Closest Figure: ${figured[0].name} (${Math.round(figured[0].similarity)}%)`, 50, 475);
+
+  // Mini compass (right side)
+  const compassX = 700, compassY = 170, compassSize = 200;
+  ctx.fillStyle = 'rgba(239, 68, 68, 0.15)'; ctx.fillRect(compassX, compassY, compassSize/2, compassSize/2);
+  ctx.fillStyle = 'rgba(59, 130, 246, 0.15)'; ctx.fillRect(compassX + compassSize/2, compassY, compassSize/2, compassSize/2);
+  ctx.fillStyle = 'rgba(34, 197, 94, 0.15)'; ctx.fillRect(compassX, compassY + compassSize/2, compassSize/2, compassSize/2);
+  ctx.fillStyle = 'rgba(168, 85, 247, 0.15)'; ctx.fillRect(compassX + compassSize/2, compassY + compassSize/2, compassSize/2, compassSize/2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1;
+  ctx.strokeRect(compassX, compassY, compassSize, compassSize);
+  // Cross
+  ctx.beginPath(); ctx.moveTo(compassX + compassSize/2, compassY); ctx.lineTo(compassX + compassSize/2, compassY + compassSize); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(compassX, compassY + compassSize/2); ctx.lineTo(compassX + compassSize, compassY + compassSize/2); ctx.stroke();
+  // Dot
+  const dotCX = compassX + (scores.economy / 100) * compassSize;
+  const dotCY = compassY + (1 - scores.governance / 100) * compassSize;
+  ctx.beginPath(); ctx.arc(dotCX, dotCY, 10, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(139, 92, 246, 0.4)'; ctx.fill();
+  ctx.beginPath(); ctx.arc(dotCX, dotCY, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#8B5CF6'; ctx.fill();
+
+  // Labels around compass
+  ctx.font = '11px "Space Grotesk", Inter, sans-serif';
+  ctx.fillStyle = '#7E8CA8';
+  ctx.textAlign = 'center';
+  ctx.fillText('Authoritarian', compassX + compassSize/2, compassY - 8);
+  ctx.fillText('Libertarian', compassX + compassSize/2, compassY + compassSize + 16);
+  ctx.textAlign = 'right';
+  ctx.fillText('Left', compassX - 8, compassY + compassSize/2 + 4);
+  ctx.textAlign = 'left';
+  ctx.fillText('Right', compassX + compassSize + 8, compassY + compassSize/2 + 4);
+
+  // Watermark
+  ctx.textAlign = 'center';
+  ctx.font = '13px Inter, sans-serif';
+  ctx.fillStyle = '#4A5568';
+  ctx.fillText("Troy's Political Test — troysalam.github.io/where-do-you-stand", W / 2, H - 30);
+
+  // Border glow
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, W - 2, H - 2);
+
+  // Download
+  const dataURL = canvas.toDataURL('image/png');
+  const link = document.getElementById('downloadLink');
+  link.href = dataURL;
+  link.download = 'where-do-you-stand-results.png';
+  link.click();
+
+  playSound('sparkle');
+}
+
+// ─── 11. Compare Mode ─────────────────────────
+function encodeScores(scores) {
+  const vals = [...AXES, ...EXPANSION_SUBS].map(k => scores[k]);
+  return btoa(vals.join(','));
+}
+
+function decodeScores(hash) {
+  try {
+    const vals = atob(hash).split(',').map(Number);
+    const scores = {};
+    [...AXES, ...EXPANSION_SUBS].forEach((k, i) => scores[k] = vals[i]);
+    scores.expansion = Math.round(EXPANSION_SUBS.reduce((sum, s) => sum + scores[s], 0) / EXPANSION_SUBS.length);
+    return scores;
+  } catch (e) { return null; }
+}
+
+function checkCompareHash() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#compare=')) {
+    const encoded = hash.substring('#compare='.length);
+    friendScores = decodeScores(encoded);
+  }
+}
+
+function challengeFriend() {
+  const scores = window._lastScores;
+  if (!scores) return;
+  const encoded = encodeScores(scores);
+  const url = `${window.location.origin}${window.location.pathname}#compare=${encoded}`;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url);
+  }
+
+  // Show a temporary notification
+  const btn = event.target;
+  const orig = btn.textContent;
+  btn.textContent = '✓ Link Copied!';
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+
+  playSound('sparkle');
+}
+
+function renderCompare(myScores, theirScores) {
+  const overlay = document.getElementById('compareOverlay');
+  overlay.classList.remove('hidden');
+
+  const allDims = [...AXES, 'expansion'];
+  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
+
+  let html = `<h3 class="compare-heading gradient-heading-sm">You vs Friend</h3>`;
+  html += `<div class="figure-bar-legend" style="margin-bottom:12px;">
+    <span class="leg-you">You</span>
+    <span class="leg-fig">Friend</span>
+  </div>`;
+  html += `<div class="compare-bars">`;
+
+  allDims.forEach(dim => {
+    const myVal = dim === 'expansion' ? myScores.expansion : myScores[dim];
+    const theirVal = dim === 'expansion' ? theirScores.expansion : theirScores[dim];
+    const label = allLabels[dim] || { left: dim, right: dim };
+    html += `
+      <div class="compare-bar-row">
+        <span style="text-align:right;color:var(--text-muted)">${label.left}</span>
+        <div class="compare-bar-track">
+          <div class="compare-bar-you" style="width:${myVal}%"></div>
+          <div class="compare-bar-friend" style="width:${theirVal}%"></div>
+        </div>
+        <span style="color:var(--text-muted)">${label.right}</span>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+
+  // Similarity
+  const similarity = calcSimilarity(myScores, theirScores);
+  html += `<p style="text-align:center;margin-top:16px;font-size:0.9rem;color:var(--accent);font-weight:700;">You and your friend are ${Math.round(similarity)}% similar</p>`;
+
+  overlay.innerHTML = html;
+}
+
+// ─── 12. History Management ───────────────────
+function saveToHistory(scores) {
+  const history = JSON.parse(localStorage.getItem('wdys_history') || '[]');
+  const type = POLITICAL_TYPES.find(t => t.condition(scores));
+  const figured = FIGURES.map(f => ({ name: f.name, similarity: calcSimilarity(scores, f) }));
+  figured.sort((a, b) => b.similarity - a.similarity);
+
+  const entry = {
+    date: new Date().toISOString(),
+    scores: { ...scores },
+    type: type.label,
+    closestFigure: figured[0].name,
+    speedMode: speedMode
+  };
+
+  history.unshift(entry);
+  if (history.length > 20) history.pop();
+  localStorage.setItem('wdys_history', JSON.stringify(history));
+}
+
+function renderHistorySection() {
+  const history = JSON.parse(localStorage.getItem('wdys_history') || '[]');
+  const content = document.getElementById('historyContent');
+
+  if (history.length === 0) {
+    content.innerHTML = '<p style="text-align:center;color:var(--text-dim);padding:20px;">No history yet. Take the quiz to start tracking!</p>';
+    return;
+  }
+
+  let html = '';
+
+  // Shift tracking
+  if (history.length >= 2) {
+    const latest = history[0].scores;
+    const first = history[history.length - 1].scores;
+    AXES.forEach(axis => {
+      const shift = latest[axis] - first[axis];
+      if (Math.abs(shift) >= 5) {
+        const dir = shift > 0 ? AXIS_LABELS[axis].right : AXIS_LABELS[axis].left;
+        html += `<div class="history-shift" style="margin-bottom:8px;">Shifted ${Math.abs(shift)}% toward ${dir} on ${axis} since first test</div>`;
+      }
+    });
+  }
+
+  history.forEach((entry, i) => {
+    const date = new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    html += `
+      <div class="history-item">
+        <div>
+          <div class="history-type">${entry.type}</div>
+          <div class="history-date">${date}${entry.speedMode ? ' ⚡' : ''}</div>
+        </div>
+        <div class="history-figure">${entry.closestFigure}</div>
+      </div>
+    `;
+  });
+
+  html += `<button class="btn-secondary" style="margin-top:12px;padding:8px 16px;font-size:0.8rem;" onclick="clearHistory()">Clear History</button>`;
+  content.innerHTML = html;
+}
+
+function clearHistory() {
+  localStorage.removeItem('wdys_history');
+  localStorage.removeItem('wdys_badges');
+  renderHistorySection();
+}
+
+function toggleHistorySection() {
+  const content = document.getElementById('historyContent');
+  const toggle = document.getElementById('historyToggle');
+  content.classList.toggle('hidden');
+  toggle.classList.toggle('open');
+}
+
+// ─── 13. Badge System ─────────────────────────
+const BADGE_DEFS = [
+  { id: 'centrist', icon: '⚖️', name: 'Centrist', desc: 'All 5 main axes within 35-65%', check: (s) => AXES.every(a => s[a] >= 35 && s[a] <= 65) },
+  { id: 'extremist', icon: '🔥', name: 'Extremist', desc: 'Any axis above 90% or below 10%', check: (s) => AXES.some(a => s[a] > 90 || s[a] < 10) },
+  { id: 'figure_twin', icon: '🪞', name: 'Figure Twin', desc: '95%+ match with any figure', check: (s) => FIGURES.some(f => calcSimilarity(s, f) >= 95) },
+  { id: 'world_citizen', icon: '🌍', name: 'World Citizen', desc: '90%+ match with any country', check: (s) => COUNTRIES.some(c => calcSimilarity(s, c) >= 90) },
+  { id: 'speed_demon', icon: '⚡', name: 'Speed Demon', desc: 'Completed in Speed Mode', check: () => speedMode },
+  { id: 'balanced', icon: '🧘', name: 'Balanced', desc: 'All main axes within 5% of each other', check: (s) => { const vals = AXES.map(a => s[a]); return Math.max(...vals) - Math.min(...vals) <= 5; } },
+  { id: 'contrarian', icon: '🎭', name: 'Contrarian', desc: 'Most distant figure match < 30%', check: (s) => { const sims = FIGURES.map(f => calcSimilarity(s, f)); return Math.min(...sims) < 30; } },
+  { id: 'repeat_voter', icon: '🔄', name: 'Repeat Voter', desc: 'Taken quiz 3+ times', check: () => { const h = JSON.parse(localStorage.getItem('wdys_history') || '[]'); return h.length >= 3; } },
+  { id: 'flip_flopper', icon: '🔀', name: 'Flip Flopper', desc: 'Type changed from last attempt', check: (s, typeName) => { const h = JSON.parse(localStorage.getItem('wdys_history') || '[]'); return h.length >= 2 && h[1].type !== typeName; } },
+  { id: 'deep_thinker', icon: '🧠', name: 'Deep Thinker', desc: 'No neutral answers', check: () => answers.every(a => a !== null && a !== 3) },
+];
+
+function renderBadges(scores, typeName) {
+  const grid = document.getElementById('badgesGrid');
+  const earned = JSON.parse(localStorage.getItem('wdys_badges') || '[]');
+  let newBadges = [];
+
+  let html = '';
+  BADGE_DEFS.forEach(badge => {
+    const isUnlocked = badge.check(scores, typeName);
+    if (isUnlocked && !earned.includes(badge.id)) {
+      newBadges.push(badge.id);
+    }
+    const unlocked = isUnlocked || earned.includes(badge.id);
+    html += `
+      <div class="badge-item ${unlocked ? 'unlocked' : 'locked'}">
+        <span class="badge-icon">${badge.icon}</span>
+        <span class="badge-name">${badge.name}</span>
+        <span class="badge-desc">${badge.desc}</span>
+      </div>
+    `;
+  });
+  grid.innerHTML = html;
+
+  // Save newly earned badges
+  if (newBadges.length > 0) {
+    const allBadges = [...new Set([...earned, ...newBadges])];
+    localStorage.setItem('wdys_badges', JSON.stringify(allBadges));
+    newBadges.forEach(() => playSound('sparkle'));
+  }
+}
+
+// ─── 14. Figure Breakdown ("Why This Figure") ─
 function renderFigures(scores) {
   const figured = FIGURES.map(f => ({
     ...f,
     similarity: calcSimilarity(scores, f)
   }));
-
   figured.sort((a, b) => b.similarity - a.similarity);
 
-  // Closest 4
   const closest = figured.slice(0, 4);
   const closestEl = document.getElementById('closestFigures');
-  closestEl.innerHTML = closest.map(f => `
-    <div class="figure-card">
-      <span class="figure-name">${f.name}</span>
-      <span class="figure-pct">${Math.round(f.similarity)}%</span>
-    </div>
-  `).join('');
+  closestEl.innerHTML = closest.map(f => buildFigureCard(f, scores)).join('');
 
-  // Most distant 4
   const distant = figured.slice(-4).reverse();
   const distantEl = document.getElementById('distantFigures');
-  distantEl.innerHTML = distant.map(f => `
+  distantEl.innerHTML = distant.map(f => buildFigureCard(f, scores)).join('');
+
+  // Add click listeners
+  document.querySelectorAll('.figure-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('expanded');
+    });
+  });
+}
+
+function buildFigureCard(fig, scores) {
+  const allDims = [...AXES, ...EXPANSION_SUBS];
+  const dimLabels = { ...AXIS_LABELS, space: { left: 'Space' }, technology: { left: 'Tech' }, bioethics: { left: 'Bio' }, growth: { left: 'Growth' } };
+
+  let barsHtml = '';
+  let maxDivAxis = '', maxDiv = 0;
+  let minDivAxis = '', minDiv = Infinity;
+
+  allDims.forEach(dim => {
+    const myVal = scores[dim];
+    const figVal = fig[dim];
+    const label = dimLabels[dim] ? (dimLabels[dim].left || dim) : dim;
+    const diff = Math.abs(myVal - figVal);
+    if (diff > maxDiv) { maxDiv = diff; maxDivAxis = label; }
+    if (diff < minDiv) { minDiv = diff; minDivAxis = label; }
+    const highlight = diff > 20 ? 'border-left: 2px solid var(--accent);padding-left:4px;' : '';
+    barsHtml += `
+      <div class="figure-axis-bar" style="${highlight}">
+        <span class="figure-axis-label">${label}</span>
+        <div class="figure-bar-track">
+          <div class="figure-bar-you" style="width:${myVal}%;top:0;height:50%"></div>
+          <div class="figure-bar-fig" style="width:${figVal}%;bottom:0;top:auto;height:50%"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  return `
     <div class="figure-card">
-      <span class="figure-name">${f.name}</span>
-      <span class="figure-pct">${Math.round(f.similarity)}%</span>
+      <div class="figure-card-header">
+        <span class="figure-name">${fig.name}</span>
+        <span class="figure-pct">${Math.round(fig.similarity)}%</span>
+      </div>
+      <span class="figure-expand-hint">Tap for breakdown ▾</span>
+      <div class="figure-breakdown">
+        <div class="figure-bar-legend">
+          <span class="leg-you">You</span>
+          <span class="leg-fig">${fig.name}</span>
+        </div>
+        ${barsHtml}
+        <div class="figure-diverge-note">Agree most on ${minDivAxis}, disagree most on ${maxDivAxis}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── 15. Sensitivity Analysis ─────────────────
+function renderImpactAnalysis(scores) {
+  const impacts = [];
+
+  QUESTIONS.forEach((q, i) => {
+    if (answers[i] === null) return;
+    const originalAnswer = answers[i];
+
+    // Calculate what scores would be if this answer were neutral (3)
+    const modifiedAnswers = [...answers];
+    modifiedAnswers[i] = 3;
+
+    // Recalculate the specific axis score
+    const axis = q.axis === 'expansion' ? (q.sub || q.axis) : q.axis;
+    const relevantQs = QUESTIONS.map((qq, ii) => ({ q: qq, answer: modifiedAnswers[ii] }))
+      .filter(x => {
+        if (q.axis === 'expansion') return x.q.axis === 'expansion' && x.q.sub === q.sub;
+        return x.q.axis === q.axis;
+      });
+
+    let totalRight = 0;
+    relevantQs.forEach(({ q: rq, answer }) => {
+      if (answer === null) return;
+      const normalized = (answer - 1) / 4;
+      totalRight += rq.pole === 'right' ? normalized : (1 - normalized);
+    });
+
+    const modifiedScore = relevantQs.length > 0 ? Math.round((totalRight / relevantQs.length) * 100) : 50;
+    const originalScore = scores[axis] || 50;
+    const impact = Math.abs(originalScore - modifiedScore);
+
+    if (impact > 0) {
+      impacts.push({
+        qIndex: i,
+        question: q.text,
+        axis: axis,
+        impact: impact,
+        answer: originalAnswer,
+        axisColor: ALL_Q_COLORS[q.axis] || '#8B5CF6'
+      });
+    }
+  });
+
+  impacts.sort((a, b) => b.impact - a.impact);
+  const top5 = impacts.slice(0, 5);
+  const maxImpact = top5.length > 0 ? top5[0].impact : 1;
+
+  const container = document.getElementById('impactList');
+  container.innerHTML = top5.map((item, i) => `
+    <div class="impact-item" style="border-left-color: ${item.axisColor};">
+      <span class="impact-rank">#${i + 1}</span>
+      <span class="impact-text">Your answer to <strong>Q${item.qIndex + 1}</strong> shifted your <strong>${item.axis}</strong> score by <strong>${item.impact} points</strong></span>
+      <div class="impact-bar-wrap">
+        <div class="impact-bar-inner" style="width: ${(item.impact / maxImpact) * 100}%; background: ${item.axisColor};"></div>
+      </div>
     </div>
   `).join('');
 }
 
-function calcSimilarity(scores, profile) {
-  // Compare across 5 main axes + 4 expansion subs = 9 dimensions
-  const allDims = [...AXES, ...EXPANSION_SUBS];
-  let sumSqDiff = 0;
-  allDims.forEach(dim => {
-    const diff = scores[dim] - profile[dim];
-    sumSqDiff += diff * diff;
+// ─── 16. Question Review ──────────────────────
+function renderQuestionReview() {
+  const content = document.getElementById('reviewContent');
+  const groupedByAxis = {};
+
+  QUESTIONS.forEach((q, i) => {
+    const axis = q.axis;
+    if (!groupedByAxis[axis]) groupedByAxis[axis] = [];
+    groupedByAxis[axis].push({ q, i, answer: answers[i] });
   });
-  // Max possible distance = sqrt(9 * 100^2) = 300
-  const maxDist = Math.sqrt(allDims.length * 100 * 100);
-  const dist = Math.sqrt(sumSqDiff);
-  return Math.max(0, (1 - dist / maxDist) * 100);
+
+  let html = '';
+  ALL_Q_AXES.forEach(axis => {
+    const group = groupedByAxis[axis];
+    if (!group) return;
+    const color = ALL_Q_COLORS[axis];
+    html += `
+      <div class="review-axis-group">
+        <div class="review-axis-title" style="background: ${color}22; color: ${color};">${SECTION_NAMES[axis]}</div>
+    `;
+
+    group.forEach(({ q, i, answer }) => {
+      const val = answer || 3;
+      const answerLabels = { 1: 'SD', 2: 'D', 3: 'N', 4: 'A', 5: 'SA' };
+      const bgIntensity = Math.abs(val - 3) / 2;
+      const bgColor = val > 3 ? `rgba(34, 197, 94, ${0.1 + bgIntensity * 0.2})` :
+                       val < 3 ? `rgba(239, 68, 68, ${0.1 + bgIntensity * 0.2})` :
+                       'rgba(255,255,255,0.06)';
+      const direction = q.pole === 'left' ?
+        (val > 3 ? AXIS_LABELS[q.axis]?.left || 'Left' : val < 3 ? AXIS_LABELS[q.axis]?.right || 'Right' : 'Neutral') :
+        (val > 3 ? AXIS_LABELS[q.axis]?.right || 'Right' : val < 3 ? AXIS_LABELS[q.axis]?.left || 'Left' : 'Neutral');
+
+      const directionForExpansion = q.axis === 'expansion' ?
+        (q.pole === 'left' ?
+          (val > 3 ? 'Expansionist' : val < 3 ? 'Restraint' : 'Neutral') :
+          (val > 3 ? 'Restraint' : val < 3 ? 'Expansionist' : 'Neutral'))
+        : direction;
+
+      html += `
+        <div class="review-question">
+          <div class="review-answer-dot" style="background:${bgColor};color:${val !== 3 ? '#fff' : 'var(--text-dim)'};">${answerLabels[val]}</div>
+          <span style="flex:1;">${q.text.substring(0, 80)}${q.text.length > 80 ? '...' : ''}</span>
+          <span class="review-direction" style="color:${color};">→ ${q.axis === 'expansion' ? directionForExpansion : direction}</span>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+  });
+
+  content.innerHTML = html;
 }
 
-// ─── Results Reveal Animations ─────────────────
+function toggleReviewSection() {
+  const content = document.getElementById('reviewContent');
+  const toggle = document.getElementById('reviewToggle');
+  content.classList.toggle('hidden');
+  toggle.classList.toggle('open');
+}
+
+// ─── 17. Reveal Animations ────────────────────
 function animateResultsReveal() {
-  // Reset all reveal elements
   const reveals = document.querySelectorAll('#results [data-reveal]');
   reveals.forEach(el => el.classList.remove('revealed'));
-
-  // Reset figure cards
   const figureCards = document.querySelectorAll('#results .figure-card');
   figureCards.forEach(el => el.classList.remove('revealed'));
 
-  // Stagger each section with increasing delay
-  const baseDelay = 150; // ms between each section
+  const baseDelay = 150;
   reveals.forEach((el, i) => {
     setTimeout(() => {
       el.classList.add('revealed');
-
-      // If this is the figures section, stagger individual cards after it reveals
       if (el.id === 'figuresSection') {
         const cards = el.querySelectorAll('.figure-card');
         cards.forEach((card, j) => {
@@ -1005,3 +1846,124 @@ function animateResultsReveal() {
     }, i * baseDelay);
   });
 }
+
+function calcSimilarity(scores, profile) {
+  const allDims = [...AXES, ...EXPANSION_SUBS];
+  let sumSqDiff = 0;
+  allDims.forEach(dim => {
+    const diff = (scores[dim] || 50) - (profile[dim] || 50);
+    sumSqDiff += diff * diff;
+  });
+  const maxDist = Math.sqrt(allDims.length * 100 * 100);
+  const dist = Math.sqrt(sumSqDiff);
+  return Math.max(0, (1 - dist / maxDist) * 100);
+}
+
+// ─── Particle Background ──────────────────────
+let particleAnimId = null;
+
+function initParticles() {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const particles = [];
+  const count = 50;
+
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 2 + 1,
+      color: Math.random() > 0.5 ? 'rgba(139, 92, 246, 0.15)' : 'rgba(20, 184, 166, 0.15)'
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    });
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    particleAnimId = requestAnimationFrame(animate);
+  }
+
+  cancelAnimationFrame(particleAnimId);
+  animate();
+}
+
+// ─── Stat Counter Animation ───────────────────
+function animateStatCounters() {
+  document.querySelectorAll('.stat-num').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const duration = 1500;
+    const start = performance.now();
+
+    function tick(now) {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      el.textContent = Math.round(target * eased);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+// ─── Init ─────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  initParticles();
+  animateStatCounters();
+
+  // Check mute state
+  if (!soundEnabled) {
+    document.querySelectorAll('.mute-btn').forEach(btn => btn.classList.add('muted'));
+  }
+
+  // Check if URL has compare hash
+  if (window.location.hash.startsWith('#compare=')) {
+    // Show a notice on landing
+    const hero = document.querySelector('.hero');
+    const notice = document.createElement('div');
+    notice.style.cssText = 'background:rgba(20,184,166,0.15);border:1px solid rgba(20,184,166,0.3);border-radius:12px;padding:12px 20px;margin-bottom:16px;font-size:0.9rem;color:#14B8A6;text-align:center;';
+    notice.textContent = '🔗 A friend challenged you! Take the quiz to compare results.';
+    hero.insertBefore(notice, hero.firstChild);
+  }
+});
