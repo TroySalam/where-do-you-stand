@@ -35,6 +35,8 @@
       </button>
     </header>
 
+    <div class="hud-status-line"><span class="hud-text">SYS:READY // DIMENSIONS:6 // PROFILES:20 // STATUS:ONLINE</span></div>
+
     <main class="hero">
       <h1 class="gradient-heading">Troy's Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
       <p class="subtitle">Discover your political profile across 5 core dimensions and an expansion outlook — economy, society, governance, universality, environment, plus space, technology, bioethics, and growth. Find the country and figures that match your views.</p>
@@ -84,6 +86,12 @@
 
   <!-- ═══════ QUIZ ═══════ -->
   <div id="quiz" class="screen">
+    <div class="corner-dots" id="cornerDots">
+      <div class="corner-dot"></div>
+      <div class="corner-dot"></div>
+      <div class="corner-dot"></div>
+      <div class="corner-dot"></div>
+    </div>
     <header class="nav quiz-nav">
       <a class="home-link" onclick="goHome()">🏠 Home</a>
       <button class="mute-btn" onclick="toggleMute()" title="Toggle Sound">
@@ -189,6 +197,9 @@
     </header>
 
     <div class="results-container">
+      <!-- Data ticker -->
+      <div class="data-ticker" id="dataTicker"></div>
+
       <!-- 1. Political type -->
       <div class="profile-header glass-card corner-brackets" data-reveal>
         <span class="profile-label">MY PROFILE:</span>
@@ -196,6 +207,7 @@
           <span class="profile-emoji" id="profileEmoji">⚖️</span>
           <h2 id="profileType" class="gradient-heading">You are a Social Democrat</h2>
         </div>
+        <div class="scanlines" id="profileScanlines"></div>
         <p class="profile-description" id="profileDescription"></p>
       </div>
 
@@ -212,6 +224,7 @@
       </div>
 
       <!-- 3. Pentagon radars -->
+      <span class="section-micro-label">// RADAR ANALYSIS</span>
       <div class="radar-section" data-reveal="radar">
         <div class="radar-col">
           <h3 class="radar-title left">Left-Leaning Trends</h3>
@@ -237,11 +250,13 @@
       </div>
 
       <!-- 4. Axis bars -->
-      <div class="glow-divider"></div>
+      <div class="section-divider"><span>AXIS BREAKDOWN</span></div>
+      <span class="section-micro-label">// AXIS BREAKDOWN</span>
       <div class="axis-bars" id="axisBars" data-reveal></div>
 
       <!-- 5. Political Compass -->
-      <div class="glow-divider"></div>
+      <div class="section-divider"><span>POLITICAL COMPASS</span></div>
+      <span class="section-micro-label">// POLITICAL COMPASS</span>
       <div class="compass-section" data-reveal>
         <div class="compass-wrap">
           <div class="compass-header">
@@ -272,7 +287,8 @@
       </div>
 
       <!-- 6. Country match -->
-      <div class="glow-divider"></div>
+      <div class="section-divider"><span>COUNTRY MATCH</span></div>
+      <span class="section-micro-label">// COUNTRY MATCH</span>
       <div class="country-card glass-card corner-brackets" id="countryCard" data-reveal="country">
         <span class="country-label">YOUR CLOSEST COUNTRY</span>
         <div class="country-row">
@@ -285,6 +301,7 @@
       </div>
 
       <!-- 7. Figures -->
+      <span class="section-micro-label">// FIGURE ANALYSIS</span>
       <div class="figures-section" id="figuresSection" data-reveal>
         <h3 class="section-heading gradient-heading-sm">Closest Figures</h3>
         <div class="figures-grid" id="closestFigures"></div>
@@ -293,7 +310,7 @@
       </div>
 
       <!-- 8. Impact Analysis (Sensitivity) -->
-      <div class="glow-divider"></div>
+      <div class="section-divider"><span>IMPACT ANALYSIS</span></div>
       <div class="impact-section glass-card corner-brackets" id="impactSection" data-reveal>
         <h3 class="section-heading gradient-heading-sm">Impact Analysis</h3>
         <p class="section-sub">Questions that shaped your results the most</p>
@@ -301,7 +318,7 @@
       </div>
 
       <!-- 9. Question Review -->
-      <div class="glow-divider"></div>
+      <div class="section-divider"><span>QUESTION REVIEW</span></div>
       <div class="review-section" id="reviewSection" data-reveal>
         <button class="review-toggle" id="reviewToggle" onclick="toggleReviewSection()">
           <span class="gradient-heading-sm">Review Your Answers</span>
@@ -311,7 +328,7 @@
       </div>
 
       <!-- 10. History -->
-      <div class="glow-divider"></div>
+      <div class="section-divider"><span>RESULTS HISTORY</span></div>
       <div class="history-section" id="historySection" data-reveal>
         <button class="review-toggle" id="historyToggle" onclick="toggleHistorySection()">
           <span class="gradient-heading-sm">Results History</span>
@@ -321,13 +338,16 @@
       </div>
 
       <!-- 11. Share / Compare / Retake -->
-      <div class="glow-divider"></div>
+      <div class="section-divider"><span>ACTIONS</span></div>
       <div class="results-actions" data-reveal>
         <button class="btn-primary neon-btn" onclick="generateShareCard()">📸 Share Results</button>
         <button class="btn-secondary neon-btn" onclick="challengeFriend()">🔗 Challenge a Friend</button>
         <button class="btn-secondary neon-btn" onclick="retakeQuiz()">🔄 Retake Test</button>
         <button class="btn-secondary neon-btn" onclick="goHome()">🏠 Home</button>
       </div>
+
+      <!-- Footer data line -->
+      <div class="footer-data-line">v3.0 // 54Q × 9D × 20F // EUCLIDEAN SIMILARITY ENGINE</div>
 
       <!-- Compare overlay -->
       <div id="compareOverlay" class="compare-overlay hidden"></div>

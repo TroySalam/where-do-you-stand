@@ -1653,3 +1653,268 @@ a:hover { color: var(--text); }
   .profile-type-row { flex-direction: column; align-items: flex-start; gap: 8px; }
   .profile-emoji { font-size: 2rem; }
 }
+
+/* ═══════════════════════════════════════════════
+   FUTURISTIC UI POLISH — Sci-fi HUD layer
+   ═══════════════════════════════════════════════ */
+
+/* ─── 1. HUD STATUS LINE (Landing) ─── */
+.hud-status-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 6px 16px;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.hud-status-line .hud-text {
+  display: inline-block;
+  animation: hudPulse 4s ease-in-out infinite;
+}
+@keyframes hudPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+/* ─── 2. HOLOGRAPHIC BORDER on question-card ─── */
+.question-card {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+.question-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px;
+  right: -1px; bottom: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--holo-angle, 0deg),
+    transparent 0deg,
+    var(--accent) 60deg,
+    var(--teal) 120deg,
+    transparent 180deg,
+    var(--accent) 240deg,
+    var(--teal) 300deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.35;
+  animation: holoRotate 6s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+@keyframes holoRotate {
+  to { --holo-angle: 360deg; }
+}
+@property --holo-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ─── 3. FLOATING ANIMATION on result cards ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.profile-header.revealed {
+  animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, float 5s ease-in-out 1s infinite;
+}
+.country-card.revealed {
+  animation: revealGlow 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards, float 6s ease-in-out 1.2s infinite;
+}
+.compass-section.revealed {
+  animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, float 5.5s ease-in-out 1.4s infinite;
+}
+
+/* ─── 4. FUTURISTIC QUESTION COUNTER ─── */
+#qCounter {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+#qCounter::after {
+  content: '█';
+  animation: cursorBlink 1s steps(1) infinite;
+  margin-left: 3px;
+  font-size: 0.7em;
+  color: var(--accent);
+  opacity: 0.7;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0; }
+}
+
+/* ─── 5. DATA TICKER on results ─── */
+.data-ticker {
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: var(--teal);
+  text-align: center;
+  padding: 12px 16px 4px;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  min-height: 2em;
+}
+.data-ticker.typing {
+  opacity: 1;
+}
+.data-ticker .ticker-cursor {
+  animation: cursorBlink 0.6s steps(1) infinite;
+}
+
+/* ─── 6. SECTION DIVIDERS with labels ─── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0;
+}
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--teal), transparent);
+  opacity: 0.3;
+}
+.section-divider span {
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+/* ─── 7. AMBIENT CORNER DOTS (quiz) ─── */
+.corner-dots {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+.corner-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: cornerPulse 3s ease-in-out infinite;
+}
+.corner-dot:nth-child(1) { top: 16px; left: 16px; animation-delay: 0s; }
+.corner-dot:nth-child(2) { top: 16px; right: 16px; animation-delay: 0.75s; }
+.corner-dot:nth-child(3) { bottom: 16px; left: 16px; animation-delay: 1.5s; }
+.corner-dot:nth-child(4) { bottom: 16px; right: 16px; animation-delay: 2.25s; }
+@keyframes cornerPulse {
+  0%, 100% { opacity: 0.1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.4); }
+}
+
+/* ─── 8. RESULTS SECTION MICRO-LABELS ─── */
+.section-micro-label {
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* ─── 9. BETTER SCREEN TRANSITIONS ─── */
+.screen.active {
+  animation: screenEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes screenEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.screen-flash {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--teal), transparent);
+  z-index: 200;
+  opacity: 0;
+  animation: flashPulse 0.4s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes flashPulse {
+  0% { opacity: 0; }
+  30% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+/* ─── 10. SUBTLE DOT GRID on quiz screen ─── */
+#quiz {
+  background-image: radial-gradient(rgba(139,92,246,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ─── 11. PROFILE TYPE — LARGER + GLITCH + SCANLINES ─── */
+.profile-header h2 {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  position: relative;
+}
+.profile-header h2.glitch-active {
+  animation: glitchText 0.3s steps(2) forwards;
+}
+@keyframes glitchText {
+  0% { transform: translate(2px, -1px); text-shadow: -2px 0 var(--teal), 2px 0 var(--accent); }
+  25% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--teal), -2px 0 var(--accent); }
+  50% { transform: translate(1px, 0); text-shadow: -1px 0 var(--teal), 1px 0 var(--accent); }
+  75% { transform: translate(-1px, 1px); text-shadow: 1px 0 transparent; }
+  100% { transform: translate(0, 0); text-shadow: none; }
+}
+.profile-header .scanlines {
+  position: absolute;
+  top: 0; left: -10px; right: -10px; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(139, 92, 246, 0.03) 2px,
+    rgba(139, 92, 246, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.profile-header .scanlines.visible {
+  opacity: 1;
+}
+
+/* ─── 12. FOOTER DATA LINE ─── */
+.footer-data-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-align: center;
+  letter-spacing: 0.08em;
+  padding: 8px 16px;
+  margin-top: 8px;
+  opacity: 0.5;
+}
+
+/* ─── RESPONSIVE for new elements ─── */
+@media (max-width: 640px) {
+  .hud-status-line { font-size: 0.55rem; padding: 4px 12px; }
+  .section-divider span { font-size: 0.5rem; }
+  .section-micro-label { font-size: 0.5rem; }
+  .footer-data-line { font-size: 0.5rem; }
+  .corner-dot { width: 3px; height: 3px; }
+  .data-ticker { font-size: 0.6rem; }
+}

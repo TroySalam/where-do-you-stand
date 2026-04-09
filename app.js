@@ -89,6 +89,12 @@ const POLITICAL_TYPE_META = {
 
 // ─── 2. Navigation + Quiz Start ───────────────
 function show(id) {
+  // Screen flash effect
+  const flash = document.createElement('div');
+  flash.className = 'screen-flash';
+  document.body.appendChild(flash);
+  setTimeout(() => flash.remove(), 500);
+
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
@@ -330,7 +336,7 @@ function renderQuestion() {
   card.style.animation = '';
   document.getElementById('questionText').textContent = q.text;
 
-  document.getElementById('qCounter').textContent = `Question ${currentQ + 1} of ${QUESTIONS.length}`;
+  document.getElementById('qCounter').textContent = `Q.${String(currentQ + 1).padStart(2, '0')} // ${QUESTIONS.length}`;
 
   const badge = document.getElementById('axisBadge');
   badge.textContent = q.axis.charAt(0).toUpperCase() + q.axis.slice(1);
@@ -674,13 +680,46 @@ function calculateResults() {
 }
 
 // ─── 8. Results Rendering ─────────────────────
+function typewriterEffect(el, text, speed = 30) {
+  el.classList.add('typing');
+  el.innerHTML = '';
+  let i = 0;
+  function tick() {
+    if (i < text.length) {
+      el.innerHTML = text.slice(0, i + 1) + '<span class="ticker-cursor">█</span>';
+      i++;
+      setTimeout(tick, speed);
+    } else {
+      el.innerHTML = text;
+      setTimeout(() => { el.style.transition = 'opacity 0.8s ease'; el.style.opacity = '0.4'; }, 1500);
+    }
+  }
+  tick();
+}
+
 function renderResults(scores) {
+  // Data ticker
+  const ticker = document.getElementById('dataTicker');
+  ticker.style.opacity = '';
+  typewriterEffect(ticker, '> ANALYSIS COMPLETE // PROCESSING POLITICAL PROFILE...', 25);
+
   // Political type (enhanced)
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
   const meta = POLITICAL_TYPE_META[type.label] || { emoji: '🧠', desc: '' };
   document.getElementById('profileEmoji').textContent = meta.emoji;
   document.getElementById('profileType').textContent = `You are ${type.label.toLowerCase().match(/^[aeiou]/i) ? 'an' : 'a'} ${type.label}`;
   document.getElementById('profileDescription').textContent = meta.desc;
+
+  // Glitch effect on profile type
+  const profileH2 = document.getElementById('profileType');
+  profileH2.classList.remove('glitch-active');
+  setTimeout(() => {
+    profileH2.classList.add('glitch-active');
+    // Show scanlines after glitch
+    setTimeout(() => {
+      document.getElementById('profileScanlines').classList.add('visible');
+    }, 350);
+  }, 400);
 
   // Speed mode result
   if (speedMode && speedEndTime > 0) {
