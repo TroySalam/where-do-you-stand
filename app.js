@@ -89,12 +89,6 @@ const POLITICAL_TYPE_META = {
 
 // ─── 2. Navigation + Quiz Start ───────────────
 function show(id) {
-  // Screen flash effect
-  const flash = document.createElement('div');
-  flash.className = 'screen-flash';
-  document.body.appendChild(flash);
-  setTimeout(() => flash.remove(), 500);
-
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
@@ -698,28 +692,12 @@ function typewriterEffect(el, text, speed = 30) {
 }
 
 function renderResults(scores) {
-  // Data ticker
-  const ticker = document.getElementById('dataTicker');
-  ticker.style.opacity = '';
-  typewriterEffect(ticker, '> ANALYSIS COMPLETE // PROCESSING POLITICAL PROFILE...', 25);
-
-  // Political type (enhanced)
+  // Political type
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
   const meta = POLITICAL_TYPE_META[type.label] || { emoji: '🧠', desc: '' };
   document.getElementById('profileEmoji').textContent = meta.emoji;
   document.getElementById('profileType').textContent = `You are ${type.label.toLowerCase().match(/^[aeiou]/i) ? 'an' : 'a'} ${type.label}`;
   document.getElementById('profileDescription').textContent = meta.desc;
-
-  // Glitch effect on profile type
-  const profileH2 = document.getElementById('profileType');
-  profileH2.classList.remove('glitch-active');
-  setTimeout(() => {
-    profileH2.classList.add('glitch-active');
-    // Show scanlines after glitch
-    setTimeout(() => {
-      document.getElementById('profileScanlines').classList.add('visible');
-    }, 350);
-  }, 400);
 
   // Speed mode result
   if (speedMode && speedEndTime > 0) {

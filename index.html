@@ -35,10 +35,10 @@
       </button>
     </header>
 
-    <div class="hud-status-line"><span class="hud-text">SYS:READY // DIMENSIONS:6 // PROFILES:20 // STATUS:ONLINE</span></div>
+
 
     <main class="hero">
-      <h1 class="gradient-heading">Troy's Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
+      <h1>Troy's Political Test: Where Do&nbsp;You&nbsp;Stand?</h1>
       <p class="subtitle">Discover your political profile across 5 core dimensions and an expansion outlook — economy, society, governance, universality, environment, plus space, technology, bioethics, and growth. Find the country and figures that match your views.</p>
 
       <div class="speed-toggle-wrap">
@@ -71,7 +71,7 @@
     </main>
 
     <section class="info-section">
-      <h3 class="gradient-heading-sm">How it works</h3>
+      <h3>How it works</h3>
       <p>You'll rate 54 statements on a scale from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile that gets compared against real country profiles and political figures.</p>
       <div class="axes-preview">
         <div class="axis-chip"><span class="dot" style="background:var(--c-economy)"></span> Economy</div>
@@ -86,12 +86,7 @@
 
   <!-- ═══════ QUIZ ═══════ -->
   <div id="quiz" class="screen">
-    <div class="corner-dots" id="cornerDots">
-      <div class="corner-dot"></div>
-      <div class="corner-dot"></div>
-      <div class="corner-dot"></div>
-      <div class="corner-dot"></div>
-    </div>
+
     <header class="nav quiz-nav">
       <a class="home-link" onclick="goHome()">🏠 Home</a>
       <button class="mute-btn" onclick="toggleMute()" title="Toggle Sound">
@@ -125,7 +120,7 @@
         <div class="segment" data-axis="expansion"><div class="segment-fill"></div></div>
       </div>
 
-      <div class="question-card glass-card">
+      <div class="question-card">
         <p id="questionText" class="question-text"></p>
       </div>
 
@@ -178,7 +173,7 @@
 
   <!-- ═══════ RESULTS ═══════ -->
   <div id="results" class="screen">
-    <div class="scanning-line"></div>
+
     <header class="nav">
       <div class="logo">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Logo">
@@ -197,34 +192,32 @@
     </header>
 
     <div class="results-container">
-      <!-- Data ticker -->
-      <div class="data-ticker" id="dataTicker"></div>
+
 
       <!-- 1. Political type -->
-      <div class="profile-header glass-card corner-brackets" data-reveal>
+      <div class="profile-header" data-reveal>
         <span class="profile-label">MY PROFILE:</span>
         <div class="profile-type-row">
           <span class="profile-emoji" id="profileEmoji">⚖️</span>
-          <h2 id="profileType" class="gradient-heading">You are a Social Democrat</h2>
+          <h2 id="profileType">You are a Social Democrat</h2>
         </div>
-        <div class="scanlines" id="profileScanlines"></div>
+
         <p class="profile-description" id="profileDescription"></p>
       </div>
 
       <!-- Speed mode time display -->
-      <div id="speedResult" class="speed-result glass-card hidden" data-reveal>
+      <div id="speedResult" class="speed-result hidden" data-reveal>
         <span class="speed-result-icon">⚡</span>
         <span class="speed-result-text" id="speedResultText">Completed in 0:00</span>
       </div>
 
       <!-- 2. Ideology Breakdown -->
       <div class="ideology-section" id="ideologySection" data-reveal>
-        <h3 class="section-heading gradient-heading-sm">Your Political DNA</h3>
+        <h3 class="section-heading">Your Political DNA</h3>
         <div class="ideology-grid" id="ideologyGrid"></div>
       </div>
 
       <!-- 3. Pentagon radars -->
-      <span class="section-micro-label">// RADAR ANALYSIS</span>
       <div class="radar-section" data-reveal="radar">
         <div class="radar-col">
           <h3 class="radar-title left">Left-Leaning Trends</h3>
@@ -250,17 +243,15 @@
       </div>
 
       <!-- 4. Axis bars -->
-      <div class="section-divider"><span>AXIS BREAKDOWN</span></div>
-      <span class="section-micro-label">// AXIS BREAKDOWN</span>
+      <div class="divider"></div>
       <div class="axis-bars" id="axisBars" data-reveal></div>
 
       <!-- 5. Political Compass -->
-      <div class="section-divider"><span>POLITICAL COMPASS</span></div>
-      <span class="section-micro-label">// POLITICAL COMPASS</span>
+      <div class="divider"></div>
       <div class="compass-section" data-reveal>
         <div class="compass-wrap">
           <div class="compass-header">
-            <h3 class="compass-heading gradient-heading-sm">Political Compass</h3>
+            <h3 class="compass-heading">Political Compass</h3>
             <div class="compass-toggle">
               <button class="toggle-btn active" id="btn2d" onclick="showCompass2D()">2D</button>
               <button class="toggle-btn" id="btn3d" onclick="showCompass3D()">3D</button>
@@ -287,9 +278,8 @@
       </div>
 
       <!-- 6. Country match -->
-      <div class="section-divider"><span>COUNTRY MATCH</span></div>
-      <span class="section-micro-label">// COUNTRY MATCH</span>
-      <div class="country-card glass-card corner-brackets" id="countryCard" data-reveal="country">
+      <div class="divider"></div>
+      <div class="country-card" id="countryCard" data-reveal="country">
         <span class="country-label">YOUR CLOSEST COUNTRY</span>
         <div class="country-row">
           <div class="country-info">
@@ -301,53 +291,51 @@
       </div>
 
       <!-- 7. Figures -->
-      <span class="section-micro-label">// FIGURE ANALYSIS</span>
       <div class="figures-section" id="figuresSection" data-reveal>
-        <h3 class="section-heading gradient-heading-sm">Closest Figures</h3>
+        <h3 class="section-heading">Closest Figures</h3>
         <div class="figures-grid" id="closestFigures"></div>
-        <h3 class="section-heading gradient-heading-sm">Most Distant Figures</h3>
+        <h3 class="section-heading">Most Distant Figures</h3>
         <div class="figures-grid" id="distantFigures"></div>
       </div>
 
       <!-- 8. Impact Analysis (Sensitivity) -->
-      <div class="section-divider"><span>IMPACT ANALYSIS</span></div>
-      <div class="impact-section glass-card corner-brackets" id="impactSection" data-reveal>
-        <h3 class="section-heading gradient-heading-sm">Impact Analysis</h3>
+      <div class="divider"></div>
+      <div class="impact-section" id="impactSection" data-reveal>
+        <h3 class="section-heading">Impact Analysis</h3>
         <p class="section-sub">Questions that shaped your results the most</p>
         <div id="impactList" class="impact-list"></div>
       </div>
 
       <!-- 9. Question Review -->
-      <div class="section-divider"><span>QUESTION REVIEW</span></div>
+      <div class="divider"></div>
       <div class="review-section" id="reviewSection" data-reveal>
         <button class="review-toggle" id="reviewToggle" onclick="toggleReviewSection()">
-          <span class="gradient-heading-sm">Review Your Answers</span>
+          <span>Review Your Answers</span>
           <span class="review-arrow">▼</span>
         </button>
         <div class="review-content hidden" id="reviewContent"></div>
       </div>
 
       <!-- 10. History -->
-      <div class="section-divider"><span>RESULTS HISTORY</span></div>
+      <div class="divider"></div>
       <div class="history-section" id="historySection" data-reveal>
         <button class="review-toggle" id="historyToggle" onclick="toggleHistorySection()">
-          <span class="gradient-heading-sm">Results History</span>
+          <span>Results History</span>
           <span class="review-arrow">▼</span>
         </button>
         <div class="history-content hidden" id="historyContent"></div>
       </div>
 
       <!-- 11. Share / Compare / Retake -->
-      <div class="section-divider"><span>ACTIONS</span></div>
+      <div class="divider"></div>
       <div class="results-actions" data-reveal>
-        <button class="btn-primary neon-btn" onclick="generateShareCard()">📸 Share Results</button>
-        <button class="btn-secondary neon-btn" onclick="challengeFriend()">🔗 Challenge a Friend</button>
-        <button class="btn-secondary neon-btn" onclick="retakeQuiz()">🔄 Retake Test</button>
-        <button class="btn-secondary neon-btn" onclick="goHome()">🏠 Home</button>
+        <button class="btn-primary" onclick="generateShareCard()">📸 Share Results</button>
+        <button class="btn-secondary" onclick="challengeFriend()">🔗 Challenge a Friend</button>
+        <button class="btn-secondary" onclick="retakeQuiz()">🔄 Retake Test</button>
+        <button class="btn-secondary" onclick="goHome()">🏠 Home</button>
       </div>
 
-      <!-- Footer data line -->
-      <div class="footer-data-line">v3.0 // 54Q × 9D × 20F // EUCLIDEAN SIMILARITY ENGINE</div>
+
 
       <!-- Compare overlay -->
       <div id="compareOverlay" class="compare-overlay hidden"></div>
@@ -362,9 +350,9 @@
 
   <!-- History Modal -->
   <div id="historyModal" class="modal-overlay hidden">
-    <div class="modal-card glass-card">
+    <div class="modal-card">
       <div class="modal-header">
-        <h3 class="gradient-heading-sm">Results History</h3>
+        <h3>Results History</h3>
         <button class="modal-close" onclick="closeHistoryModal()">✕</button>
       </div>
       <div class="modal-body" id="historyModalBody"></div>
