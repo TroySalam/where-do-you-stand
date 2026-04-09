@@ -622,6 +622,40 @@ a:hover { color: var(--text); }
   z-index: 2;
 }
 
+/* Per-axis figure matching */
+.axis-bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.axis-figure-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+.axis-figure {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+.axis-figure strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.axis-figure.closest::before {
+  content: '\2714 ';
+  color: #22C55E;
+  font-size: 0.7rem;
+}
+.axis-figure.distant::before {
+  content: '\2716 ';
+  color: #EF4444;
+  font-size: 0.7rem;
+}
+
 /* Country card */
 .country-card {
   background: var(--bg-card);
@@ -807,6 +841,7 @@ a:hover { color: var(--text); }
   .axis-bar-row { grid-template-columns: 1fr; gap: 4px; text-align: center; }
   .axis-bar-left, .axis-bar-right { text-align: center; }
   .axis-bar-row .bar-track { max-width: 100%; min-width: 0; }
+  .axis-figure-row { flex-direction: column; align-items: center; gap: 2px; }
   .figures-grid { grid-template-columns: 1fr; }
   .country-name { font-size: 1.2rem; }
   .country-pct { font-size: 1.8rem; }

@@ -639,6 +639,37 @@ function addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx,
   });
 }
 
+// Find closest + most distant figure for a single axis score
+function getAxisFigureMatch(axisKey, userScore) {
+  let closest = null, closestDist = Infinity;
+  let distant = null, distantDist = -1;
+
+  FIGURES.forEach(fig => {
+    let figScore;
+    if (axisKey === 'expansion') {
+      figScore = (fig.space + fig.technology + fig.bioethics + fig.growth) / 4;
+    } else {
+      figScore = fig[axisKey];
+    }
+    const dist = Math.abs(userScore - figScore);
+    if (dist < closestDist) { closestDist = dist; closest = { name: fig.name, score: figScore }; }
+    if (dist > distantDist) { distantDist = dist; distant = { name: fig.name, score: figScore }; }
+  });
+
+  return { closest, distant };
+}
+
+// Build the per-axis figure row HTML
+function axisFigureHTML(axisKey, userScore) {
+  const match = getAxisFigureMatch(axisKey, userScore);
+  return `
+    <div class="axis-figure-row">
+      <span class="axis-figure closest">Closest: <strong>${match.closest.name}</strong></span>
+      <span class="axis-figure distant">Most Distant: <strong>${match.distant.name}</strong></span>
+    </div>
+  `;
+}
+
 function renderAxisBars(scores) {
   const container = document.getElementById('axisBars');
   container.innerHTML = '';
@@ -651,56 +682,62 @@ function renderAxisBars(scores) {
     const color = BAR_COLORS[idx];
     const markerPos = scores[axis];
 
-    const row = document.createElement('div');
-    row.className = 'axis-bar-row';
-    row.innerHTML = `
-      <div class="axis-bar-left">
-        <span class="axis-bar-label">${labels.left}</span>
-        <span class="axis-bar-pct">${leftPct}%</span>
+    const wrapper = document.createElement('div');
+    wrapper.className = 'axis-bar-group';
+    wrapper.innerHTML = `
+      <div class="axis-bar-row">
+        <div class="axis-bar-left">
+          <span class="axis-bar-label">${labels.left}</span>
+          <span class="axis-bar-pct">${leftPct}%</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill" style="
+            left: ${Math.min(markerPos, 50)}%;
+            width: ${Math.abs(markerPos - 50)}%;
+            background: ${color};
+            border-radius: 4px;
+          "></div>
+          <div class="bar-marker" style="left: ${markerPos}%;"></div>
+        </div>
+        <div class="axis-bar-right">
+          <span class="axis-bar-pct">${rightPct}%</span>
+          <span class="axis-bar-label">${labels.right}</span>
+        </div>
       </div>
-      <div class="bar-track">
-        <div class="bar-fill" style="
-          left: ${Math.min(markerPos, 50)}%;
-          width: ${Math.abs(markerPos - 50)}%;
-          background: ${color};
-          border-radius: 4px;
-        "></div>
-        <div class="bar-marker" style="left: ${markerPos}%;"></div>
-      </div>
-      <div class="axis-bar-right">
-        <span class="axis-bar-pct">${rightPct}%</span>
-        <span class="axis-bar-label">${labels.right}</span>
-      </div>
+      ${axisFigureHTML(axis, scores[axis])}
     `;
-    container.appendChild(row);
+    container.appendChild(wrapper);
   });
 
   // Expansion aggregate bar
   const expLeft = 100 - scores.expansion;
   const expRight = scores.expansion;
   const expMarker = scores.expansion;
-  const expRow = document.createElement('div');
-  expRow.className = 'axis-bar-row';
-  expRow.innerHTML = `
-    <div class="axis-bar-left">
-      <span class="axis-bar-label">Expansionism</span>
-      <span class="axis-bar-pct">${expLeft}%</span>
+  const expWrapper = document.createElement('div');
+  expWrapper.className = 'axis-bar-group';
+  expWrapper.innerHTML = `
+    <div class="axis-bar-row">
+      <div class="axis-bar-left">
+        <span class="axis-bar-label">Expansionism</span>
+        <span class="axis-bar-pct">${expLeft}%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="
+          left: ${Math.min(expMarker, 50)}%;
+          width: ${Math.abs(expMarker - 50)}%;
+          background: #F472B6;
+          border-radius: 4px;
+        "></div>
+        <div class="bar-marker" style="left: ${expMarker}%;"></div>
+      </div>
+      <div class="axis-bar-right">
+        <span class="axis-bar-pct">${expRight}%</span>
+        <span class="axis-bar-label">Restraint</span>
+      </div>
     </div>
-    <div class="bar-track">
-      <div class="bar-fill" style="
-        left: ${Math.min(expMarker, 50)}%;
-        width: ${Math.abs(expMarker - 50)}%;
-        background: #F472B6;
-        border-radius: 4px;
-      "></div>
-      <div class="bar-marker" style="left: ${expMarker}%;"></div>
-    </div>
-    <div class="axis-bar-right">
-      <span class="axis-bar-pct">${expRight}%</span>
-      <span class="axis-bar-label">Restraint</span>
-    </div>
+    ${axisFigureHTML('expansion', scores.expansion)}
   `;
-  container.appendChild(expRow);
+  container.appendChild(expWrapper);
 }
 
 function renderCountryMatch(scores) {
