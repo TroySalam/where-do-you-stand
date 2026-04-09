@@ -87,7 +87,7 @@ const FIGURES = [
   { name: "Ayn Rand",            economy: 92, society: 35, governance: 5,  universality: 42, environment: 80, space: 10, technology: 8, bioethics: 15, growth: 12 },
   { name: "Martin Luther King Jr.", economy: 22, society: 10, governance: 15, universality: 10, environment: 30, space: 48, technology: 42, bioethics: 52, growth: 52 },
   { name: "Pope Francis",        economy: 22, society: 55, governance: 38, universality: 18, environment: 15, space: 70, technology: 65, bioethics: 75, growth: 72 },
-  { name: "Elon Musk",           economy: 75, society: 38, governance: 25, universality: 42, environment: 40, space: 2, technology: 2, bioethics: 5, growth: 5 },
+  { name: "Elon Musk",           economy: 78, society: 35, governance: 22, universality: 40, environment: 72, space: 2, technology: 2, bioethics: 8, growth: 3 },
 ];
 
 // Political type labels based on combined scores

@@ -5,9 +5,9 @@
 // Safe localStorage wrapper (falls back to in-memory for iframe previews)
 const _memStore = {};
 const safeStorage = {
-  getItem(k) { try { return safeStorage.getItem(k); } catch(e) { return _memStore[k] || null; } },
-  setItem(k,v) { try { safeStorage.setItem(k,v); } catch(e) { _memStore[k] = v; } },
-  removeItem(k) { try { safeStorage.removeItem(k); } catch(e) { delete _memStore[k]; } }
+  getItem(k) { try { return localStorage.getItem(k); } catch(e) { return _memStore[k] || null; } },
+  setItem(k,v) { try { localStorage.setItem(k,v); } catch(e) { _memStore[k] = v; } },
+  removeItem(k) { try { localStorage.removeItem(k); } catch(e) { delete _memStore[k]; } }
 };
 
 /* (Mega Upgrade)
@@ -88,7 +88,6 @@ function show(id) {
 
 function goHome() {
   show('landing');
-  initParticles();
 }
 
 function startQuiz() {
@@ -1957,37 +1956,76 @@ function calcSimilarity(scores, profile) {
 
 // ─── Particle Background ──────────────────────
 let particleAnimId = null;
+let _particles = [];
+let _particleCanvas = null;
+let _particleCtx = null;
+
+const PARTICLE_THEMES = {
+  default: {
+    colors: ['rgba(139, 92, 246, 0.25)', 'rgba(20, 184, 166, 0.25)'],
+    lineColor: [139, 92, 246],
+    lineAlpha: 0.08
+  },
+  black: {
+    colors: ['rgba(139, 92, 246, 0.35)', 'rgba(20, 184, 166, 0.35)'],
+    lineColor: [139, 92, 246],
+    lineAlpha: 0.12
+  },
+  neon: {
+    colors: ['rgba(0, 255, 136, 0.3)', 'rgba(0, 221, 255, 0.3)'],
+    lineColor: [0, 255, 136],
+    lineAlpha: 0.1
+  }
+};
+
+function getParticleTheme() {
+  const t = document.documentElement.dataset.theme || 'default';
+  return PARTICLE_THEMES[t] || PARTICLE_THEMES.default;
+}
+
+function updateParticleColors() {
+  const theme = getParticleTheme();
+  _particles.forEach(p => {
+    p.color = theme.colors[p.colorIdx];
+  });
+}
 
 function initParticles() {
-  const canvas = document.getElementById('particleCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  _particleCanvas = document.getElementById('particleCanvas');
+  if (!_particleCanvas) return;
+  _particleCtx = _particleCanvas.getContext('2d');
 
   function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    _particleCanvas.width = window.innerWidth;
+    _particleCanvas.height = window.innerHeight;
   }
   resize();
   window.addEventListener('resize', resize);
 
-  const particles = [];
+  const theme = getParticleTheme();
   const count = 50;
+  _particles = [];
 
   for (let i = 0; i < count; i++) {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
+    const colorIdx = Math.random() > 0.5 ? 0 : 1;
+    _particles.push({
+      x: Math.random() * _particleCanvas.width,
+      y: Math.random() * _particleCanvas.height,
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       r: Math.random() * 2 + 1,
-      color: Math.random() > 0.5 ? 'rgba(139, 92, 246, 0.25)' : 'rgba(20, 184, 166, 0.25)'
+      colorIdx,
+      color: theme.colors[colorIdx]
     });
   }
 
   function animate() {
+    const ctx = _particleCtx;
+    const canvas = _particleCanvas;
+    const pt = getParticleTheme();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    particles.forEach(p => {
+    _particles.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
       if (p.x < 0) p.x = canvas.width;
@@ -2002,16 +2040,17 @@ function initParticles() {
     });
 
     // Draw connections
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
+    const [lr, lg, lb] = pt.lineColor;
+    for (let i = 0; i < _particles.length; i++) {
+      for (let j = i + 1; j < _particles.length; j++) {
+        const dx = _particles[i].x - _particles[j].x;
+        const dy = _particles[i].y - _particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 120) {
           ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(139, 92, 246, ${0.08 * (1 - dist / 120)})`;
+          ctx.moveTo(_particles[i].x, _particles[i].y);
+          ctx.lineTo(_particles[j].x, _particles[j].y);
+          ctx.strokeStyle = `rgba(${lr}, ${lg}, ${lb}, ${pt.lineAlpha * (1 - dist / 120)})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -2044,7 +2083,49 @@ function animateStatCounters() {
 }
 
 // ─── Init ─────────────────────────────────────
+// ─── Settings Panel & Theme System ─────────────
+function toggleSettings() {
+  const panel = document.getElementById('settingsPanel');
+  const overlay = document.getElementById('settingsOverlay');
+  const isHidden = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden', !isHidden);
+  overlay.classList.toggle('hidden', !isHidden);
+}
+
+function setTheme(name) {
+  // Apply theme attribute — 'default' uses data-theme="dark" (no special CSS overrides)
+  if (name === 'default') {
+    document.documentElement.dataset.theme = 'dark';
+  } else {
+    document.documentElement.dataset.theme = name;
+  }
+
+  // Save preference
+  safeStorage.setItem('wdys_theme', name);
+
+  // Update body background for the theme
+  const bgMap = { default: '#0B1120', black: '#000000', neon: '#0A0A14' };
+  document.body.style.background = bgMap[name] || bgMap.default;
+
+  // Update active button in settings
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === name);
+  });
+
+  // Update particle colors
+  updateParticleColors();
+}
+
+function applySavedTheme() {
+  const saved = safeStorage.getItem('wdys_theme') || 'default';
+  setTheme(saved);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply saved theme before anything else
+  applySavedTheme();
+
+  // Init global particle background
   initParticles();
 
   // Check mute state

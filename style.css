@@ -89,19 +89,18 @@ a:hover { color: var(--text); }
   margin-bottom: 16px;
 }
 
-/* ─── PARTICLE CANVAS ─── */
+/* ─── PARTICLE CANVAS (Global Fixed Background) ─── */
 #particleCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: fixed;
+  inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
 }
 
 /* ─── SCREENS ─── */
-.screen { display: none; min-height: 100vh; position: relative; }
+.screen { display: none; min-height: 100vh; position: relative; background: transparent; }
 .screen.active { display: flex; flex-direction: column; }
 
 /* ─── NAV ─── */
@@ -151,12 +150,270 @@ a:hover { color: var(--text); }
 .mute-btn:active { transform: scale(0.88); transition: transform 0.06s ease; }
 .mute-btn.muted .sound-waves { display: none; }
 
+/* ─── NAV BUTTONS GROUP ─── */
+.nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── SETTINGS BUTTON ─── */
+.settings-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.3s;
+}
+.settings-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+.settings-btn:hover svg { transform: rotate(30deg); }
+.settings-btn:active { transform: scale(0.88); transition: transform 0.06s ease; }
+.settings-btn svg { transition: transform 0.3s ease; }
+
+/* ─── SETTINGS PANEL ─── */
+.settings-panel {
+  position: fixed;
+  top: 68px;
+  right: 20px;
+  width: 220px;
+  background: rgba(19, 29, 53, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 16px;
+  z-index: 1100;
+  transform: translateY(-8px);
+  opacity: 1;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.settings-panel.hidden {
+  transform: translateY(-16px);
+  opacity: 0;
+  pointer-events: none;
+}
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1099;
+  background: transparent;
+}
+.settings-overlay.hidden {
+  display: none;
+}
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+.settings-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.settings-close:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+
+.theme-options {
+  display: flex;
+  gap: 8px;
+}
+.theme-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  font-family: var(--font);
+}
+.theme-btn:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+  color: var(--text);
+}
+.theme-btn.active {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: var(--text);
+}
+
+.theme-preview {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+.default-preview {
+  background: linear-gradient(135deg, #0B1120 40%, #8B5CF6 100%);
+}
+.black-preview {
+  background: linear-gradient(135deg, #000000 40%, #8B5CF6 100%);
+}
+.neon-preview {
+  background: linear-gradient(135deg, #0A0A14 40%, #00FF88 100%);
+}
+
+/* ═══════════════════════════════════════════════
+   THEME: BLACK (OLED)
+   ═══════════════════════════════════════════════ */
+html[data-theme="black"] {
+  --bg: #000000;
+  --bg-card: rgba(15, 15, 15, 0.8);
+  --bg-card-solid: #0A0A0A;
+  --bg-card-hover: #151515;
+  --border: rgba(255,255,255,0.08);
+  --border-solid: rgba(255,255,255,0.1);
+  --accent: #8B5CF6;
+}
+html[data-theme="black"] body {
+  background: #000000;
+}
+html[data-theme="black"] .settings-panel {
+  background: rgba(10, 10, 10, 0.92);
+  border-color: rgba(255,255,255,0.1);
+}
+html[data-theme="black"] .interstitial-overlay {
+  background: rgba(0, 0, 0, 0.92);
+}
+html[data-theme="black"] .question-card {
+  background: rgba(15, 15, 15, 0.7);
+  border-color: rgba(255,255,255,0.06);
+}
+html[data-theme="black"] .theme-btn.active {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+/* ═══════════════════════════════════════════════
+   THEME: NEON (Cyberpunk)
+   ═══════════════════════════════════════════════ */
+html[data-theme="neon"] {
+  --bg: #0A0A14;
+  --bg-card: rgba(10, 10, 30, 0.8);
+  --bg-card-solid: #0D0D1F;
+  --bg-card-hover: #141428;
+  --accent: #00FF88;
+  --accent-glow: rgba(0, 255, 136, 0.25);
+  --teal: #00DDFF;
+  --teal-glow: rgba(0, 221, 255, 0.25);
+  --text: #EEFFEE;
+  --text-muted: rgba(200, 255, 200, 0.6);
+  --text-dim: rgba(200, 255, 200, 0.35);
+  --border: rgba(0, 255, 136, 0.1);
+  --border-solid: rgba(0, 255, 136, 0.15);
+}
+html[data-theme="neon"] body {
+  background: #0A0A14;
+}
+/* Neon buttons */
+html[data-theme="neon"] .btn-primary {
+  background: var(--accent);
+  color: #0A0A14;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 60px rgba(0, 255, 136, 0.1);
+  border-color: transparent;
+}
+html[data-theme="neon"] .btn-primary:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.45), 0 0 80px rgba(0, 255, 136, 0.15);
+  background: #33FF99;
+}
+/* Neon headings glow */
+html[data-theme="neon"] .hero h1,
+html[data-theme="neon"] .section-heading,
+html[data-theme="neon"] .compass-heading,
+html[data-theme="neon"] .info-section h3 {
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+}
+/* Neon cards border glow */
+html[data-theme="neon"] .question-card {
+  border-color: rgba(0, 255, 136, 0.12);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.05);
+}
+html[data-theme="neon"] .figure-card,
+html[data-theme="neon"] .country-card {
+  border-color: rgba(0, 255, 136, 0.1);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.04);
+}
+/* Neon scale dot selected glow */
+html[data-theme="neon"] .scale-btn.selected .dot-fill {
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.5), 0 0 4px rgba(0, 255, 136, 0.3);
+}
+html[data-theme="neon"] .scale-btn.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.25);
+}
+/* Neon settings panel */
+html[data-theme="neon"] .settings-panel {
+  background: rgba(10, 10, 25, 0.92);
+  border-color: rgba(0, 255, 136, 0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(0, 255, 136, 0.05);
+}
+html[data-theme="neon"] .theme-btn.active {
+  background: rgba(0, 255, 136, 0.12);
+  border-color: rgba(0, 255, 136, 0.4);
+}
+html[data-theme="neon"] .interstitial-overlay {
+  background: rgba(5, 5, 15, 0.92);
+}
+html[data-theme="neon"] .interstitial-card {
+  border-color: rgba(0, 255, 136, 0.2);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.08);
+}
+/* Neon axis badge */
+html[data-theme="neon"] .axis-badge {
+  text-shadow: 0 0 10px currentColor;
+}
+/* Neon segment bar glow */
+html[data-theme="neon"] .segment.active-segment {
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+}
+/* Neon dot progress */
+html[data-theme="neon"] .dot-progress .dot.answered {
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.3);
+}
+/* Neon nav buttons */
+html[data-theme="neon"] .mute-btn,
+html[data-theme="neon"] .settings-btn {
+  border-color: rgba(0, 255, 136, 0.12);
+}
+html[data-theme="neon"] .mute-btn:hover,
+html[data-theme="neon"] .settings-btn:hover {
+  border-color: rgba(0, 255, 136, 0.25);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.1);
+}
+
 /* ═══════════════════════════════════════════════
    LANDING PAGE — Premium Tech Aesthetic
    ═══════════════════════════════════════════════ */
 
 #landing {
-  background: var(--bg);
+  background: transparent;
   overflow: hidden;
 }
 
