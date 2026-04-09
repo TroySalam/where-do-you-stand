@@ -143,6 +143,166 @@ function updateDotProgress() {
   });
 }
 
+// ─── Section Interstitials ───────────────────
+const SECTION_ORDER = ['economy', 'society', 'governance', 'universality', 'environment', 'expansion'];
+const SECTION_NAMES = {
+  economy: 'Economy', society: 'Society', governance: 'Governance',
+  universality: 'Universality', environment: 'Environment', expansion: 'Expansion'
+};
+
+// Fun message templates
+const INTER_MESSAGES = [
+  { emoji: '👀', msg: 'Starting to look a bit like...' },
+  { emoji: '🫣', msg: 'Hmm... giving major vibes of...' },
+  { emoji: '🎭', msg: 'Plot twist — you\'re turning into...' },
+  { emoji: '🔮', msg: 'The oracle has spoken...' },
+  { emoji: '🧬', msg: 'Your political DNA is matching...' },
+  { emoji: '📡', msg: 'Vibes detected...' },
+  { emoji: '🪞', msg: 'Look in the mirror...' },
+  { emoji: '🎯', msg: 'Bullseye — closest match so far...' },
+  { emoji: '🛸', msg: 'Incoming transmission...' },
+  { emoji: '🧪', msg: 'Lab results are in...' },
+];
+
+// Compute partial scores from answers so far
+function computePartialScores() {
+  const scores = {};
+  const answeredAxes = new Set();
+
+  AXES.forEach(axis => {
+    const axisQs = QUESTIONS.map((q, i) => ({ q, answer: answers[i] })).filter(x => x.q.axis === axis && x.answer !== null);
+    if (axisQs.length === 0) return;
+    answeredAxes.add(axis);
+    let totalRight = 0;
+    axisQs.forEach(({ q, answer }) => {
+      const normalized = (answer - 1) / 4;
+      totalRight += q.pole === 'right' ? normalized : (1 - normalized);
+    });
+    scores[axis] = Math.round((totalRight / axisQs.length) * 100);
+  });
+
+  // Expansion subs
+  const expansionQs = QUESTIONS.map((q, i) => ({ q, answer: answers[i] })).filter(x => x.q.axis === 'expansion' && x.answer !== null);
+  if (expansionQs.length > 0) {
+    EXPANSION_SUBS.forEach(sub => {
+      const subQs = expansionQs.filter(x => x.q.sub === sub);
+      if (subQs.length === 0) return;
+      let totalRight = 0;
+      subQs.forEach(({ q, answer }) => {
+        const normalized = (answer - 1) / 4;
+        totalRight += q.pole === 'right' ? normalized : (1 - normalized);
+      });
+      scores[sub] = Math.round((totalRight / subQs.length) * 100);
+    });
+  }
+
+  return { scores, answeredAxes };
+}
+
+// Find closest figure from partial scores
+function closestFigurePartial(scores, answeredAxes) {
+  let best = null, bestDist = Infinity;
+
+  FIGURES.forEach(fig => {
+    let sumSq = 0, dims = 0;
+    answeredAxes.forEach(axis => {
+      if (scores[axis] !== undefined) {
+        const diff = scores[axis] - fig[axis];
+        sumSq += diff * diff;
+        dims++;
+      }
+    });
+    // Also include expansion subs if scored
+    EXPANSION_SUBS.forEach(sub => {
+      if (scores[sub] !== undefined) {
+        const diff = scores[sub] - fig[sub];
+        sumSq += diff * diff;
+        dims++;
+      }
+    });
+    if (dims === 0) return;
+    const dist = Math.sqrt(sumSq / dims);
+    if (dist < bestDist) { bestDist = dist; best = fig; }
+  });
+
+  return best;
+}
+
+// Check if we just finished a section
+function getSectionBoundary(qIndex) {
+  // Find which section this question belongs to
+  const thisAxis = QUESTIONS[qIndex].axis;
+  // Check if the next question exists and is a different axis
+  if (qIndex < QUESTIONS.length - 1) {
+    const nextAxis = QUESTIONS[qIndex + 1].axis;
+    if (nextAxis !== thisAxis) {
+      const sectionIdx = SECTION_ORDER.indexOf(thisAxis);
+      return { axis: thisAxis, sectionNum: sectionIdx + 1, total: SECTION_ORDER.length };
+    }
+  }
+  return null;
+}
+
+let interstitialActive = false;
+
+function showSectionInterstitial(sectionInfo, callback) {
+  interstitialActive = true;
+  const { scores, answeredAxes } = computePartialScores();
+  const closest = closestFigurePartial(scores, answeredAxes);
+  if (!closest) { callback(); return; }
+
+  const pick = Math.floor(Math.random() * INTER_MESSAGES.length);
+  const template = INTER_MESSAGES[pick];
+
+  const overlay = document.getElementById('sectionInterstitial');
+  document.getElementById('interSectionTag').textContent = `${SECTION_NAMES[sectionInfo.axis]} Complete`;
+
+  // Re-trigger emoji + name animations
+  const emojiEl = document.getElementById('interEmoji');
+  const nameEl = document.getElementById('interName');
+  emojiEl.style.animation = 'none';
+  nameEl.style.animation = 'none';
+  void emojiEl.offsetHeight;
+
+  document.getElementById('interEmoji').textContent = template.emoji;
+  document.getElementById('interMsg').textContent = template.msg;
+  document.getElementById('interName').textContent = closest.name;
+
+  emojiEl.style.animation = '';
+  nameEl.style.animation = '';
+  document.getElementById('interSub').textContent = `${sectionInfo.sectionNum} of ${sectionInfo.total} sections done`;
+
+  // Progress bar
+  const pct = (sectionInfo.sectionNum / sectionInfo.total) * 100;
+  const barFill = document.getElementById('interBarFill');
+  barFill.style.width = '0%';
+
+  overlay.classList.remove('hidden');
+
+  // Trigger card entrance animation
+  const card = overlay.querySelector('.interstitial-card');
+  card.classList.remove('inter-enter');
+  void card.offsetHeight;
+  card.classList.add('inter-enter');
+
+  // Animate progress bar after card enters
+  setTimeout(() => { barFill.style.width = pct + '%'; }, 400);
+
+  // Continue button
+  const btn = document.getElementById('interContinueBtn');
+  const handler = () => {
+    btn.removeEventListener('click', handler);
+    card.classList.add('inter-exit');
+    setTimeout(() => {
+      overlay.classList.add('hidden');
+      card.classList.remove('inter-enter', 'inter-exit');
+      interstitialActive = false;
+      callback();
+    }, 350);
+  };
+  btn.addEventListener('click', handler);
+}
+
 function selectAnswer(value) {
   answers[currentQ] = value;
 
@@ -159,26 +319,45 @@ function selectAnswer(value) {
 
   // Auto-advance after a short delay
   setTimeout(() => {
-    if (currentQ < QUESTIONS.length - 1) {
-      nextQuestion();
-    } else {
+    if (currentQ >= QUESTIONS.length - 1) {
       calculateResults();
+      return;
+    }
+
+    // Check for section boundary
+    const boundary = getSectionBoundary(currentQ);
+    if (boundary) {
+      showSectionInterstitial(boundary, () => {
+        currentQ++;
+        renderQuestion();
+      });
+    } else {
+      currentQ++;
+      renderQuestion();
     }
   }, 350);
 }
 
 function nextQuestion() {
-  if (answers[currentQ] === null) return;
+  if (answers[currentQ] === null || interstitialActive) return;
   if (currentQ < QUESTIONS.length - 1) {
-    currentQ++;
-    renderQuestion();
+    const boundary = getSectionBoundary(currentQ);
+    if (boundary) {
+      showSectionInterstitial(boundary, () => {
+        currentQ++;
+        renderQuestion();
+      });
+    } else {
+      currentQ++;
+      renderQuestion();
+    }
   } else {
     calculateResults();
   }
 }
 
 function prevQuestion() {
-  if (currentQ > 0) {
+  if (currentQ > 0 && !interstitialActive) {
     currentQ--;
     renderQuestion();
   }

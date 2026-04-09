@@ -656,6 +656,159 @@ a:hover { color: var(--text); }
   font-size: 0.7rem;
 }
 
+/* ─── Section Interstitial ─── */
+.interstitial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(8, 10, 25, 0.88);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  transition: opacity 0.3s ease;
+}
+.interstitial-overlay.hidden {
+  display: none;
+}
+
+.interstitial-card {
+  background: linear-gradient(145deg, rgba(30, 27, 75, 0.95), rgba(20, 16, 50, 0.98));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  padding: 2.5rem 2rem 2rem;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(139, 92, 246, 0.15), 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* Subtle shimmer on card */
+.interstitial-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(139, 92, 246, 0.06), transparent, rgba(20, 184, 166, 0.06), transparent);
+  animation: interShimmer 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes interShimmer {
+  to { transform: rotate(360deg); }
+}
+
+.interstitial-section-tag {
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  margin-bottom: 1.2rem;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.interstitial-emoji {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: emojiBounce 0.6s ease-out 0.3s both;
+}
+@keyframes emojiBounce {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60%  { transform: scale(1.25) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.interstitial-msg {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.01em;
+}
+
+.interstitial-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1.2rem;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #fff 40%, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: nameReveal 0.5s ease-out 0.5s both;
+}
+@keyframes nameReveal {
+  0%   { opacity: 0; transform: translateY(12px) scale(0.95); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.interstitial-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  margin-bottom: 0.6rem;
+  overflow: hidden;
+}
+.interstitial-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #14B8A6);
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.interstitial-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 1.4rem;
+  letter-spacing: 0.02em;
+}
+
+.interstitial-btn {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.interstitial-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* Card entrance */
+.interstitial-card.inter-enter {
+  animation: cardEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes cardEnter {
+  0%   { opacity: 0; transform: translateY(40px) scale(0.92); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Card exit */
+.interstitial-card.inter-exit {
+  animation: cardExit 0.3s ease-in forwards;
+}
+@keyframes cardExit {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-30px) scale(0.95); }
+}
+
 /* Country card */
 .country-card {
   background: var(--bg-card);
