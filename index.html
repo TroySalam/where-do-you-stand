@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
 </head>
 <body>
   <!-- ═══════ GLOBAL PARTICLE BACKGROUND ═══════ -->
@@ -365,7 +366,8 @@
       <!-- 11. Share / Compare / Retake -->
       <div class="divider"></div>
       <div class="results-actions" data-reveal>
-        <button class="btn-primary" onclick="generateShareCard()">📸 Share Results</button>
+        <button class="btn-primary" onclick="generateShareCard()">📸 Share Image</button>
+        <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF</button>
         <button class="btn-secondary" onclick="challengeFriend()">🔗 Challenge a Friend</button>
         <button class="btn-secondary" onclick="retakeQuiz()">🔄 Retake Test</button>
         <button class="btn-secondary" onclick="goHome()">🏠 Home</button>

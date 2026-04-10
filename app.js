@@ -1352,6 +1352,196 @@ function generateShareCard() {
   playSound('sparkle');
 }
 
+// ─── 10b. PDF Download ─────────────────────
+function downloadPDF() {
+  const scores = window._lastScores;
+  const typeName = window._lastType;
+  if (!scores || typeof jspdf === 'undefined') return;
+
+  const { jsPDF } = jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, margin = 18;
+  let y = 20;
+
+  // Colors
+  const purple = [139, 92, 246];
+  const teal = [20, 184, 166];
+  const dimText = [120, 140, 168];
+  const white = [255, 255, 255];
+  const darkBg = [11, 17, 32];
+
+  // Dark background
+  doc.setFillColor(...darkBg);
+  doc.rect(0, 0, W, 297, 'F');
+
+  // Title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.setTextColor(...white);
+  doc.text('Where Do You Stand?', margin, y);
+  y += 10;
+
+  doc.setFontSize(9);
+  doc.setTextColor(...dimText);
+  doc.text('Political Profile Report — ' + new Date().toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' }), margin, y);
+  y += 4;
+
+  // Divider
+  doc.setDrawColor(...purple);
+  doc.setLineWidth(0.5);
+  doc.line(margin, y, W - margin, y);
+  y += 10;
+
+  // Political type
+  const meta = POLITICAL_TYPE_META[typeName] || { emoji: '', desc: '' };
+  doc.setFontSize(11);
+  doc.setTextColor(...dimText);
+  doc.text('MY PROFILE:', margin, y);
+  y += 8;
+  doc.setFontSize(20);
+  doc.setTextColor(...purple);
+  doc.text(typeName, margin, y);
+  y += 8;
+  doc.setFontSize(9);
+  doc.setTextColor(...dimText);
+  const descLines = doc.splitTextToSize(meta.desc || '', W - margin * 2);
+  doc.text(descLines, margin, y);
+  y += descLines.length * 5 + 8;
+
+  // Political DNA section
+  doc.setFontSize(11);
+  doc.setTextColor(...white);
+  doc.text('YOUR POLITICAL DNA', margin, y);
+  y += 8;
+
+  const allAxes = [...AXES, 'expansion'];
+  const axisNames = { economy: 'Economy', society: 'Society', governance: 'Governance', universality: 'Universality', environment: 'Environment', expansion: 'Expansion' };
+  const barColors = [[139,92,246],[20,184,166],[245,158,11],[59,130,246],[34,197,94],[244,114,182]];
+
+  allAxes.forEach((axis, i) => {
+    const score = scores[axis];
+    const type = getIdeologyType(axis, score);
+    const barW = W - margin * 2 - 50;
+    const barX = margin + 50;
+
+    // Axis label + score
+    doc.setFontSize(8);
+    doc.setTextColor(...dimText);
+    doc.text(axisNames[axis].toUpperCase(), margin, y + 1);
+    doc.setTextColor(...white);
+    doc.text(score + '%', W - margin, y + 1, { align: 'right' });
+
+    // Ideology label
+    y += 5;
+    doc.setFontSize(10);
+    doc.setTextColor(...barColors[i]);
+    doc.text(type.label, margin, y);
+
+    // Bar track
+    y += 3;
+    doc.setFillColor(30, 35, 50);
+    doc.roundedRect(margin, y, barW + 50, 3, 1.5, 1.5, 'F');
+
+    // Bar fill
+    doc.setFillColor(...barColors[i]);
+    doc.roundedRect(margin, y, (score / 100) * (barW + 50), 3, 1.5, 1.5, 'F');
+
+    y += 8;
+  });
+
+  y += 4;
+
+  // Divider
+  doc.setDrawColor(40, 45, 60);
+  doc.setLineWidth(0.3);
+  doc.line(margin, y, W - margin, y);
+  y += 8;
+
+  // Axis bars section
+  doc.setFontSize(11);
+  doc.setTextColor(...white);
+  doc.text('AXIS BREAKDOWN', margin, y);
+  y += 8;
+
+  const AXIS_LABELS_PDF = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
+  allAxes.forEach((axis, i) => {
+    const score = scores[axis];
+    const labels = AXIS_LABELS_PDF[axis];
+    const leftPct = 100 - score;
+    const rightPct = score;
+
+    doc.setFontSize(7);
+    doc.setTextColor(...dimText);
+    doc.text(labels.left + ' ' + leftPct + '%', margin, y + 1);
+    doc.text(rightPct + '% ' + labels.right, W - margin, y + 1, { align: 'right' });
+
+    // Track
+    const trackX = margin + 45, trackW = W - margin * 2 - 90;
+    y += 3;
+    doc.setFillColor(30, 35, 50);
+    doc.roundedRect(trackX, y, trackW, 2.5, 1, 1, 'F');
+
+    // Fill from center
+    doc.setFillColor(...barColors[i]);
+    const center = trackX + trackW / 2;
+    const fillStart = score < 50 ? trackX + (score / 100) * trackW : center;
+    const fillW = Math.abs(score - 50) / 100 * trackW;
+    doc.rect(fillStart, y, fillW, 2.5, 'F');
+
+    y += 7;
+  });
+
+  y += 4;
+  doc.setDrawColor(40, 45, 60);
+  doc.line(margin, y, W - margin, y);
+  y += 8;
+
+  // Country match
+  let bestCountry = null, bestSim = -1;
+  COUNTRIES.forEach(c => {
+    const sim = calcSimilarity(scores, c);
+    if (sim > bestSim) { bestSim = sim; bestCountry = c; }
+  });
+  doc.setFontSize(11);
+  doc.setTextColor(...white);
+  doc.text('CLOSEST COUNTRY', margin, y);
+  y += 7;
+  doc.setFontSize(14);
+  doc.setTextColor(...teal);
+  doc.text(`${bestCountry.flag} ${bestCountry.name}  —  ${Math.round(bestSim)}%`, margin, y);
+  y += 10;
+
+  // Closest figures
+  const figured = FIGURES.map(f => ({ ...f, similarity: calcSimilarity(scores, f) }));
+  figured.sort((a, b) => b.similarity - a.similarity);
+  const top4 = figured.slice(0, 4);
+
+  doc.setFontSize(11);
+  doc.setTextColor(...white);
+  doc.text('CLOSEST FIGURES', margin, y);
+  y += 7;
+
+  top4.forEach((f, i) => {
+    doc.setFontSize(10);
+    doc.setTextColor(...purple);
+    doc.text(`${f.name}`, margin + (i < 2 ? 0 : 85), i < 2 ? y + i * 6 : y + (i - 2) * 6);
+    doc.setFontSize(8);
+    doc.setTextColor(...dimText);
+    doc.text(`${Math.round(f.similarity)}%`, margin + (i < 2 ? 70 : 155), i < 2 ? y + i * 6 : y + (i - 2) * 6);
+  });
+
+  y += 16;
+
+  // Footer
+  doc.setFontSize(7);
+  doc.setTextColor(80, 90, 110);
+  doc.text('Where Do You Stand? — troysalam.github.io/where-do-you-stand', W / 2, 288, { align: 'center' });
+
+  // Save
+  doc.save('where-do-you-stand-results.pdf');
+  playSound('sparkle');
+}
+
 // ─── 11. Compare Mode ─────────────────────────
 function encodeScores(scores) {
   const vals = [...AXES, ...EXPANSION_SUBS].map(k => scores[k]);
