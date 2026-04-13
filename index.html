@@ -292,7 +292,17 @@
         <div class="figures-grid" id="closestFigures"></div>
       </div>
 
-      <!-- 8. Share / Compare / Retake -->
+      <!-- 8. Review Answers -->
+      <div class="divider"></div>
+      <div class="review-section" data-reveal>
+        <button class="review-toggle" id="reviewToggle" onclick="toggleAnswers()">
+          <span>View Your Answers</span>
+          <span class="review-arrow">▼</span>
+        </button>
+        <div class="review-content hidden" id="reviewContent"></div>
+      </div>
+
+      <!-- 9. Share / Compare / Retake -->
       <div class="divider"></div>
       <div class="results-actions" data-reveal>
         <button class="btn-primary" onclick="generateShareCard()">📸 Share Image</button>

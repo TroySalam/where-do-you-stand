@@ -1552,6 +1552,55 @@ html[data-theme="neon"] .settings-btn:hover {
   overflow-y: auto;
 }
 .review-content.hidden, .history-content.hidden { display: none; }
+
+/* Answer review items */
+.review-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  margin-bottom: 4px;
+  transition: background 0.2s;
+}
+.review-item:hover { background: rgba(255,255,255,0.04); }
+.review-q-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 24px;
+  padding-top: 2px;
+}
+.review-q-body { flex: 1; }
+.review-q-text {
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.review-q-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.review-axis-tag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 4px;
+}
+.review-answer {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.review-answer.skipped {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
 .review-axis-group {
   margin-bottom: 16px;
 }

@@ -1207,6 +1207,41 @@ function renderCountryMatch(scores) {
   document.getElementById('countryPct').textContent = `${Math.round(bestSimilarity)}%`;
 }
 
+// ─── 9b. Answer Review ──────────────────────
+function toggleAnswers() {
+  const content = document.getElementById('reviewContent');
+  const toggle = document.getElementById('reviewToggle');
+  content.classList.toggle('hidden');
+  toggle.classList.toggle('open');
+
+  // Build on first open
+  if (!content.classList.contains('hidden') && !content.dataset.built) {
+    content.dataset.built = 'true';
+    const labels = { 5: 'Strongly agree', 4: 'Agree', 3: 'Neutral', 2: 'Disagree', 1: 'Strongly disagree' };
+    const axisColors = { economy: '#8B5CF6', society: '#14B8A6', governance: '#F59E0B', universality: '#3B82F6', environment: '#22C55E', expansion: '#F472B6' };
+    const axisNames = { economy: 'Economy', society: 'Society', governance: 'Governance', universality: 'Universality', environment: 'Environment', expansion: 'Expansion' };
+
+    let html = '';
+    QUESTIONS.forEach((q, i) => {
+      const answer = answers[i];
+      const color = axisColors[q.axis] || '#8B5CF6';
+      html += `
+        <div class="review-item">
+          <div class="review-q-num" style="color:${color}">${String(i + 1).padStart(2, '0')}</div>
+          <div class="review-q-body">
+            <div class="review-q-text">${q.text}</div>
+            <div class="review-q-meta">
+              <span class="review-axis-tag" style="border-color:${color};color:${color}">${axisNames[q.axis]}</span>
+              <span class="review-answer ${answer === null ? 'skipped' : ''}">${answer ? labels[answer] : 'Skipped'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    content.innerHTML = html;
+  }
+}
+
 // ─── 10. Share Card Generation ────────────────
 function generateShareCard() {
   const scores = window._lastScores;
