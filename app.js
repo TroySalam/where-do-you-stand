@@ -134,6 +134,7 @@ if (!soundEnabled) {
 }
 
 function playSound(type) {
+  return; // Sound system disabled
   if (!soundEnabled || !audioCtx) return;
   try {
     const now = audioCtx.currentTime;
@@ -612,20 +613,11 @@ function renderResults(scores) {
   // Country match
   renderCountryMatch(scores);
 
-  // Figures (with "Why This Figure" breakdown)
+  // Figures (closest only)
   renderFigures(scores);
 
   // Ideology breakdown (Political DNA)
   renderIdeologyBreakdown(scores);
-
-  // Impact analysis (sensitivity)
-  renderImpactAnalysis(scores);
-
-  // Question review
-  renderQuestionReview();
-
-  // History section
-  renderHistorySection();
 
   // Compare mode
   if (friendScores) {
@@ -878,6 +870,7 @@ function animateCompassDot(ctx, cx, cy, targetX, targetY, size, pad, gridSize, d
 
 function drawRadar(canvasId, scores, side) {
   const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
   const container = canvas.parentElement;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
@@ -970,6 +963,7 @@ function drawRadar(canvasId, scores, side) {
 
 function drawRadarExpansion(canvasId, scores) {
   const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
   const container = canvas.parentElement;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
@@ -1811,9 +1805,7 @@ function renderFigures(scores) {
   const closestEl = document.getElementById('closestFigures');
   closestEl.innerHTML = closest.map((f, i) => buildFigureCard(f, scores, i === 0, i)).join('');
 
-  const distant = figured.slice(-4).reverse();
-  const distantEl = document.getElementById('distantFigures');
-  distantEl.innerHTML = distant.map((f, i) => buildFigureCard(f, scores, false, i + 4)).join('');
+  // Distant figures removed for cleaner results
 
   // Add click listeners with smooth expand
   document.querySelectorAll('.figure-card').forEach(card => {
