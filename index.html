@@ -97,14 +97,20 @@
           <span class="mode-title">Political Compass</span>
           <span class="mode-desc">54 general policy questions</span>
         </button>
-        <button class="mode-btn" data-mode="presidents" onclick="selectMode('presidents')">
+        <button class="mode-btn" data-mode="president" onclick="selectMode('president')">
           <span class="mode-icon">🏛️</span>
-          <span class="mode-title">Presidential Match</span>
-          <span class="mode-desc">54 questions on real presidential actions</span>
+          <span class="mode-title">Presidential Deep Dive</span>
+          <span class="mode-desc">Pick a president, 30 questions</span>
         </button>
       </div>
 
-      <button class="btn-primary btn-cta" onclick="startQuiz()">
+      <!-- President Picker Grid (hidden by default) -->
+      <div id="presidentPicker" class="president-picker hidden">
+        <p class="picker-label">Choose a president to evaluate:</p>
+        <div class="picker-grid" id="pickerGrid"></div>
+      </div>
+
+      <button class="btn-primary btn-cta" id="beginBtn" onclick="startQuiz()">
         Begin <span class="arrow">→</span>
       </button>
 
@@ -137,6 +143,7 @@
 
     <header class="nav quiz-nav">
       <a class="home-link" onclick="goHome()">🏠 Home</a>
+      <span id="quizPresName" class="quiz-pres-name hidden"></span>
       <div class="nav-btns">
         <button class="settings-btn" onclick="toggleSettings()" title="Settings">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -234,6 +241,26 @@
     </header>
 
     <div class="results-container">
+
+      <!-- 0. Presidential Approval (president mode only) -->
+      <div id="presApprovalSection" class="pres-approval-section hidden" data-reveal>
+        <div class="pres-approval-header">
+          <span class="pres-approval-label" id="presApprovalLabel">OVERALL APPROVAL</span>
+          <div class="pres-approval-big">
+            <span class="pres-approval-pct" id="presApprovalPct">0%</span>
+          </div>
+          <p class="pres-approval-subtitle" id="presApprovalSubtitle">You approve of 0% of this president's actions</p>
+        </div>
+        <div class="pres-axis-approval" id="presAxisApproval"></div>
+      </div>
+
+      <!-- 0b. Most/Least Approved Actions (president mode only) -->
+      <div id="presActionsSection" class="pres-actions-section hidden" data-reveal>
+        <h3 class="section-heading">Most Approved Actions</h3>
+        <div id="mostApproved" class="pres-action-cards"></div>
+        <h3 class="section-heading" style="margin-top:24px;">Least Approved Actions</h3>
+        <div id="leastApproved" class="pres-action-cards"></div>
+      </div>
 
       <!-- 1. Political type -->
       <div class="profile-header" data-reveal>

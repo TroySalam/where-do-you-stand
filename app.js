@@ -15,12 +15,16 @@ const safeStorage = {
    ═══════════════════════════════════════════════ */
 
 // ─── 1. State + Constants ─────────────────────
-let quizMode = 'compass'; // 'compass' or 'presidents'
+let quizMode = 'compass'; // 'compass' or 'president'
+let selectedPresident = null; // key into PRESIDENT_DATA
 let currentQ = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
 
 function getActiveQuestions() {
-  return quizMode === 'presidents' ? PRESIDENT_QUESTIONS : QUESTIONS;
+  if (quizMode === 'president' && selectedPresident && PRESIDENT_DATA[selectedPresident]) {
+    return PRESIDENT_DATA[selectedPresident].questions;
+  }
+  return QUESTIONS;
 }
 
 function selectMode(mode) {
@@ -29,11 +33,51 @@ function selectMode(mode) {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
   const subtitle = document.getElementById('landingSubtitle');
-  if (subtitle) {
-    subtitle.textContent = mode === 'presidents'
-      ? 'Rate real presidential actions from FDR to Biden.'
-      : 'Map your political identity across 6 dimensions. 54 questions. 5 minutes.';
+  const picker = document.getElementById('presidentPicker');
+  const beginBtn = document.getElementById('beginBtn');
+  if (mode === 'president') {
+    if (subtitle) subtitle.textContent = 'Pick a president. 30 specific questions about their actions.';
+    picker.classList.remove('hidden');
+    buildPresidentPicker();
+    // Disable begin until a president is selected
+    if (!selectedPresident) beginBtn.classList.add('disabled-btn');
+  } else {
+    if (subtitle) subtitle.textContent = 'Map your political identity across 6 dimensions. 54 questions. 5 minutes.';
+    picker.classList.add('hidden');
+    selectedPresident = null;
+    beginBtn.classList.remove('disabled-btn');
   }
+}
+
+function buildPresidentPicker() {
+  const grid = document.getElementById('pickerGrid');
+  if (grid.dataset.built) {
+    // Just update selection state
+    grid.querySelectorAll('.picker-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.key === selectedPresident);
+    });
+    return;
+  }
+  grid.dataset.built = 'true';
+  grid.innerHTML = '';
+  Object.entries(PRESIDENT_DATA).forEach(([key, data]) => {
+    const card = document.createElement('button');
+    card.className = 'picker-card' + (key === selectedPresident ? ' selected' : '');
+    card.dataset.key = key;
+    const partyClass = data.party === 'Democrat' ? 'party-dem' : 'party-rep';
+    card.innerHTML = `
+      <span class="picker-party-dot ${partyClass}"></span>
+      <span class="picker-name">${data.name}</span>
+      <span class="picker-years">${data.years}</span>
+    `;
+    card.addEventListener('click', () => {
+      selectedPresident = key;
+      grid.querySelectorAll('.picker-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('beginBtn').classList.remove('disabled-btn');
+    });
+    grid.appendChild(card);
+  });
 }
 
 const AXES = ['economy', 'society', 'governance', 'universality', 'environment'];
@@ -110,10 +154,23 @@ function goHome() {
 }
 
 function startQuiz() {
+  // President mode requires a selection
+  if (quizMode === 'president' && !selectedPresident) return;
+
   initAudio();
   currentQ = 0;
   const qs = getActiveQuestions();
   answers = new Array(qs.length).fill(null);
+
+  // Show president name in quiz nav
+  const presNameEl = document.getElementById('quizPresName');
+  if (quizMode === 'president' && selectedPresident) {
+    const pData = PRESIDENT_DATA[selectedPresident];
+    presNameEl.textContent = pData.name;
+    presNameEl.classList.remove('hidden');
+  } else {
+    presNameEl.classList.add('hidden');
+  }
 
   // Check for compare mode from URL hash
   checkCompareHash();
@@ -402,7 +459,7 @@ function computePartialScores() {
 
 function closestFigurePartial(scores, answeredAxes) {
   let best = null, bestDist = Infinity;
-  const figureSet = quizMode === 'presidents' ? PRESIDENTS : FIGURES;
+  const figureSet = (quizMode === 'presidents' || quizMode === 'president') ? PRESIDENTS : FIGURES;
   figureSet.forEach(fig => {
     let sumSq = 0, dims = 0;
     answeredAxes.forEach(axis => {
@@ -443,6 +500,49 @@ let interstitialActive = false;
 
 function showSectionInterstitial(sectionInfo, callback) {
   interstitialActive = true;
+
+  // In president mode, show approval so far
+  if (quizMode === 'president' && selectedPresident) {
+    playSound('reveal');
+    const qs = getActiveQuestions();
+    let totalApproval = 0, answeredCount = 0;
+    answers.forEach((a, i) => {
+      if (a !== null) { totalApproval += (a - 1) / 4 * 100; answeredCount++; }
+    });
+    const approvalPct = answeredCount > 0 ? Math.round(totalApproval / answeredCount) : 0;
+    const pData = PRESIDENT_DATA[selectedPresident];
+
+    const overlay = document.getElementById('sectionInterstitial');
+    document.getElementById('interSectionTag').textContent = `${SECTION_NAMES[sectionInfo.axis]} Complete`;
+    const emojiEl = document.getElementById('interEmoji');
+    const nameEl = document.getElementById('interName');
+    emojiEl.style.animation = 'none'; nameEl.style.animation = 'none';
+    void emojiEl.offsetHeight;
+    document.getElementById('interEmoji').textContent = approvalPct >= 65 ? '👍' : approvalPct >= 35 ? '🤔' : '👎';
+    document.getElementById('interMsg').textContent = `Approval of ${pData.name} so far:`;
+    document.getElementById('interName').textContent = `${approvalPct}%`;
+    emojiEl.style.animation = ''; nameEl.style.animation = '';
+    document.getElementById('interSub').textContent = `${sectionInfo.sectionNum} of ${sectionInfo.total} sections done`;
+
+    const pct = (sectionInfo.sectionNum / sectionInfo.total) * 100;
+    const barFill = document.getElementById('interBarFill');
+    if (barFill) barFill.style.width = '0%';
+    overlay.classList.remove('hidden');
+    const card = overlay.querySelector('.interstitial-card');
+    card.classList.remove('inter-enter'); void card.offsetHeight; card.classList.add('inter-enter');
+    if (barFill) setTimeout(() => { barFill.style.width = pct + '%'; }, 400);
+
+    const btn = document.getElementById('interContinueBtn');
+    const handler = () => {
+      btn.removeEventListener('click', handler);
+      card.classList.add('inter-exit');
+      playSound('click');
+      setTimeout(() => { overlay.classList.add('hidden'); card.classList.remove('inter-enter', 'inter-exit'); interstitialActive = false; callback(); }, 350);
+    };
+    btn.addEventListener('click', handler);
+    return;
+  }
+
   const { scores, answeredAxes } = computePartialScores();
   const closest = closestFigurePartial(scores, answeredAxes);
   if (!closest) { interstitialActive = false; callback(); return; }
@@ -653,11 +753,25 @@ function renderResults(scores) {
   // Axis bars
   renderAxisBars(scores);
 
-  // Country match or Presidential match
-  if (quizMode === 'presidents') {
-    renderPresidentialMatch(scores);
-    renderPresidentialAlignment(scores);
+  // President deep dive mode results
+  const presApprovalSection = document.getElementById('presApprovalSection');
+  const presActionsSection = document.getElementById('presActionsSection');
+  const countryCard = document.getElementById('countryCard');
+  const figSection = document.getElementById('figuresSection');
+
+  if (quizMode === 'president' && selectedPresident) {
+    presApprovalSection.classList.remove('hidden');
+    presActionsSection.classList.remove('hidden');
+    renderPresidentApproval();
+    renderPresidentActions();
+    // Hide country and figures for president mode
+    countryCard.style.display = 'none';
+    figSection.style.display = 'none';
   } else {
+    presApprovalSection.classList.add('hidden');
+    presActionsSection.classList.add('hidden');
+    countryCard.style.display = '';
+    figSection.style.display = '';
     renderCountryMatch(scores);
     renderFigures(scores);
   }
@@ -673,6 +787,112 @@ function renderResults(scores) {
   // Store scores globally for share/compare
   window._lastScores = scores;
   window._lastType = type.label;
+}
+
+// ─── Presidential Approval Results ────────────
+function renderPresidentApproval() {
+  if (!selectedPresident) return;
+  const pData = PRESIDENT_DATA[selectedPresident];
+  const qs = pData.questions;
+
+  // Overall approval: average of answers mapped 0-100 (1=0%, 5=100%)
+  let totalApproval = 0, answeredCount = 0;
+  answers.forEach((a, i) => {
+    if (a !== null && i < qs.length) { totalApproval += (a - 1) / 4 * 100; answeredCount++; }
+  });
+  const overallApproval = answeredCount > 0 ? Math.round(totalApproval / answeredCount) : 0;
+
+  document.getElementById('presApprovalLabel').textContent = `${pData.name} — APPROVAL`;
+  document.getElementById('presApprovalPct').textContent = '0%';
+  document.getElementById('presApprovalPct').dataset.target = overallApproval;
+  document.getElementById('presApprovalSubtitle').textContent =
+    `You approve of ${overallApproval}% of ${pData.name}'s actions`;
+
+  // Per-axis approval bars
+  const axisApprovalEl = document.getElementById('presAxisApproval');
+  const axisCounts = {};
+  const axisApprovals = {};
+  ALL_Q_AXES.forEach(a => { axisCounts[a] = 0; axisApprovals[a] = 0; });
+  qs.forEach((q, i) => {
+    if (answers[i] !== null) {
+      axisCounts[q.axis]++;
+      axisApprovals[q.axis] += (answers[i] - 1) / 4 * 100;
+    }
+  });
+
+  const axisNames = { economy: 'Economy', society: 'Society', governance: 'Governance', universality: 'Universality', environment: 'Environment', expansion: 'Expansion' };
+  let html = '';
+  ALL_Q_AXES.forEach(axis => {
+    if (axisCounts[axis] === 0) return;
+    const pct = Math.round(axisApprovals[axis] / axisCounts[axis]);
+    const color = ALL_Q_COLORS[axis];
+    html += `
+      <div class="pres-axis-bar-row">
+        <span class="pres-axis-bar-label">${axisNames[axis]}</span>
+        <div class="pres-axis-bar-track">
+          <div class="pres-axis-bar-fill" style="width:0%;background:${color}" data-w="${pct}"></div>
+        </div>
+        <span class="pres-axis-bar-pct" data-target="${pct}">0%</span>
+      </div>
+    `;
+  });
+  axisApprovalEl.innerHTML = html;
+}
+
+function renderPresidentActions() {
+  if (!selectedPresident) return;
+  const pData = PRESIDENT_DATA[selectedPresident];
+  const qs = pData.questions;
+
+  // Build array of {index, text, answer, axis}
+  const rated = [];
+  qs.forEach((q, i) => {
+    if (answers[i] !== null) {
+      rated.push({ index: i, text: q.text, answer: answers[i], axis: q.axis });
+    }
+  });
+  rated.sort((a, b) => b.answer - a.answer);
+
+  const most = rated.slice(0, 3);
+  const least = rated.slice(-3).reverse();
+
+  const labels = { 5: 'Strongly agree', 4: 'Agree', 3: 'Neutral', 2: 'Disagree', 1: 'Strongly disagree' };
+
+  function renderActionCards(items) {
+    return items.map(item => {
+      const color = ALL_Q_COLORS[item.axis] || '#8B5CF6';
+      const valClass = item.answer >= 4 ? 'action-approve' : item.answer <= 2 ? 'action-disapprove' : 'action-neutral';
+      return `
+        <div class="pres-action-card ${valClass}">
+          <div class="pres-action-text">${item.text}</div>
+          <div class="pres-action-meta">
+            <span class="pres-action-axis" style="color:${color}">${item.axis}</span>
+            <span class="pres-action-answer">${labels[item.answer]}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('mostApproved').innerHTML = renderActionCards(most);
+  document.getElementById('leastApproved').innerHTML = renderActionCards(least);
+}
+
+function animatePresApproval() {
+  // Animate the big percentage
+  const bigPct = document.getElementById('presApprovalPct');
+  if (bigPct && bigPct.dataset.target) {
+    animateCountUp(bigPct, parseInt(bigPct.dataset.target), 1200);
+  }
+  // Animate per-axis bars
+  document.querySelectorAll('.pres-axis-bar-fill').forEach(el => {
+    const w = el.dataset.w;
+    setTimeout(() => { el.style.width = w + '%'; }, 200);
+  });
+  document.querySelectorAll('.pres-axis-bar-pct[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    setTimeout(() => animateCountUp(el, target, 900), 300);
+  });
 }
 
 // ─── Draw Compass (with animated dot) ─────────
@@ -1141,7 +1361,7 @@ function addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx,
 function getAxisFigureMatch(axisKey, userScore) {
   let closest = null, closestDist = Infinity;
   let distant = null, distantDist = -1;
-  const figureSet = quizMode === 'presidents' ? PRESIDENTS : FIGURES;
+  const figureSet = (quizMode === 'presidents' || quizMode === 'president') ? PRESIDENTS : FIGURES;
   figureSet.forEach(fig => {
     let figScore;
     if (axisKey === 'expansion') {
@@ -1809,7 +2029,7 @@ function renderCompare(myScores, theirScores) {
 function saveToHistory(scores) {
   const history = JSON.parse(safeStorage.getItem('wdys_history') || '[]');
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
-  const figureSet = quizMode === 'presidents' ? PRESIDENTS : FIGURES;
+  const figureSet = (quizMode === 'presidents' || quizMode === 'president') ? PRESIDENTS : FIGURES;
   const figured = figureSet.map(f => ({ name: f.name, similarity: calcSimilarity(scores, f) }));
   figured.sort((a, b) => b.similarity - a.similarity);
 
@@ -2290,6 +2510,11 @@ function animateResultsReveal() {
       // Presidential match — animate gauges
       if (el.getAttribute('data-reveal') === 'presidents') {
         setTimeout(() => animatePresGauges(), 200);
+      }
+
+      // Presidential approval — animate
+      if (el.id === 'presApprovalSection') {
+        setTimeout(() => animatePresApproval(), 200);
       }
 
       // Axis bars — animate marker positions
