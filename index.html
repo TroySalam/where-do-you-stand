@@ -89,7 +89,20 @@
       </div>
 
       <h1>Where Do You Stand?</h1>
-      <p class="subtitle">Map your political identity across 6 dimensions. 54 questions. 5 minutes.</p>
+      <p class="subtitle" id="landingSubtitle">Map your political identity across 6 dimensions. 54 questions. 5 minutes.</p>
+
+      <div class="mode-selector">
+        <button class="mode-btn active" data-mode="compass" onclick="selectMode('compass')">
+          <span class="mode-icon">🧭</span>
+          <span class="mode-title">Political Compass</span>
+          <span class="mode-desc">54 general policy questions</span>
+        </button>
+        <button class="mode-btn" data-mode="presidents" onclick="selectMode('presidents')">
+          <span class="mode-icon">🏛️</span>
+          <span class="mode-title">Presidential Match</span>
+          <span class="mode-desc">54 questions on real presidential actions</span>
+        </button>
+      </div>
 
       <button class="btn-primary btn-cta" onclick="startQuiz()">
         Begin <span class="arrow">→</span>
@@ -354,6 +367,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="./questions.js"></script>
   <script src="./countries.js"></script>
+  <script src="./presidents.js"></script>
   <script src="./app.js"></script>
   <script src="./compass3d.js"></script>
 </body>
