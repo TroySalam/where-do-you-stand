@@ -759,25 +759,40 @@ function renderResults(scores) {
   const countryCard = document.getElementById('countryCard');
   const figSection = document.getElementById('figuresSection');
 
+  // Elements to hide/show based on mode
+  const ideologySection = document.getElementById('ideologySection');
+  const axisBars = document.getElementById('axisBars');
+  const compassSection = document.querySelector('.compass-section');
+
   if (quizMode === 'president' && selectedPresident) {
     presApprovalSection.classList.remove('hidden');
     presActionsSection.classList.remove('hidden');
     renderPresidentApproval();
     renderPresidentActions();
-    // Hide country and figures for president mode
+    // Hide sections not relevant for presidential mode
     countryCard.style.display = 'none';
     figSection.style.display = 'none';
+    if (ideologySection) ideologySection.style.display = 'none';
+    if (axisBars) axisBars.style.display = 'none';
+    if (compassSection) compassSection.style.display = 'none';
+    const profileHeader = document.querySelector('.profile-header');
+    if (profileHeader) profileHeader.style.display = 'none';
   } else {
     presApprovalSection.classList.add('hidden');
     presActionsSection.classList.add('hidden');
     countryCard.style.display = '';
     figSection.style.display = '';
+    if (ideologySection) ideologySection.style.display = '';
+    if (axisBars) axisBars.style.display = '';
+    if (compassSection) compassSection.style.display = '';
+    const profileHeader2 = document.querySelector('.profile-header');
+    if (profileHeader2) profileHeader2.style.display = '';
     renderCountryMatch(scores);
     renderFigures(scores);
   }
 
-  // Ideology breakdown (Political DNA)
-  renderIdeologyBreakdown(scores);
+  // Ideology breakdown (Political DNA) — compass mode only
+  if (quizMode !== 'president') renderIdeologyBreakdown(scores);
 
   // Compare mode
   if (friendScores) {
