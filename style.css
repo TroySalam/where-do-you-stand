@@ -2352,3 +2352,484 @@ html[data-theme="neon"] .settings-btn:hover {
   color: var(--text-muted);
   font-weight: 500;
 }
+
+/* ═══════════════════════════════════════════════
+   HEAD-TO-HEAD MATCHUP MODE
+   ═══════════════════════════════════════════════ */
+
+/* --- Landing picker (two slots + grid) --- */
+.matchup-picker {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto 18px;
+}
+.matchup-picker.hidden { display: none; }
+
+.matchup-slots {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 14px;
+  max-width: 560px;
+}
+
+.matchup-slot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-height: 58px;
+  transition: all 0.22s ease;
+}
+.matchup-slot.empty {
+  border-style: dashed;
+  background: transparent;
+}
+.matchup-slot .slot-position {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.matchup-slot .slot-name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.matchup-slot.slot-a:not(.empty) {
+  border-color: rgba(59, 130, 246, 0.55);
+  background: rgba(59, 130, 246, 0.08);
+}
+.matchup-slot.slot-b:not(.empty) {
+  border-color: rgba(239, 68, 68, 0.55);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.matchup-vs {
+  align-self: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.picker-card.slot-a-selected {
+  border-color: #3B82F6 !important;
+  background: rgba(59, 130, 246, 0.12) !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.18);
+}
+.picker-card.slot-b-selected {
+  border-color: #EF4444 !important;
+  background: rgba(239, 68, 68, 0.12) !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.18);
+}
+
+.matchup-reset-btn {
+  display: block;
+  margin: 12px auto 0;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.matchup-reset-btn:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.2);
+}
+.matchup-reset-btn.hidden { display: none; }
+
+/* --- Matchup quiz screen --- */
+.matchup-container {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px 24px 60px;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.matchup-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.matchup-progress-track {
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+.matchup-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+.matchup-header-label {
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 4px 12px;
+  background: rgba(139, 92, 246, 0.12);
+  border-radius: 20px;
+  white-space: nowrap;
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.matchup-topic {
+  font-family: var(--font-heading);
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+.matchup-question {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.matchup-cards {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.matchup-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.25s;
+  position: relative;
+}
+
+.matchup-card.party-dem {
+  border-top: 3px solid #3B82F6;
+}
+.matchup-card.party-rep {
+  border-top: 3px solid #EF4444;
+}
+.matchup-card:hover { transform: translateY(-2px); }
+.matchup-card.picked {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), 0 0 28px rgba(139, 92, 246, 0.25);
+}
+
+.matchup-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.matchup-pres-name {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.matchup-pres-years {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.matchup-approach {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.matchup-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border-left: 3px solid;
+  background: rgba(255,255,255,0.02);
+}
+.matchup-pill .pill-label {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.matchup-pill .pill-text {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.matchup-pill-good {
+  border-left-color: #22C55E;
+  background: rgba(34, 197, 94, 0.06);
+}
+.matchup-pill-good .pill-label { color: #4ADE80; }
+.matchup-pill-bad {
+  border-left-color: #EF4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+.matchup-pill-bad .pill-label { color: #F87171; }
+
+.matchup-choose-btn {
+  margin-top: auto;
+  padding: 11px 16px;
+  background: linear-gradient(135deg, var(--accent), #7C3AED);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.matchup-choose-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+}
+.matchup-card.picked .matchup-choose-btn {
+  background: linear-gradient(135deg, #22C55E, #16A34A);
+}
+
+.matchup-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.matchup-divider::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
+}
+.matchup-vs-badge {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  position: relative;
+  z-index: 1;
+}
+
+.matchup-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+.matchup-neutral-btn {
+  padding: 10px 22px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.matchup-neutral-btn:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.25);
+}
+.matchup-neutral-btn.picked {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: #F59E0B;
+  color: #FBBF24;
+}
+
+.matchup-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* --- Matchup results screen --- */
+.matchup-results-container {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 20px 24px 60px;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.matchup-result-label {
+  display: block;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 20px;
+}
+.matchup-winner-name {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 10px 0 4px;
+  background: linear-gradient(135deg, var(--accent), var(--teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+.matchup-winner-sub {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 32px;
+}
+
+.matchup-split-bar {
+  display: flex;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 36px;
+  background: rgba(255,255,255,0.04);
+}
+.matchup-split-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 10px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+.matchup-split-segment.split-a.party-dem { background: #3B82F6; color: #fff; }
+.matchup-split-segment.split-a.party-rep { background: #EF4444; color: #fff; }
+.matchup-split-segment.split-b.party-dem { background: #3B82F6; color: #fff; }
+.matchup-split-segment.split-b.party-rep { background: #EF4444; color: #fff; }
+.matchup-split-segment.split-tie { background: rgba(245, 158, 11, 0.35); color: #fff; }
+.matchup-split-segment .split-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.matchup-split-segment .split-count {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.matchup-results-heading {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.matchup-issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.matchup-issue-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.matchup-issue-row.picked-a.party-dem,
+.matchup-issue-row.picked-b.party-dem { border-left-color: #3B82F6; }
+.matchup-issue-row.picked-a.party-rep,
+.matchup-issue-row.picked-b.party-rep { border-left-color: #EF4444; }
+.matchup-issue-row.picked-tie { border-left-color: #F59E0B; opacity: 0.85; }
+.matchup-issue-topic {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.matchup-issue-pick {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.matchup-results-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* --- Mobile stacking --- */
+@media (max-width: 760px) {
+  .matchup-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .matchup-divider {
+    padding: 6px 0;
+  }
+  .matchup-divider::before {
+    top: 50%;
+    left: 0; right: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+  }
+  .matchup-topic { font-size: 1.6rem; }
+  .matchup-winner-name { font-size: 2.1rem; }
+  .matchup-slots {
+    gap: 6px;
+  }
+  .matchup-slot {
+    padding: 8px 10px;
+    min-height: 50px;
+  }
+  .matchup-slot .slot-name { font-size: 0.8rem; }
+}

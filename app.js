@@ -15,15 +15,18 @@ const safeStorage = {
    ═══════════════════════════════════════════════ */
 
 // ─── 1. State + Constants ─────────────────────
-let quizMode = 'compass'; // 'compass' or 'president'
-let selectedPresident = null; // key into PRESIDENT_DATA
+let quizMode = 'compass'; // 'compass' or 'matchup'
 let currentQ = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
 
+// Head-to-head matchup state
+let matchupA = null;        // first president key
+let matchupB = null;        // second president key
+let matchupIssues = [];     // array of issue objects both share
+let matchupPicks = [];      // array of 'a' | 'b' | 'tie' (index aligned to issues)
+let matchupIdx = 0;         // current matchup question index
+
 function getActiveQuestions() {
-  if (quizMode === 'president' && selectedPresident && PRESIDENT_DATA[selectedPresident]) {
-    return PRESIDENT_DATA[selectedPresident].questions;
-  }
   return QUESTIONS;
 }
 
@@ -33,36 +36,30 @@ function selectMode(mode) {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
   const subtitle = document.getElementById('landingSubtitle');
-  const picker = document.getElementById('presidentPicker');
+  const matchupPicker = document.getElementById('matchupPicker');
   const beginBtn = document.getElementById('beginBtn');
-  if (mode === 'president') {
-    if (subtitle) subtitle.textContent = 'Pick a president. 30 specific questions about their actions.';
-    picker.classList.remove('hidden');
-    buildPresidentPicker();
-    // Disable begin until a president is selected
-    if (!selectedPresident) beginBtn.classList.add('disabled-btn');
+  if (mode === 'matchup') {
+    if (subtitle) subtitle.textContent = 'Pick 2 presidents. See how their approaches stack up.';
+    matchupPicker.classList.remove('hidden');
+    // Reset picks every time user switches into matchup mode.
+    matchupA = null; matchupB = null;
+    buildMatchupPicker();
+    updateMatchupSlots();
+    beginBtn.classList.add('disabled-btn');
   } else {
     if (subtitle) subtitle.textContent = 'Map your political identity across 6 dimensions. 54 questions. 5 minutes.';
-    picker.classList.add('hidden');
-    selectedPresident = null;
+    matchupPicker.classList.add('hidden');
+    matchupA = null; matchupB = null;
     beginBtn.classList.remove('disabled-btn');
   }
 }
 
-function buildPresidentPicker() {
-  const grid = document.getElementById('pickerGrid');
-  if (grid.dataset.built) {
-    // Just update selection state
-    grid.querySelectorAll('.picker-card').forEach(c => {
-      c.classList.toggle('selected', c.dataset.key === selectedPresident);
-    });
-    return;
-  }
-  grid.dataset.built = 'true';
+function buildMatchupPicker() {
+  const grid = document.getElementById('matchupGrid');
   grid.innerHTML = '';
-  Object.entries(PRESIDENT_DATA).forEach(([key, data]) => {
+  Object.entries(PRESIDENT_META).forEach(([key, data]) => {
     const card = document.createElement('button');
-    card.className = 'picker-card' + (key === selectedPresident ? ' selected' : '');
+    card.className = 'picker-card';
     card.dataset.key = key;
     const partyClass = data.party === 'Democrat' ? 'party-dem' : 'party-rep';
     card.innerHTML = `
@@ -70,14 +67,71 @@ function buildPresidentPicker() {
       <span class="picker-name">${data.name}</span>
       <span class="picker-years">${data.years}</span>
     `;
-    card.addEventListener('click', () => {
-      selectedPresident = key;
-      grid.querySelectorAll('.picker-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      document.getElementById('beginBtn').classList.remove('disabled-btn');
-    });
+    card.addEventListener('click', () => handleMatchupCardPick(key));
     grid.appendChild(card);
   });
+  refreshMatchupPickerState();
+}
+
+function handleMatchupCardPick(key) {
+  if (matchupA === null) {
+    matchupA = key;
+  } else if (matchupB === null && key !== matchupA) {
+    matchupB = key;
+  } else if (matchupA === key) {
+    // Clicking first pick again clears it.
+    matchupA = matchupB;
+    matchupB = null;
+  } else if (matchupB === key) {
+    matchupB = null;
+  }
+  updateMatchupSlots();
+  refreshMatchupPickerState();
+}
+
+function refreshMatchupPickerState() {
+  const grid = document.getElementById('matchupGrid');
+  if (!grid) return;
+  grid.querySelectorAll('.picker-card').forEach(card => {
+    card.classList.remove('selected', 'slot-a-selected', 'slot-b-selected', 'disabled');
+    if (card.dataset.key === matchupA) card.classList.add('selected', 'slot-a-selected');
+    else if (card.dataset.key === matchupB) card.classList.add('selected', 'slot-b-selected');
+  });
+  const label = document.getElementById('matchupPickerLabel');
+  if (label) {
+    if (!matchupA) label.textContent = 'Pick your first president';
+    else if (!matchupB) label.textContent = `Now pick an opponent for ${PRESIDENT_META[matchupA].name}`;
+    else label.textContent = `${PRESIDENT_META[matchupA].name} vs ${PRESIDENT_META[matchupB].name}`;
+  }
+  const beginBtn = document.getElementById('beginBtn');
+  const resetBtn = document.getElementById('matchupResetBtn');
+  if (beginBtn) beginBtn.classList.toggle('disabled-btn', !(matchupA && matchupB));
+  if (resetBtn) resetBtn.classList.toggle('hidden', !matchupA);
+}
+
+function updateMatchupSlots() {
+  const slotA = document.getElementById('slotA');
+  const slotB = document.getElementById('slotB');
+  if (!slotA || !slotB) return;
+  const fill = (slot, key) => {
+    const nameEl = slot.querySelector('.slot-name');
+    if (!key) {
+      slot.classList.add('empty');
+      nameEl.textContent = '—';
+    } else {
+      slot.classList.remove('empty');
+      nameEl.textContent = PRESIDENT_META[key].name;
+    }
+  };
+  fill(slotA, matchupA);
+  fill(slotB, matchupB);
+}
+
+function resetMatchupPicks() {
+  matchupA = null;
+  matchupB = null;
+  updateMatchupSlots();
+  refreshMatchupPickerState();
 }
 
 const AXES = ['economy', 'society', 'governance', 'universality', 'environment'];
@@ -154,23 +208,20 @@ function goHome() {
 }
 
 function startQuiz() {
-  // President mode requires a selection
-  if (quizMode === 'president' && !selectedPresident) return;
+  // Matchup mode branches entirely into its own flow.
+  if (quizMode === 'matchup') {
+    if (!matchupA || !matchupB) return;
+    startMatchup();
+    return;
+  }
 
   initAudio();
   currentQ = 0;
   const qs = getActiveQuestions();
   answers = new Array(qs.length).fill(null);
 
-  // Show president name in quiz nav
   const presNameEl = document.getElementById('quizPresName');
-  if (quizMode === 'president' && selectedPresident) {
-    const pData = PRESIDENT_DATA[selectedPresident];
-    presNameEl.textContent = pData.name;
-    presNameEl.classList.remove('hidden');
-  } else {
-    presNameEl.classList.add('hidden');
-  }
+  if (presNameEl) presNameEl.classList.add('hidden');
 
   // Check for compare mode from URL hash
   checkCompareHash();
@@ -320,20 +371,9 @@ function renderQuestion() {
   card.style.animation = '';
   document.getElementById('questionText').textContent = q.text;
 
-  // Show president tag in presidential mode
-  let presTag = document.getElementById('presidentTag');
-  if (quizMode === 'presidents' && q.president) {
-    if (!presTag) {
-      presTag = document.createElement('span');
-      presTag.id = 'presidentTag';
-      presTag.className = 'president-tag';
-      document.querySelector('.question-card').appendChild(presTag);
-    }
-    presTag.textContent = q.president;
-    presTag.style.display = '';
-  } else if (presTag) {
-    presTag.style.display = 'none';
-  }
+  // Hide any legacy president tag.
+  const presTag = document.getElementById('presidentTag');
+  if (presTag) presTag.style.display = 'none';
 
   document.getElementById('qCounter').textContent = `${String(currentQ + 1).padStart(2, '0')} / ${qs.length}`;
 
@@ -459,7 +499,7 @@ function computePartialScores() {
 
 function closestFigurePartial(scores, answeredAxes) {
   let best = null, bestDist = Infinity;
-  const figureSet = (quizMode === 'presidents' || quizMode === 'president') ? PRESIDENTS : FIGURES;
+  const figureSet = FIGURES;
   figureSet.forEach(fig => {
     let sumSq = 0, dims = 0;
     answeredAxes.forEach(axis => {
@@ -500,48 +540,6 @@ let interstitialActive = false;
 
 function showSectionInterstitial(sectionInfo, callback) {
   interstitialActive = true;
-
-  // In president mode, show approval so far
-  if (quizMode === 'president' && selectedPresident) {
-    playSound('reveal');
-    const qs = getActiveQuestions();
-    let totalApproval = 0, answeredCount = 0;
-    answers.forEach((a, i) => {
-      if (a !== null) { totalApproval += (a - 1) / 4 * 100; answeredCount++; }
-    });
-    const approvalPct = answeredCount > 0 ? Math.round(totalApproval / answeredCount) : 0;
-    const pData = PRESIDENT_DATA[selectedPresident];
-
-    const overlay = document.getElementById('sectionInterstitial');
-    document.getElementById('interSectionTag').textContent = `${SECTION_NAMES[sectionInfo.axis]} Complete`;
-    const emojiEl = document.getElementById('interEmoji');
-    const nameEl = document.getElementById('interName');
-    emojiEl.style.animation = 'none'; nameEl.style.animation = 'none';
-    void emojiEl.offsetHeight;
-    document.getElementById('interEmoji').textContent = approvalPct >= 65 ? '👍' : approvalPct >= 35 ? '🤔' : '👎';
-    document.getElementById('interMsg').textContent = `Approval of ${pData.name} so far:`;
-    document.getElementById('interName').textContent = `${approvalPct}%`;
-    emojiEl.style.animation = ''; nameEl.style.animation = '';
-    document.getElementById('interSub').textContent = `${sectionInfo.sectionNum} of ${sectionInfo.total} sections done`;
-
-    const pct = (sectionInfo.sectionNum / sectionInfo.total) * 100;
-    const barFill = document.getElementById('interBarFill');
-    if (barFill) barFill.style.width = '0%';
-    overlay.classList.remove('hidden');
-    const card = overlay.querySelector('.interstitial-card');
-    card.classList.remove('inter-enter'); void card.offsetHeight; card.classList.add('inter-enter');
-    if (barFill) setTimeout(() => { barFill.style.width = pct + '%'; }, 400);
-
-    const btn = document.getElementById('interContinueBtn');
-    const handler = () => {
-      btn.removeEventListener('click', handler);
-      card.classList.add('inter-exit');
-      playSound('click');
-      setTimeout(() => { overlay.classList.add('hidden'); card.classList.remove('inter-enter', 'inter-exit'); interstitialActive = false; callback(); }, 350);
-    };
-    btn.addEventListener('click', handler);
-    return;
-  }
 
   const { scores, answeredAxes } = computePartialScores();
   const closest = closestFigurePartial(scores, answeredAxes);
@@ -753,46 +751,10 @@ function renderResults(scores) {
   // Axis bars
   renderAxisBars(scores);
 
-  // President deep dive mode results
-  const presApprovalSection = document.getElementById('presApprovalSection');
-  const presActionsSection = document.getElementById('presActionsSection');
-  const countryCard = document.getElementById('countryCard');
-  const figSection = document.getElementById('figuresSection');
-
-  // Elements to hide/show based on mode
-  const ideologySection = document.getElementById('ideologySection');
-  const axisBars = document.getElementById('axisBars');
-  const compassSection = document.querySelector('.compass-section');
-
-  if (quizMode === 'president' && selectedPresident) {
-    presApprovalSection.classList.remove('hidden');
-    presActionsSection.classList.remove('hidden');
-    renderPresidentApproval();
-    renderPresidentActions();
-    // Hide sections not relevant for presidential mode
-    countryCard.style.display = 'none';
-    figSection.style.display = 'none';
-    if (ideologySection) ideologySection.style.display = 'none';
-    if (axisBars) axisBars.style.display = 'none';
-    if (compassSection) compassSection.style.display = 'none';
-    const profileHeader = document.querySelector('.profile-header');
-    if (profileHeader) profileHeader.style.display = 'none';
-  } else {
-    presApprovalSection.classList.add('hidden');
-    presActionsSection.classList.add('hidden');
-    countryCard.style.display = '';
-    figSection.style.display = '';
-    if (ideologySection) ideologySection.style.display = '';
-    if (axisBars) axisBars.style.display = '';
-    if (compassSection) compassSection.style.display = '';
-    const profileHeader2 = document.querySelector('.profile-header');
-    if (profileHeader2) profileHeader2.style.display = '';
-    renderCountryMatch(scores);
-    renderFigures(scores);
-  }
-
-  // Ideology breakdown (Political DNA) — compass mode only
-  if (quizMode !== 'president') renderIdeologyBreakdown(scores);
+  // Compass-mode results only (matchup mode never reaches this code path).
+  renderCountryMatch(scores);
+  renderFigures(scores);
+  renderIdeologyBreakdown(scores);
 
   // Compare mode
   if (friendScores) {
@@ -804,111 +766,198 @@ function renderResults(scores) {
   window._lastType = type.label;
 }
 
-// ─── Presidential Approval Results ────────────
-function renderPresidentApproval() {
-  if (!selectedPresident) return;
-  const pData = PRESIDENT_DATA[selectedPresident];
-  const qs = pData.questions;
+// ─── Head-to-Head Matchup Flow ────────────
+// Populated by startMatchup(). Attached here so renderResults above remains clean.
+function startMatchup() {
+  initAudio();
+  matchupIssues = (typeof getSharedIssues === 'function')
+    ? getSharedIssues(matchupA, matchupB)
+    : MATCHUP_ISSUES.filter(iss => iss.positions[matchupA] && iss.positions[matchupB]);
 
-  // Overall approval: average of answers mapped 0-100 (1=0%, 5=100%)
-  let totalApproval = 0, answeredCount = 0;
-  answers.forEach((a, i) => {
-    if (a !== null && i < qs.length) { totalApproval += (a - 1) / 4 * 100; answeredCount++; }
-  });
-  const overallApproval = answeredCount > 0 ? Math.round(totalApproval / answeredCount) : 0;
+  if (!matchupIssues.length) {
+    alert(`${PRESIDENT_META[matchupA].name} and ${PRESIDENT_META[matchupB].name} don’t share enough issues to compare. Try another matchup.`);
+    return;
+  }
 
-  document.getElementById('presApprovalLabel').textContent = `${pData.name} — APPROVAL`;
-  document.getElementById('presApprovalPct').textContent = '0%';
-  document.getElementById('presApprovalPct').dataset.target = overallApproval;
-  document.getElementById('presApprovalSubtitle').textContent =
-    `You approve of ${overallApproval}% of ${pData.name}'s actions`;
+  matchupPicks = new Array(matchupIssues.length).fill(null);
+  matchupIdx = 0;
 
-  // Per-axis approval bars
-  const axisApprovalEl = document.getElementById('presAxisApproval');
-  const axisCounts = {};
-  const axisApprovals = {};
-  ALL_Q_AXES.forEach(a => { axisCounts[a] = 0; axisApprovals[a] = 0; });
-  qs.forEach((q, i) => {
-    if (answers[i] !== null) {
-      axisCounts[q.axis]++;
-      axisApprovals[q.axis] += (answers[i] - 1) / 4 * 100;
+  const header = document.getElementById('matchupHeader');
+  if (header) header.textContent = `${PRESIDENT_META[matchupA].name} vs ${PRESIDENT_META[matchupB].name}`;
+
+  renderMatchupQuestion();
+  show('matchup');
+  playSound('click');
+}
+
+function renderMatchupQuestion() {
+  const issue = matchupIssues[matchupIdx];
+  const aMeta = PRESIDENT_META[matchupA];
+  const bMeta = PRESIDENT_META[matchupB];
+  const aPos = issue.positions[matchupA];
+  const bPos = issue.positions[matchupB];
+
+  document.getElementById('matchupCounter').textContent =
+    `${String(matchupIdx + 1).padStart(2, '0')} / ${String(matchupIssues.length).padStart(2, '0')}`;
+  document.getElementById('matchupTopicBadge').textContent = issue.topic;
+  document.getElementById('matchupTopic').textContent = issue.topic;
+  document.getElementById('matchupQuestion').textContent = issue.question;
+
+  document.getElementById('matchupNameA').textContent = aMeta.name;
+  document.getElementById('matchupYearsA').textContent = aMeta.years;
+  document.getElementById('matchupApproachA').textContent = aPos.approach;
+  document.getElementById('matchupGoodA').textContent = aPos.good;
+  document.getElementById('matchupBadA').textContent = aPos.bad;
+  document.getElementById('matchupPickNameA').textContent = aMeta.name.split(' ').slice(-1)[0];
+
+  document.getElementById('matchupNameB').textContent = bMeta.name;
+  document.getElementById('matchupYearsB').textContent = bMeta.years;
+  document.getElementById('matchupApproachB').textContent = bPos.approach;
+  document.getElementById('matchupGoodB').textContent = bPos.good;
+  document.getElementById('matchupBadB').textContent = bPos.bad;
+  document.getElementById('matchupPickNameB').textContent = bMeta.name.split(' ').slice(-1)[0];
+
+  // Party styling for card accents.
+  const cardA = document.getElementById('matchupCardA');
+  const cardB = document.getElementById('matchupCardB');
+  cardA.classList.remove('party-dem', 'party-rep', 'picked');
+  cardB.classList.remove('party-dem', 'party-rep', 'picked');
+  cardA.classList.add(aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep');
+  cardB.classList.add(bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep');
+
+  const existing = matchupPicks[matchupIdx];
+  if (existing === 'a') cardA.classList.add('picked');
+  if (existing === 'b') cardB.classList.add('picked');
+  const neutralBtn = document.getElementById('matchupNeutralBtn');
+  neutralBtn.classList.toggle('picked', existing === 'tie');
+
+  // Progress bar.
+  const pct = ((matchupIdx) / matchupIssues.length) * 100;
+  document.getElementById('matchupProgressFill').style.width = pct + '%';
+
+  // Footer state.
+  document.getElementById('matchupPrevBtn').classList.toggle('disabled', matchupIdx === 0);
+
+  // Scroll to top.
+  const container = document.querySelector('.matchup-container');
+  if (container) container.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function handleMatchupPick(choice) {
+  matchupPicks[matchupIdx] = choice;
+  const cardA = document.getElementById('matchupCardA');
+  const cardB = document.getElementById('matchupCardB');
+  const neutralBtn = document.getElementById('matchupNeutralBtn');
+  cardA.classList.toggle('picked', choice === 'a');
+  cardB.classList.toggle('picked', choice === 'b');
+  neutralBtn.classList.toggle('picked', choice === 'tie');
+  playSound('click');
+
+  setTimeout(() => {
+    if (matchupIdx >= matchupIssues.length - 1) {
+      finishMatchup();
+    } else {
+      matchupIdx++;
+      renderMatchupQuestion();
     }
-  });
+  }, 280);
+}
 
-  const axisNames = { economy: 'Economy', society: 'Society', governance: 'Governance', universality: 'Universality', environment: 'Environment', expansion: 'Expansion' };
+function matchupPrev() {
+  if (matchupIdx === 0) return;
+  matchupIdx--;
+  renderMatchupQuestion();
+}
+
+function matchupSkip() {
+  if (matchupPicks[matchupIdx] === null) matchupPicks[matchupIdx] = 'tie';
+  if (matchupIdx >= matchupIssues.length - 1) {
+    finishMatchup();
+  } else {
+    matchupIdx++;
+    renderMatchupQuestion();
+  }
+}
+
+function finishMatchup() {
+  const aMeta = PRESIDENT_META[matchupA];
+  const bMeta = PRESIDENT_META[matchupB];
+
+  let countA = 0, countB = 0, countTie = 0;
+  matchupPicks.forEach(p => {
+    if (p === 'a') countA++;
+    else if (p === 'b') countB++;
+    else countTie++;
+  });
+  const total = matchupIssues.length;
+
+  // Winner headline
+  const winnerEl = document.getElementById('matchupWinnerName');
+  const subEl = document.getElementById('matchupWinnerSub');
+  if (countA > countB) {
+    winnerEl.textContent = aMeta.name;
+    subEl.textContent = `on ${countA} of ${total} issues`;
+  } else if (countB > countA) {
+    winnerEl.textContent = bMeta.name;
+    subEl.textContent = `on ${countB} of ${total} issues`;
+  } else {
+    winnerEl.textContent = 'a tie';
+    subEl.textContent = `${countA}–${countB} across ${total} issues`;
+  }
+
+  // Split bar
+  document.getElementById('splitNameA').textContent = aMeta.name;
+  document.getElementById('splitNameB').textContent = bMeta.name;
+  document.getElementById('splitCountA').textContent = countA;
+  document.getElementById('splitCountB').textContent = countB;
+  document.getElementById('splitCountTie').textContent = countTie;
+  const safeTotal = total || 1;
+  const segA = document.getElementById('splitSegA');
+  const segB = document.getElementById('splitSegB');
+  const segTie = document.getElementById('splitSegTie');
+  segA.style.width = (countA / safeTotal * 100) + '%';
+  segB.style.width = (countB / safeTotal * 100) + '%';
+  segTie.style.width = (countTie / safeTotal * 100) + '%';
+  // Party-colored bar classes.
+  segA.className = 'matchup-split-segment split-a ' + (aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep');
+  segB.className = 'matchup-split-segment split-b ' + (bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep');
+
+  // Issue by issue list
+  const listEl = document.getElementById('matchupIssueList');
   let html = '';
-  ALL_Q_AXES.forEach(axis => {
-    if (axisCounts[axis] === 0) return;
-    const pct = Math.round(axisApprovals[axis] / axisCounts[axis]);
-    const color = ALL_Q_COLORS[axis];
+  matchupIssues.forEach((issue, i) => {
+    const pick = matchupPicks[i];
+    let pickedName = 'No preference', pickedClass = 'picked-tie';
+    if (pick === 'a') { pickedName = aMeta.name; pickedClass = 'picked-a ' + (aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
+    else if (pick === 'b') { pickedName = bMeta.name; pickedClass = 'picked-b ' + (bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
     html += `
-      <div class="pres-axis-bar-row">
-        <span class="pres-axis-bar-label">${axisNames[axis]}</span>
-        <div class="pres-axis-bar-track">
-          <div class="pres-axis-bar-fill" style="width:0%;background:${color}" data-w="${pct}"></div>
-        </div>
-        <span class="pres-axis-bar-pct" data-target="${pct}">0%</span>
+      <div class="matchup-issue-row ${pickedClass}">
+        <span class="matchup-issue-topic">${issue.topic}</span>
+        <span class="matchup-issue-pick">${pickedName}</span>
       </div>
     `;
   });
-  axisApprovalEl.innerHTML = html;
+  listEl.innerHTML = html;
+
+  show('matchupResults');
+  playSound('fanfare');
 }
 
-function renderPresidentActions() {
-  if (!selectedPresident) return;
-  const pData = PRESIDENT_DATA[selectedPresident];
-  const qs = pData.questions;
-
-  // Build array of {index, text, answer, axis}
-  const rated = [];
-  qs.forEach((q, i) => {
-    if (answers[i] !== null) {
-      rated.push({ index: i, text: q.text, answer: answers[i], axis: q.axis });
-    }
-  });
-  rated.sort((a, b) => b.answer - a.answer);
-
-  const most = rated.slice(0, 3);
-  const least = rated.slice(-3).reverse();
-
-  const labels = { 5: 'Strongly agree', 4: 'Agree', 3: 'Neutral', 2: 'Disagree', 1: 'Strongly disagree' };
-
-  function renderActionCards(items) {
-    return items.map(item => {
-      const color = ALL_Q_COLORS[item.axis] || '#8B5CF6';
-      const valClass = item.answer >= 4 ? 'action-approve' : item.answer <= 2 ? 'action-disapprove' : 'action-neutral';
-      return `
-        <div class="pres-action-card ${valClass}">
-          <div class="pres-action-text">${item.text}</div>
-          <div class="pres-action-meta">
-            <span class="pres-action-axis" style="color:${color}">${item.axis}</span>
-            <span class="pres-action-answer">${labels[item.answer]}</span>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  document.getElementById('mostApproved').innerHTML = renderActionCards(most);
-  document.getElementById('leastApproved').innerHTML = renderActionCards(least);
+function restartMatchup() {
+  show('landing');
+  selectMode('matchup');
 }
 
-function animatePresApproval() {
-  // Animate the big percentage
-  const bigPct = document.getElementById('presApprovalPct');
-  if (bigPct && bigPct.dataset.target) {
-    animateCountUp(bigPct, parseInt(bigPct.dataset.target), 1200);
-  }
-  // Animate per-axis bars
-  document.querySelectorAll('.pres-axis-bar-fill').forEach(el => {
-    const w = el.dataset.w;
-    setTimeout(() => { el.style.width = w + '%'; }, 200);
-  });
-  document.querySelectorAll('.pres-axis-bar-pct[data-target]').forEach(el => {
-    const target = parseInt(el.dataset.target);
-    setTimeout(() => animateCountUp(el, target, 900), 300);
-  });
-}
+// Wire up matchup choice buttons once, after DOM is ready.
+document.addEventListener('DOMContentLoaded', () => {
+  const btnA = document.getElementById('matchupChooseA');
+  const btnB = document.getElementById('matchupChooseB');
+  const btnTie = document.getElementById('matchupNeutralBtn');
+  if (btnA) btnA.addEventListener('click', () => handleMatchupPick('a'));
+  if (btnB) btnB.addEventListener('click', () => handleMatchupPick('b'));
+  if (btnTie) btnTie.addEventListener('click', () => handleMatchupPick('tie'));
+});
 
 // ─── Draw Compass (with animated dot) ─────────
 function drawCompass(scores) {
@@ -1376,7 +1425,7 @@ function addRadarLabels(container, canvas, labels, n, startAngle, angleStep, cx,
 function getAxisFigureMatch(axisKey, userScore) {
   let closest = null, closestDist = Infinity;
   let distant = null, distantDist = -1;
-  const figureSet = (quizMode === 'presidents' || quizMode === 'president') ? PRESIDENTS : FIGURES;
+  const figureSet = FIGURES;
   figureSet.forEach(fig => {
     let figScore;
     if (axisKey === 'expansion') {
@@ -1501,96 +1550,6 @@ function renderCountryMatch(scores) {
   document.getElementById('countryCode').textContent = bestCountry.code;
   document.getElementById('countryName').textContent = `${bestCountry.flag} ${bestCountry.name}`;
   document.getElementById('countryPct').textContent = `${Math.round(bestSimilarity)}%`;
-}
-
-// ─── 9a. Presidential Match Results ──────────
-function renderPresidentialMatch(scores) {
-  const ranked = PRESIDENTS.map(p => ({
-    ...p,
-    similarity: calcSimilarity(scores, p)
-  }));
-  ranked.sort((a, b) => b.similarity - a.similarity);
-
-  const top5 = ranked.slice(0, 5);
-  const bottom3 = ranked.slice(-3).reverse();
-
-  // Replace the country card content with presidential ranking
-  const countryCard = document.getElementById('countryCard');
-  countryCard.setAttribute('data-reveal', 'presidents');
-  countryCard.className = 'pres-match-section';
-  countryCard.innerHTML = `
-    <h3 class="pres-match-heading">Presidential Match</h3>
-    <div class="pres-match-subhead">Most Aligned</div>
-    <div class="pres-ranking" id="presTopRanking">
-      ${top5.map((p, i) => buildPresRow(p, i + 1, false)).join('')}
-    </div>
-    <div class="pres-match-subhead">Least Aligned</div>
-    <div class="pres-ranking" id="presBottomRanking">
-      ${bottom3.map((p, i) => buildPresRow(p, ranked.length - 2 + i, true)).join('')}
-    </div>
-  `;
-}
-
-function buildPresRow(pres, rank, isLeast) {
-  const pct = Math.round(pres.similarity);
-  const partyClass = pres.party === 'Democrat' ? 'democrat' : 'republican';
-  const partyAbbr = pres.party === 'Democrat' ? 'D' : 'R';
-  const gaugeColor = pct >= 80 ? '#22C55E' : pct >= 60 ? '#8B5CF6' : pct >= 40 ? '#F59E0B' : '#EF4444';
-
-  return `
-    <div class="pres-row ${rank === 1 ? 'top-1' : ''} ${isLeast ? 'least-aligned' : ''}">
-      <span class="pres-rank">#${rank}</span>
-      <div class="pres-info">
-        <span class="pres-name">${pres.name}</span>
-        <span class="pres-years">${pres.years}</span>
-      </div>
-      <span class="party-tag ${partyClass}">${partyAbbr}</span>
-      <div class="pres-gauge-wrap">
-        <div class="pres-gauge-bar">
-          <div class="pres-gauge-fill" style="width:0%;background:${gaugeColor}" data-w="${pct}"></div>
-        </div>
-        <span class="pres-gauge-pct" data-target="${pct}">0%</span>
-      </div>
-    </div>
-  `;
-}
-
-function animatePresGauges() {
-  document.querySelectorAll('.pres-gauge-fill').forEach(el => {
-    const w = el.dataset.w;
-    setTimeout(() => { el.style.width = w + '%'; }, 200);
-  });
-  document.querySelectorAll('.pres-gauge-pct[data-target]').forEach(el => {
-    const target = parseInt(el.dataset.target);
-    setTimeout(() => animateCountUp(el, target, 900), 300);
-  });
-}
-
-// ─── 9a2. Presidential Alignment (Figure Section) ──
-function renderPresidentialAlignment(scores) {
-  const ranked = PRESIDENTS.map(p => ({
-    ...p,
-    similarity: calcSimilarity(scores, p)
-  }));
-  ranked.sort((a, b) => b.similarity - a.similarity);
-  const top4 = ranked.slice(0, 4);
-
-  const figSection = document.getElementById('figuresSection');
-  figSection.innerHTML = `
-    <h3 class="section-heading">Presidential Alignment</h3>
-    <div class="figures-grid" id="closestFigures">
-      ${top4.map((p, i) => buildFigureCard(p, scores, i === 0, i)).join('')}
-    </div>
-  `;
-
-  // Add click listeners for expandable cards
-  document.querySelectorAll('.figure-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const wasExpanded = card.classList.contains('expanded');
-      card.classList.toggle('expanded');
-      if (!wasExpanded) animateBreakdownBars(card);
-    });
-  });
 }
 
 // ─── 9b. Answer Review ──────────────────────
@@ -2044,7 +2003,7 @@ function renderCompare(myScores, theirScores) {
 function saveToHistory(scores) {
   const history = JSON.parse(safeStorage.getItem('wdys_history') || '[]');
   const type = POLITICAL_TYPES.find(t => t.condition(scores));
-  const figureSet = (quizMode === 'presidents' || quizMode === 'president') ? PRESIDENTS : FIGURES;
+  const figureSet = FIGURES;
   const figured = figureSet.map(f => ({ name: f.name, similarity: calcSimilarity(scores, f) }));
   figured.sort((a, b) => b.similarity - a.similarity);
 
@@ -2520,16 +2479,6 @@ function animateResultsReveal() {
           pctEl.textContent = '0%';
           setTimeout(() => animateCountUp(pctEl, target, 1000), 200);
         }
-      }
-
-      // Presidential match — animate gauges
-      if (el.getAttribute('data-reveal') === 'presidents') {
-        setTimeout(() => animatePresGauges(), 200);
-      }
-
-      // Presidential approval — animate
-      if (el.id === 'presApprovalSection') {
-        setTimeout(() => animatePresApproval(), 200);
       }
 
       // Axis bars — animate marker positions
