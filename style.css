@@ -181,7 +181,7 @@ a:hover { color: var(--text); }
   position: fixed;
   top: 68px;
   right: 20px;
-  width: 220px;
+  width: 260px;
   background: rgba(19, 29, 53, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -278,6 +278,58 @@ a:hover { color: var(--text); }
 }
 .neon-preview {
   background: linear-gradient(135deg, #0A0A14 40%, #00FF88 100%);
+}
+
+/* Language selector (inside settings panel) */
+.settings-section {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.settings-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.lang-options {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.lang-btn {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 0.74rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: center;
+}
+.lang-btn:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+  color: var(--text);
+}
+.lang-btn.active {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: var(--text);
+}
+html[data-theme="neon"] .lang-btn.active {
+  background: rgba(0, 255, 136, 0.10);
+  border-color: rgba(0, 255, 136, 0.45);
 }
 
 /* ═══════════════════════════════════════════════

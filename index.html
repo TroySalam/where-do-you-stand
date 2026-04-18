@@ -27,7 +27,7 @@
           <line x1="4" y1="16" x2="28" y2="16" stroke="currentColor" stroke-width="1" opacity="0.2"/>
           <circle cx="16" cy="16" r="2.5" fill="var(--accent)"/>
         </svg>
-        <span>where do you stand?</span>
+        <span class="site-name">where do you stand?</span>
       </div>
       <div class="nav-btns">
         <button class="settings-btn" onclick="toggleSettings()" title="Settings">
@@ -88,64 +88,64 @@
         </svg>
       </div>
 
-      <h1>Where Do You Stand?</h1>
-      <p class="subtitle" id="landingSubtitle">Map your political identity across 6 dimensions. 54 questions. 5 minutes.</p>
+      <h1 data-i18n="heroTitle">Where Do You Stand?</h1>
+      <p class="subtitle" id="landingSubtitle" data-i18n="heroSub">Map your political identity across 6 dimensions. 54 questions. 5 minutes.</p>
 
       <div class="mode-selector">
         <button class="mode-btn active" data-mode="compass" onclick="selectMode('compass')">
           <span class="mode-icon">🧭</span>
-          <span class="mode-title">Political Compass</span>
-          <span class="mode-desc">54 general policy questions</span>
+          <span class="mode-title" data-i18n="modeCompass">Political Compass</span>
+          <span class="mode-desc" data-i18n="modeCompassSub">54 general policy questions</span>
         </button>
         <button class="mode-btn" data-mode="matchup" onclick="selectMode('matchup')">
           <span class="mode-icon">⚔️</span>
-          <span class="mode-title">Presidential Head-to-Head</span>
-          <span class="mode-desc">Pick 2 presidents. Compare their approaches.</span>
+          <span class="mode-title" data-i18n="modeMatchup">Presidential Head-to-Head</span>
+          <span class="mode-desc" data-i18n="modeMatchupSub">Pick 2 presidents. Compare their approaches.</span>
         </button>
       </div>
 
       <!-- Matchup Picker (two-step) -->
       <div id="matchupPicker" class="matchup-picker hidden">
-        <p class="picker-label" id="matchupPickerLabel">Pick your first president</p>
+        <p class="picker-label" id="matchupPickerLabel" data-i18n="pickFirst">Pick your first president</p>
         <div class="matchup-slots" id="matchupSlots">
           <div class="matchup-slot slot-a empty" id="slotA">
-            <span class="slot-position">First</span>
+            <span class="slot-position" data-i18n="first">First</span>
             <span class="slot-name">—</span>
           </div>
-          <span class="matchup-vs">vs</span>
+          <span class="matchup-vs" data-i18n="vs">vs</span>
           <div class="matchup-slot slot-b empty" id="slotB">
-            <span class="slot-position">Opponent</span>
+            <span class="slot-position" data-i18n="opponent">Opponent</span>
             <span class="slot-name">—</span>
           </div>
         </div>
         <div class="picker-grid" id="matchupGrid"></div>
-        <button class="matchup-reset-btn hidden" id="matchupResetBtn" onclick="resetMatchupPicks()">↺ Reset picks</button>
+        <button class="matchup-reset-btn hidden" id="matchupResetBtn" onclick="resetMatchupPicks()" data-i18n="resetPicks">↺ Reset picks</button>
       </div>
 
       <button class="btn-primary btn-cta" id="beginBtn" onclick="startQuiz()">
-        Begin <span class="arrow">→</span>
+        <span data-i18n="begin">Begin</span> <span class="arrow">→</span>
       </button>
 
       <div class="stat-pills">
-        <span class="stat-pill">54 questions</span>
+        <span class="stat-pill">54 <span data-i18n="questions">questions</span></span>
         <span class="stat-pill-sep">·</span>
-        <span class="stat-pill">48 countries</span>
+        <span class="stat-pill">48 <span data-i18n="countries">countries</span></span>
         <span class="stat-pill-sep">·</span>
-        <span class="stat-pill">20 figures</span>
+        <span class="stat-pill">20 <span data-i18n="figures">figures</span></span>
       </div>
     </main>
 
     <section class="info-section">
       <div class="info-divider"></div>
-      <h3>How it works</h3>
-      <p>Rate 54 statements from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile compared against real countries and political figures.</p>
+      <h3 data-i18n="howItWorks">How it works</h3>
+      <p data-i18n-html="howItWorksText">Rate 54 statements from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile compared against real countries and political figures.</p>
       <div class="axes-preview">
-        <div class="axis-chip"><span class="dot" style="background:var(--c-economy)"></span> Economy</div>
-        <div class="axis-chip"><span class="dot" style="background:var(--c-society)"></span> Society</div>
-        <div class="axis-chip"><span class="dot" style="background:var(--c-governance)"></span> Governance</div>
-        <div class="axis-chip"><span class="dot" style="background:var(--c-universality)"></span> Universality</div>
-        <div class="axis-chip"><span class="dot" style="background:var(--c-environment)"></span> Environment</div>
-        <div class="axis-chip"><span class="dot" style="background:var(--c-expansion)"></span> Expansion</div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-economy)"></span> <span data-i18n="economy">Economy</span></div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-society)"></span> <span data-i18n="society">Society</span></div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-governance)"></span> <span data-i18n="governance">Governance</span></div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-universality)"></span> <span data-i18n="universality">Universality</span></div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-environment)"></span> <span data-i18n="environment">Environment</span></div>
+        <div class="axis-chip"><span class="dot" style="background:var(--c-expansion)"></span> <span data-i18n="expansion">Expansion</span></div>
       </div>
     </section>
   </div>
@@ -154,7 +154,7 @@
   <div id="quiz" class="screen">
 
     <header class="nav quiz-nav">
-      <a class="home-link" onclick="goHome()">🏠 Home</a>
+      <a class="home-link" onclick="goHome()" data-i18n="homeBtn">🏠 Home</a>
       <span id="quizPresName" class="quiz-pres-name hidden"></span>
       <div class="nav-btns">
         <button class="settings-btn" onclick="toggleSettings()" title="Settings">
@@ -188,29 +188,29 @@
       <div class="answer-scale vertical">
         <div class="scale-row" data-value="5">
           <button class="scale-btn" data-value="5"><span class="dot-fill"></span></button>
-          <span class="scale-row-label">Strongly agree</span>
+          <span class="scale-row-label" data-i18n="stronglyAgree">Strongly agree</span>
         </div>
         <div class="scale-row" data-value="4">
           <button class="scale-btn" data-value="4"><span class="dot-fill"></span></button>
-          <span class="scale-row-label">Agree</span>
+          <span class="scale-row-label" data-i18n="agree">Agree</span>
         </div>
         <div class="scale-row" data-value="3">
           <button class="scale-btn" data-value="3"><span class="dot-fill"></span></button>
-          <span class="scale-row-label">Neutral</span>
+          <span class="scale-row-label" data-i18n="neutral">Neutral</span>
         </div>
         <div class="scale-row" data-value="2">
           <button class="scale-btn" data-value="2"><span class="dot-fill"></span></button>
-          <span class="scale-row-label">Disagree</span>
+          <span class="scale-row-label" data-i18n="disagree">Disagree</span>
         </div>
         <div class="scale-row" data-value="1">
           <button class="scale-btn" data-value="1"><span class="dot-fill"></span></button>
-          <span class="scale-row-label">Strongly disagree</span>
+          <span class="scale-row-label" data-i18n="stronglyDisagree">Strongly disagree</span>
         </div>
       </div>
 
       <div class="quiz-footer">
-        <button id="prevBtn" class="nav-btn disabled" onclick="prevQuestion()">← Previous</button>
-        <button id="nextBtn" class="nav-btn disabled" onclick="nextQuestion()">Next →</button>
+        <button id="prevBtn" class="nav-btn disabled" onclick="prevQuestion()" data-i18n="previous">← Previous</button>
+        <button id="nextBtn" class="nav-btn disabled" onclick="nextQuestion()" data-i18n="next">Next →</button>
       </div>
 
       <div class="dot-progress" id="dotProgress"></div>
@@ -224,7 +224,7 @@
         <p class="interstitial-msg" id="interMsg">Starting to look like...</p>
         <h2 class="interstitial-name" id="interName">Nelson Mandela</h2>
         <p class="interstitial-sub" id="interSub">1 of 6 sections done</p>
-        <button class="btn-primary interstitial-btn" id="interContinueBtn">Keep Going →</button>
+        <button class="btn-primary interstitial-btn" id="interContinueBtn" data-i18n="keepGoing">Keep Going →</button>
       </div>
     </div>
   </div>
@@ -232,7 +232,7 @@
   <!-- ═══════ MATCHUP QUIZ ═══════ -->
   <div id="matchup" class="screen">
     <header class="nav quiz-nav">
-      <a class="home-link" onclick="goHome()">🏠 Home</a>
+      <a class="home-link" onclick="goHome()" data-i18n="homeBtn">🏠 Home</a>
       <span id="matchupHeader" class="matchup-header-label"></span>
       <div class="nav-btns">
         <button class="settings-btn" onclick="toggleSettings()" title="Settings">
@@ -264,18 +264,18 @@
           </div>
           <p class="matchup-approach" id="matchupApproachA"></p>
           <div class="matchup-pill matchup-pill-good">
-            <span class="pill-label">Upside</span>
+            <span class="pill-label" data-i18n="upside">Upside</span>
             <span class="pill-text" id="matchupGoodA"></span>
           </div>
           <div class="matchup-pill matchup-pill-bad">
-            <span class="pill-label">Downside</span>
+            <span class="pill-label" data-i18n="downside">Downside</span>
             <span class="pill-text" id="matchupBadA"></span>
           </div>
-          <button class="matchup-choose-btn" data-pick="a" id="matchupChooseA">Pick <span id="matchupPickNameA"></span></button>
+          <button class="matchup-choose-btn" data-pick="a" id="matchupChooseA"><span data-i18n="pick">Pick</span> <span id="matchupPickNameA"></span></button>
         </div>
 
         <div class="matchup-divider">
-          <span class="matchup-vs-badge">VS</span>
+          <span class="matchup-vs-badge" data-i18n="vs">VS</span>
         </div>
 
         <div class="matchup-card" id="matchupCardB" data-side="b">
@@ -285,24 +285,24 @@
           </div>
           <p class="matchup-approach" id="matchupApproachB"></p>
           <div class="matchup-pill matchup-pill-good">
-            <span class="pill-label">Upside</span>
+            <span class="pill-label" data-i18n="upside">Upside</span>
             <span class="pill-text" id="matchupGoodB"></span>
           </div>
           <div class="matchup-pill matchup-pill-bad">
-            <span class="pill-label">Downside</span>
+            <span class="pill-label" data-i18n="downside">Downside</span>
             <span class="pill-text" id="matchupBadB"></span>
           </div>
-          <button class="matchup-choose-btn" data-pick="b" id="matchupChooseB">Pick <span id="matchupPickNameB"></span></button>
+          <button class="matchup-choose-btn" data-pick="b" id="matchupChooseB"><span data-i18n="pick">Pick</span> <span id="matchupPickNameB"></span></button>
         </div>
       </div>
 
       <div class="matchup-actions">
-        <button class="matchup-neutral-btn" id="matchupNeutralBtn">No preference</button>
+        <button class="matchup-neutral-btn" id="matchupNeutralBtn" data-i18n="noPreference">No preference</button>
       </div>
 
       <div class="matchup-footer">
-        <button class="nav-btn" id="matchupPrevBtn" onclick="matchupPrev()">← Previous</button>
-        <button class="nav-btn" id="matchupSkipBtn" onclick="matchupSkip()">Skip →</button>
+        <button class="nav-btn" id="matchupPrevBtn" onclick="matchupPrev()" data-i18n="previous">← Previous</button>
+        <button class="nav-btn" id="matchupSkipBtn" onclick="matchupSkip()" data-i18n="skip">Skip →</button>
       </div>
     </div>
   </div>
@@ -316,7 +316,7 @@
           <circle cx="16" cy="16" r="8" stroke="var(--accent)" stroke-width="1.5"/>
           <circle cx="16" cy="16" r="2.5" fill="var(--accent)"/>
         </svg>
-        <span>where do you stand?</span>
+        <span class="site-name">where do you stand?</span>
       </div>
       <div class="nav-btns">
         <button class="settings-btn" onclick="toggleSettings()" title="Settings">
@@ -329,7 +329,7 @@
     </header>
 
     <div class="matchup-results-container">
-      <span class="matchup-result-label">YOU SIDED WITH</span>
+      <span class="matchup-result-label" data-i18n="youSidedWith">YOU SIDED WITH</span>
       <h2 class="matchup-winner-name" id="matchupWinnerName">—</h2>
       <p class="matchup-winner-sub" id="matchupWinnerSub">on X of Y issues</p>
 
@@ -339,7 +339,7 @@
           <span class="split-count" id="splitCountA">0</span>
         </div>
         <div class="matchup-split-segment split-tie" id="splitSegTie">
-          <span class="split-name">Tie</span>
+          <span class="split-name" data-i18n="aTie">Tie</span>
           <span class="split-count" id="splitCountTie">0</span>
         </div>
         <div class="matchup-split-segment split-b" id="splitSegB">
@@ -348,12 +348,12 @@
         </div>
       </div>
 
-      <h3 class="matchup-results-heading">Issue by Issue</h3>
+      <h3 class="matchup-results-heading" data-i18n="issueByIssue">Issue by Issue</h3>
       <div class="matchup-issue-list" id="matchupIssueList"></div>
 
       <div class="matchup-results-actions">
-        <button class="btn-primary" onclick="restartMatchup()">⚔️ Try another matchup</button>
-        <button class="btn-secondary" onclick="goHome()">🏠 Home</button>
+        <button class="btn-primary" onclick="restartMatchup()" data-i18n="tryAnother">⚔️ Try another matchup</button>
+        <button class="btn-secondary" onclick="goHome()" data-i18n="homeBtn">🏠 Home</button>
       </div>
     </div>
   </div>
@@ -368,7 +368,7 @@
           <circle cx="16" cy="16" r="8" stroke="var(--accent)" stroke-width="1.5"/>
           <circle cx="16" cy="16" r="2.5" fill="var(--accent)"/>
         </svg>
-        <span>where do you stand?</span>
+        <span class="site-name">where do you stand?</span>
       </div>
       <div class="nav-btns">
         <button class="settings-btn" onclick="toggleSettings()" title="Settings">
@@ -385,7 +385,7 @@
 
       <!-- 1. Political type -->
       <div class="profile-header" data-reveal>
-        <span class="profile-label">MY PROFILE:</span>
+        <span class="profile-label" data-i18n="myProfile">MY PROFILE:</span>
         <div class="profile-type-row">
           <span class="profile-emoji" id="profileEmoji">⚖️</span>
           <h2 id="profileType">You are a Social Democrat</h2>
@@ -396,7 +396,7 @@
 
       <!-- 2. Ideology Breakdown -->
       <div class="ideology-section" id="ideologySection" data-reveal>
-        <h3 class="section-heading">Your Political DNA</h3>
+        <h3 class="section-heading" data-i18n="yourPoliticalDna">Your Political DNA</h3>
         <div class="ideology-grid" id="ideologyGrid"></div>
       </div>
 
@@ -408,7 +408,7 @@
       <div class="compass-section" data-reveal>
         <div class="compass-wrap">
           <div class="compass-header">
-            <h3 class="compass-heading">Political Compass</h3>
+            <h3 class="compass-heading" data-i18n="politicalCompass">Political Compass</h3>
             <div class="compass-toggle">
               <button class="toggle-btn active" id="btn2d" onclick="showCompass2D()">2D</button>
               <button class="toggle-btn" id="btn3d" onclick="showCompass3D()">3D</button>
@@ -416,19 +416,19 @@
           </div>
 
           <div id="compass2dView">
-            <span class="compass-label-block">Authoritarian</span>
+            <span class="compass-label-block" data-i18n="authoritarian">Authoritarian</span>
             <div class="compass-grid">
-              <span class="compass-label compass-label-left">Left</span>
+              <span class="compass-label compass-label-left" data-i18n="left">Left</span>
               <canvas id="compassCanvas" width="360" height="360"></canvas>
-              <span class="compass-label compass-label-right">Right</span>
+              <span class="compass-label compass-label-right" data-i18n="right">Right</span>
             </div>
-            <span class="compass-label-block">Libertarian</span>
+            <span class="compass-label-block" data-i18n="libertarian">Libertarian</span>
             <div class="compass-coords" id="compassCoords"></div>
           </div>
 
           <div id="compass3dView" style="display:none;">
             <div id="compass3dContainer"></div>
-            <div class="compass-3d-hint">Drag to rotate</div>
+            <div class="compass-3d-hint" data-i18n="dragRotate">Drag to rotate</div>
             <div class="compass-coords" id="compassCoords3d"></div>
           </div>
         </div>
@@ -437,7 +437,7 @@
       <!-- 6. Country match -->
       <div class="divider"></div>
       <div class="country-card" id="countryCard" data-reveal="country">
-        <span class="country-label">YOUR CLOSEST COUNTRY</span>
+        <span class="country-label" data-i18n="closestCountry">YOUR CLOSEST COUNTRY</span>
         <div class="country-row">
           <div class="country-info">
             <span class="country-code" id="countryCode">AU</span>
@@ -449,7 +449,7 @@
 
       <!-- 7. Closest Figures -->
       <div class="figures-section" id="figuresSection" data-reveal>
-        <h3 class="section-heading">Closest Figures</h3>
+        <h3 class="section-heading" data-i18n="closestFigures">Closest Figures</h3>
         <div class="figures-grid" id="closestFigures"></div>
       </div>
 
@@ -457,7 +457,7 @@
       <div class="divider"></div>
       <div class="review-section" data-reveal>
         <button class="review-toggle" id="reviewToggle" onclick="toggleAnswers()">
-          <span>View Your Answers</span>
+          <span data-i18n="viewAnswers">View Your Answers</span>
           <span class="review-arrow">▼</span>
         </button>
         <div class="review-content hidden" id="reviewContent"></div>
@@ -466,11 +466,11 @@
       <!-- 9. Share / Compare / Retake -->
       <div class="divider"></div>
       <div class="results-actions" data-reveal>
-        <button class="btn-primary" onclick="generateShareCard()">📸 Share Image</button>
-        <button class="btn-primary" onclick="downloadPDF()">📄 Download PDF</button>
-        <button class="btn-secondary" onclick="challengeFriend()">🔗 Challenge a Friend</button>
-        <button class="btn-secondary" onclick="retakeQuiz()">🔄 Retake Test</button>
-        <button class="btn-secondary" onclick="goHome()">🏠 Home</button>
+        <button class="btn-primary" onclick="generateShareCard()" data-i18n="shareImage">📸 Share Image</button>
+        <button class="btn-primary" onclick="downloadPDF()" data-i18n="downloadPdf">📄 Download PDF</button>
+        <button class="btn-secondary" onclick="challengeFriend()" data-i18n="challengeFriend">🔗 Challenge a Friend</button>
+        <button class="btn-secondary" onclick="retakeQuiz()" data-i18n="retakeTest">🔄 Retake Test</button>
+        <button class="btn-secondary" onclick="goHome()" data-i18n="homeBtn">🏠 Home</button>
       </div>
 
 
@@ -491,7 +491,7 @@
   <!-- ═══════ SETTINGS PANEL ═══════ -->
   <div id="settingsPanel" class="settings-panel hidden">
     <div class="settings-header">
-      <span>Appearance</span>
+      <span data-i18n="appearance">Appearance</span>
       <button class="settings-close" onclick="toggleSettings()">✕</button>
     </div>
     <div class="theme-options">
@@ -507,6 +507,14 @@
         <span class="theme-preview neon-preview"></span>
         <span>Neon</span>
       </button>
+    </div>
+    <div class="settings-section">
+      <div class="settings-label" data-i18n="language">Language</div>
+      <div class="lang-options">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" data-lang="id" onclick="setLanguage('id')">Indonesia</button>
+        <button class="lang-btn" data-lang="el" onclick="setLanguage('el')">Ελληνικά</button>
+      </div>
     </div>
   </div>
   <div id="settingsOverlay" class="settings-overlay hidden" onclick="toggleSettings()"></div>

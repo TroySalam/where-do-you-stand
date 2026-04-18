@@ -11,8 +11,356 @@ const safeStorage = {
   removeItem(k) { try { if (_ls) _ls.removeItem(k); else delete _memStore[k]; } catch(e) { delete _memStore[k]; } }
 };
 
-/* (Mega Upgrade)
+/* ═══════════════════════════════════════════════
+   TRANSLATIONS (UI chrome only — quiz questions stay English)
    ═══════════════════════════════════════════════ */
+const TRANSLATIONS = {
+  en: {
+    siteTitle: "where do you stand?",
+    heroTitle: "Where Do You Stand?",
+    heroSub: "Map your political identity across 6 dimensions. 54 questions. 5 minutes.",
+    begin: "Begin",
+    home: "Home",
+    modeCompass: "Political Compass",
+    modeCompassSub: "54 general policy questions",
+    modeMatchup: "Presidential Head-to-Head",
+    modeMatchupSub: "Pick 2 presidents. Compare their approaches.",
+    howItWorks: "HOW IT WORKS",
+    howItWorksText: "Rate 54 statements from <em>Strongly disagree</em> to <em>Strongly agree</em>. Your answers build a multi-axis profile compared against real countries and political figures.",
+    questions: "questions",
+    countries: "countries",
+    figures: "figures",
+    stronglyAgree: "Strongly agree",
+    agree: "Agree",
+    neutral: "Neutral",
+    disagree: "Disagree",
+    stronglyDisagree: "Strongly disagree",
+    previous: "← Previous",
+    next: "Next →",
+    skip: "Skip →",
+    myProfile: "MY PROFILE:",
+    youAre: "You are a",
+    yourPoliticalDna: "Your Political DNA",
+    axisBarsTitle: "AXIS BREAKDOWN",
+    closestCountry: "YOUR CLOSEST COUNTRY",
+    closestFigures: "Closest Figures",
+    tapBreakdown: "Tap for breakdown",
+    closest: "CLOSEST",
+    shareImage: "📸 Share Image",
+    downloadPdf: "📄 Download PDF",
+    challengeFriend: "🔗 Challenge a Friend",
+    retakeTest: "🔄 Retake Test",
+    homeBtn: "🏠 Home",
+    viewAnswers: "View Your Answers",
+    politicalCompass: "Political Compass",
+    authoritarian: "Authoritarian",
+    libertarian: "Libertarian",
+    left: "Left",
+    right: "Right",
+    you: "You",
+    skipped: "Skipped",
+    agreeMost: "Agree most on",
+    disagreeMost: "disagree most on",
+    dragRotate: "Drag to rotate",
+    pickFirst: "Pick your first president",
+    pickOpponent: "Pick your opponent",
+    nowPickOpp: "Now pick an opponent for",
+    pick2Presidents: "Pick 2 presidents. See how their approaches stack up.",
+    choosePresident: "Choose a president to evaluate:",
+    vs: "vs",
+    resetPicks: "↻ Reset picks",
+    first: "First",
+    opponent: "Opponent",
+    noPreference: "No preference",
+    youSidedWith: "YOU SIDED WITH",
+    aTie: "a tie",
+    across: "across",
+    issues: "issues",
+    on: "on",
+    of: "of",
+    issueByIssue: "Issue by Issue",
+    tryAnother: "⚔️ Try another matchup",
+    upside: "Upside",
+    downside: "Downside",
+    pick: "Pick",
+    sectionComplete: "Complete",
+    keepGoing: "Keep Going →",
+    sectionsOf: "of",
+    sectionsDone: "sections done",
+    appearance: "Appearance",
+    language: "Language",
+    economy: "Economy",
+    society: "Society",
+    governance: "Governance",
+    universality: "Universality",
+    environment: "Environment",
+    expansion: "Expansion",
+    statism: "Statism",
+    freeMarket: "Free-market",
+    progressivism: "Progressivism",
+    conservatism: "Conservatism",
+    liberty: "Liberty",
+    authority: "Authority",
+    internationalism: "Internationalism",
+    nationalism: "Nationalism",
+    ecology: "Ecology",
+    productivism: "Productivism",
+    expansionism: "Expansionism",
+    restraint: "Restraint",
+  },
+  id: {
+    siteTitle: "di mana kamu berdiri?",
+    heroTitle: "Di Mana Kamu Berdiri?",
+    heroSub: "Petakan identitas politikmu di 6 dimensi. 54 pertanyaan. 5 menit.",
+    begin: "Mulai",
+    home: "Beranda",
+    modeCompass: "Kompas Politik",
+    modeCompassSub: "54 pertanyaan kebijakan umum",
+    modeMatchup: "Duel Presiden",
+    modeMatchupSub: "Pilih 2 presiden. Bandingkan pendekatan mereka.",
+    howItWorks: "CARA KERJANYA",
+    howItWorksText: "Nilai 54 pernyataan dari <em>Sangat tidak setuju</em> hingga <em>Sangat setuju</em>. Jawabanmu membentuk profil multi-dimensi yang dibandingkan dengan negara dan tokoh politik.",
+    questions: "pertanyaan",
+    countries: "negara",
+    figures: "tokoh",
+    stronglyAgree: "Sangat setuju",
+    agree: "Setuju",
+    neutral: "Netral",
+    disagree: "Tidak setuju",
+    stronglyDisagree: "Sangat tidak setuju",
+    previous: "← Sebelumnya",
+    next: "Berikutnya →",
+    skip: "Lewati →",
+    myProfile: "PROFIL SAYA:",
+    youAre: "Kamu adalah",
+    yourPoliticalDna: "DNA Politik Kamu",
+    axisBarsTitle: "RINCIAN SUMBU",
+    closestCountry: "NEGARA TERDEKATMU",
+    closestFigures: "Tokoh Terdekat",
+    tapBreakdown: "Ketuk untuk rincian",
+    closest: "TERDEKAT",
+    shareImage: "📸 Bagikan Gambar",
+    downloadPdf: "📄 Unduh PDF",
+    challengeFriend: "🔗 Tantang Teman",
+    retakeTest: "🔄 Ulangi Tes",
+    homeBtn: "🏠 Beranda",
+    viewAnswers: "Lihat Jawabanmu",
+    politicalCompass: "Kompas Politik",
+    authoritarian: "Otoriter",
+    libertarian: "Libertarian",
+    left: "Kiri",
+    right: "Kanan",
+    you: "Kamu",
+    skipped: "Dilewati",
+    agreeMost: "Paling setuju tentang",
+    disagreeMost: "paling tidak setuju tentang",
+    dragRotate: "Seret untuk memutar",
+    pickFirst: "Pilih presiden pertamamu",
+    pickOpponent: "Pilih lawannya",
+    nowPickOpp: "Sekarang pilih lawan untuk",
+    pick2Presidents: "Pilih 2 presiden. Lihat bagaimana pendekatan mereka dibandingkan.",
+    choosePresident: "Pilih presiden untuk dievaluasi:",
+    vs: "vs",
+    resetPicks: "↻ Atur ulang",
+    first: "Pertama",
+    opponent: "Lawan",
+    noPreference: "Tidak ada preferensi",
+    youSidedWith: "KAMU MEMIHAK",
+    aTie: "seri",
+    across: "dari",
+    issues: "isu",
+    on: "pada",
+    of: "dari",
+    issueByIssue: "Isu demi Isu",
+    tryAnother: "⚔️ Coba duel lain",
+    upside: "Sisi baik",
+    downside: "Sisi buruk",
+    pick: "Pilih",
+    sectionComplete: "Selesai",
+    keepGoing: "Lanjutkan →",
+    sectionsOf: "dari",
+    sectionsDone: "bagian selesai",
+    appearance: "Tampilan",
+    language: "Bahasa",
+    economy: "Ekonomi",
+    society: "Masyarakat",
+    governance: "Pemerintahan",
+    universality: "Universalitas",
+    environment: "Lingkungan",
+    expansion: "Ekspansi",
+    statism: "Etatisme",
+    freeMarket: "Pasar bebas",
+    progressivism: "Progresivisme",
+    conservatism: "Konservatisme",
+    liberty: "Kebebasan",
+    authority: "Otoritas",
+    internationalism: "Internasionalisme",
+    nationalism: "Nasionalisme",
+    ecology: "Ekologi",
+    productivism: "Produktivisme",
+    expansionism: "Ekspansionisme",
+    restraint: "Pengekangan",
+  },
+  el: {
+    siteTitle: "πού στέκεσαι;",
+    heroTitle: "Πού Στέκεσαι;",
+    heroSub: "Χαρτογράφησε την πολιτική σου ταυτότητα σε 6 διαστάσεις. 54 ερωτήσεις. 5 λεπτά.",
+    begin: "Ξεκίνα",
+    home: "Αρχική",
+    modeCompass: "Πολιτική Πυξίδα",
+    modeCompassSub: "54 γενικές ερωτήσεις πολιτικής",
+    modeMatchup: "Πρόεδροι Αντιμέτωποι",
+    modeMatchupSub: "Διάλεξε 2 προέδρους. Σύγκρινε τις προσεγγίσεις τους.",
+    howItWorks: "ΠΩΣ ΛΕΙΤΟΥΡΓΕΙ",
+    howItWorksText: "Αξιολόγησε 54 δηλώσεις από <em>Διαφωνώ απόλυτα</em> έως <em>Συμφωνώ απόλυτα</em>. Οι απαντήσεις σου δημιουργούν ένα πολιτικό προφίλ που συγκρίνεται με χώρες και πολιτικές προσωπικότητες.",
+    questions: "ερωτήσεις",
+    countries: "χώρες",
+    figures: "προσωπικότητες",
+    stronglyAgree: "Συμφωνώ απόλυτα",
+    agree: "Συμφωνώ",
+    neutral: "Ουδέτερο",
+    disagree: "Διαφωνώ",
+    stronglyDisagree: "Διαφωνώ απόλυτα",
+    previous: "← Προηγούμενο",
+    next: "Επόμενο →",
+    skip: "Παράλειψη →",
+    myProfile: "ΤΟ ΠΡΟΦΙΛ ΜΟΥ:",
+    youAre: "Είσαι",
+    yourPoliticalDna: "Το Πολιτικό σου DNA",
+    axisBarsTitle: "ΑΝΑΛΥΣΗ ΑΞΟΝΩΝ",
+    closestCountry: "Η ΠΛΗΣΙΕΣΤΕΡΗ ΧΩΡΑ ΣΟΥ",
+    closestFigures: "Πλησιέστερες Προσωπικότητες",
+    tapBreakdown: "Πάτα για ανάλυση",
+    closest: "ΠΛΗΣΙΕΣΤΕΡΟ",
+    shareImage: "📸 Κοινοποίηση Εικόνας",
+    downloadPdf: "📄 Λήψη PDF",
+    challengeFriend: "🔗 Πρόκληση Φίλου",
+    retakeTest: "🔄 Επανάληψη",
+    homeBtn: "🏠 Αρχική",
+    viewAnswers: "Δες τις Απαντήσεις σου",
+    politicalCompass: "Πολιτική Πυξίδα",
+    authoritarian: "Αυταρχικό",
+    libertarian: "Ελευθεριακό",
+    left: "Αριστερά",
+    right: "Δεξιά",
+    you: "Εσύ",
+    skipped: "Παραλείφθηκε",
+    agreeMost: "Συμφωνείς περισσότερο στο",
+    disagreeMost: "διαφωνείς περισσότερο στο",
+    dragRotate: "Σύρε για περιστροφή",
+    pickFirst: "Διάλεξε τον πρώτο πρόεδρο",
+    pickOpponent: "Διάλεξε τον αντίπαλο",
+    nowPickOpp: "Τώρα διάλεξε αντίπαλο για τον",
+    pick2Presidents: "Διάλεξε 2 προέδρους. Δες πώς συγκρίνονται.",
+    choosePresident: "Επέλεξε πρόεδρο:",
+    vs: "εν.",
+    resetPicks: "↻ Επαναφορά",
+    first: "Πρώτος",
+    opponent: "Αντίπαλος",
+    noPreference: "Χωρίς προτίμηση",
+    youSidedWith: "ΤΑΣΣΕΣΑΙ ΜΕ",
+    aTie: "ισοπαλία",
+    across: "σε",
+    issues: "θέματα",
+    on: "σε",
+    of: "από",
+    issueByIssue: "Θέμα ανά Θέμα",
+    tryAnother: "⚔️ Δοκίμασε άλλη αναμέτρηση",
+    upside: "Θετικό",
+    downside: "Αρνητικό",
+    pick: "Διάλεξε",
+    sectionComplete: "Ολοκληρώθηκε",
+    keepGoing: "Συνέχισε →",
+    sectionsOf: "από",
+    sectionsDone: "ενότητες ολοκληρώθηκαν",
+    appearance: "Εμφάνιση",
+    language: "Γλώσσα",
+    economy: "Οικονομία",
+    society: "Κοινωνία",
+    governance: "Διακυβέρνηση",
+    universality: "Καθολικότητα",
+    environment: "Περιβάλλον",
+    expansion: "Επέκταση",
+    statism: "Κρατισμός",
+    freeMarket: "Ελεύθερη αγορά",
+    progressivism: "Προοδευτισμός",
+    conservatism: "Συντηρητισμός",
+    liberty: "Ελευθερία",
+    authority: "Εξουσία",
+    internationalism: "Διεθνισμός",
+    nationalism: "Εθνικισμός",
+    ecology: "Οικολογία",
+    productivism: "Παραγωγισμός",
+    expansionism: "Επεκτατισμός",
+    restraint: "Αυτοσυγκράτηση",
+  }
+};
+
+let currentLang = 'en';
+
+function t(key) {
+  return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.en[key] || key;
+}
+
+function setLanguage(lang) {
+  if (!TRANSLATIONS[lang]) return;
+  currentLang = lang;
+  safeStorage.setItem('wdys_lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  applyTranslations();
+}
+
+function applyTranslations() {
+  // Static text elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const val = t(key);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
+    else el.textContent = val;
+  });
+
+  // HTML-containing elements (e.g., howItWorksText with <em>)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.dataset.i18nHtml;
+    el.innerHTML = t(key);
+  });
+
+  // Site title across all nav headers
+  document.querySelectorAll('.site-name').forEach(el => el.textContent = t('siteTitle'));
+
+  // Re-render active dynamic content in current language
+  try {
+    // Live quiz screen: axis badge + matchup topic stay in questions' original text, but we refresh nav.
+    if (document.getElementById('quiz') && document.getElementById('quiz').classList.contains('active')) {
+      const badge = document.getElementById('axisBadge');
+      const qs = getActiveQuestions();
+      const q = qs[currentQ];
+      if (q && badge) badge.textContent = t(q.axis) || (q.axis.charAt(0).toUpperCase() + q.axis.slice(1));
+    }
+    // Refresh results screens if currently active
+    if (document.getElementById('results') && document.getElementById('results').classList.contains('active') && window._lastScores) {
+      renderAxisBars(window._lastScores);
+      renderCountryMatch(window._lastScores);
+      renderIdeologyBreakdown(window._lastScores);
+      renderFigures(window._lastScores);
+    }
+    if (document.getElementById('matchupResults') && document.getElementById('matchupResults').classList.contains('active')) {
+      // Update tie label if visible
+      const tieName = document.querySelector('#splitSegTie .split-name');
+      if (tieName) tieName.textContent = t('aTie');
+    }
+    // Refresh matchup picker label
+    if (typeof refreshMatchupPickerState === 'function' && document.getElementById('matchupPicker')) {
+      refreshMatchupPickerState();
+    }
+    // Refresh landing subtitle to reflect mode state
+    if (typeof quizMode !== 'undefined') {
+      const subtitle = document.getElementById('landingSubtitle');
+      if (subtitle) subtitle.textContent = quizMode === 'matchup' ? t('pick2Presidents') : t('heroSub');
+    }
+  } catch (e) { /* early-call safe */ }
+}
 
 // ─── 1. State + Constants ─────────────────────
 let quizMode = 'compass'; // 'compass' or 'matchup'
@@ -39,7 +387,7 @@ function selectMode(mode) {
   const matchupPicker = document.getElementById('matchupPicker');
   const beginBtn = document.getElementById('beginBtn');
   if (mode === 'matchup') {
-    if (subtitle) subtitle.textContent = 'Pick 2 presidents. See how their approaches stack up.';
+    if (subtitle) subtitle.textContent = t('pick2Presidents');
     matchupPicker.classList.remove('hidden');
     // Reset picks every time user switches into matchup mode.
     matchupA = null; matchupB = null;
@@ -47,7 +395,7 @@ function selectMode(mode) {
     updateMatchupSlots();
     beginBtn.classList.add('disabled-btn');
   } else {
-    if (subtitle) subtitle.textContent = 'Map your political identity across 6 dimensions. 54 questions. 5 minutes.';
+    if (subtitle) subtitle.textContent = t('heroSub');
     matchupPicker.classList.add('hidden');
     matchupA = null; matchupB = null;
     beginBtn.classList.remove('disabled-btn');
@@ -99,9 +447,9 @@ function refreshMatchupPickerState() {
   });
   const label = document.getElementById('matchupPickerLabel');
   if (label) {
-    if (!matchupA) label.textContent = 'Pick your first president';
-    else if (!matchupB) label.textContent = `Now pick an opponent for ${PRESIDENT_META[matchupA].name}`;
-    else label.textContent = `${PRESIDENT_META[matchupA].name} vs ${PRESIDENT_META[matchupB].name}`;
+    if (!matchupA) label.textContent = t('pickFirst');
+    else if (!matchupB) label.textContent = `${t('nowPickOpp')} ${PRESIDENT_META[matchupA].name}`;
+    else label.textContent = `${PRESIDENT_META[matchupA].name} ${t('vs')} ${PRESIDENT_META[matchupB].name}`;
   }
   const beginBtn = document.getElementById('beginBtn');
   const resetBtn = document.getElementById('matchupResetBtn');
@@ -378,7 +726,7 @@ function renderQuestion() {
   document.getElementById('qCounter').textContent = `${String(currentQ + 1).padStart(2, '0')} / ${qs.length}`;
 
   const badge = document.getElementById('axisBadge');
-  badge.textContent = q.axis.charAt(0).toUpperCase() + q.axis.slice(1);
+  badge.textContent = t(q.axis) || (q.axis.charAt(0).toUpperCase() + q.axis.slice(1));
   badge.style.background = ALL_Q_COLORS[q.axis];
 
   // Set current axis color for CSS theming
@@ -551,7 +899,7 @@ function showSectionInterstitial(sectionInfo, callback) {
   const template = INTER_MESSAGES[pick];
 
   const overlay = document.getElementById('sectionInterstitial');
-  document.getElementById('interSectionTag').textContent = `${SECTION_NAMES[sectionInfo.axis]} Complete`;
+  document.getElementById('interSectionTag').textContent = `${t(sectionInfo.axis) || SECTION_NAMES[sectionInfo.axis]} ${t('sectionComplete')}`;
 
   const emojiEl = document.getElementById('interEmoji');
   const nameEl = document.getElementById('interName');
@@ -565,7 +913,7 @@ function showSectionInterstitial(sectionInfo, callback) {
 
   emojiEl.style.animation = '';
   nameEl.style.animation = '';
-  document.getElementById('interSub').textContent = `${sectionInfo.sectionNum} of ${sectionInfo.total} sections done`;
+  document.getElementById('interSub').textContent = `${sectionInfo.sectionNum} ${t('sectionsOf')} ${sectionInfo.total} ${t('sectionsDone')}`;
 
   const pct = (sectionInfo.sectionNum / sectionInfo.total) * 100;
   const barFill = document.getElementById('interBarFill');
@@ -897,13 +1245,13 @@ function finishMatchup() {
   const subEl = document.getElementById('matchupWinnerSub');
   if (countA > countB) {
     winnerEl.textContent = aMeta.name;
-    subEl.textContent = `on ${countA} of ${total} issues`;
+    subEl.textContent = `${t('on')} ${countA} ${t('of')} ${total} ${t('issues')}`;
   } else if (countB > countA) {
     winnerEl.textContent = bMeta.name;
-    subEl.textContent = `on ${countB} of ${total} issues`;
+    subEl.textContent = `${t('on')} ${countB} ${t('of')} ${total} ${t('issues')}`;
   } else {
-    winnerEl.textContent = 'a tie';
-    subEl.textContent = `${countA}–${countB} across ${total} issues`;
+    winnerEl.textContent = t('aTie');
+    subEl.textContent = `${countA}–${countB} ${t('across')} ${total} ${t('issues')}`;
   }
 
   // Split bar
@@ -928,7 +1276,7 @@ function finishMatchup() {
   let html = '';
   matchupIssues.forEach((issue, i) => {
     const pick = matchupPicks[i];
-    let pickedName = 'No preference', pickedClass = 'picked-tie';
+    let pickedName = t('noPreference'), pickedClass = 'picked-tie';
     if (pick === 'a') { pickedName = aMeta.name; pickedClass = 'picked-a ' + (aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
     else if (pick === 'b') { pickedName = bMeta.name; pickedClass = 'picked-b ' + (bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
     html += `
@@ -1455,10 +1803,16 @@ function renderAxisBars(scores) {
   const container = document.getElementById('axisBars');
   container.innerHTML = '';
 
+  // Mapping from English canonical labels in AXIS_LABELS to translation keys
+  const LEFT_KEY_MAP  = { 'Statism': 'statism', 'Progressivism': 'progressivism', 'Liberty': 'liberty', 'Internationalism': 'internationalism', 'Ecology': 'ecology' };
+  const RIGHT_KEY_MAP = { 'Free-market': 'freeMarket', 'Conservatism': 'conservatism', 'Authority': 'authority', 'Nationalism': 'nationalism', 'Productivism': 'productivism' };
+
   AXES.forEach((axis, idx) => {
     const leftPct = 100 - scores[axis];
     const rightPct = scores[axis];
     const labels = AXIS_LABELS[axis];
+    const leftLabel = t(LEFT_KEY_MAP[labels.left] || '') || labels.left;
+    const rightLabel = t(RIGHT_KEY_MAP[labels.right] || '') || labels.right;
     const color = BAR_COLORS[idx];
     const markerPos = scores[axis];
 
@@ -1467,7 +1821,7 @@ function renderAxisBars(scores) {
     wrapper.innerHTML = `
       <div class="axis-bar-row">
         <div class="axis-bar-left">
-          <span class="axis-bar-label">${labels.left}</span>
+          <span class="axis-bar-label">${leftLabel}</span>
           <span class="axis-bar-pct">${leftPct}%</span>
         </div>
         <div class="bar-track">
@@ -1481,7 +1835,7 @@ function renderAxisBars(scores) {
         </div>
         <div class="axis-bar-right">
           <span class="axis-bar-pct">${rightPct}%</span>
-          <span class="axis-bar-label">${labels.right}</span>
+          <span class="axis-bar-label">${rightLabel}</span>
         </div>
       </div>
       ${axisFigureHTML(axis, scores[axis])}
@@ -1498,7 +1852,7 @@ function renderAxisBars(scores) {
   expWrapper.innerHTML = `
     <div class="axis-bar-row">
       <div class="axis-bar-left">
-        <span class="axis-bar-label">Expansionism</span>
+        <span class="axis-bar-label">${t('expansionism')}</span>
         <span class="axis-bar-pct">${expLeft}%</span>
       </div>
       <div class="bar-track">
@@ -1512,7 +1866,7 @@ function renderAxisBars(scores) {
       </div>
       <div class="axis-bar-right">
         <span class="axis-bar-pct">${expRight}%</span>
-        <span class="axis-bar-label">Restraint</span>
+        <span class="axis-bar-label">${t('restraint')}</span>
       </div>
     </div>
     ${axisFigureHTML('expansion', scores.expansion)}
@@ -1537,7 +1891,7 @@ function renderCountryMatch(scores) {
   countryCard.className = 'country-card';
   countryCard.setAttribute('data-reveal', 'country');
   countryCard.innerHTML = `
-    <span class="country-label">YOUR CLOSEST COUNTRY</span>
+    <span class="country-label">${t('closestCountry')}</span>
     <div class="country-row">
       <div class="country-info">
         <span class="country-code" id="countryCode"></span>
@@ -1563,9 +1917,9 @@ function toggleAnswers() {
   if (!content.classList.contains('hidden') && !content.dataset.built) {
     content.dataset.built = 'true';
     const qs = getActiveQuestions();
-    const labels = { 5: 'Strongly agree', 4: 'Agree', 3: 'Neutral', 2: 'Disagree', 1: 'Strongly disagree' };
+    const labels = { 5: t('stronglyAgree'), 4: t('agree'), 3: t('neutral'), 2: t('disagree'), 1: t('stronglyDisagree') };
     const axisColors = { economy: '#8B5CF6', society: '#14B8A6', governance: '#F59E0B', universality: '#3B82F6', environment: '#22C55E', expansion: '#F472B6' };
-    const axisNames = { economy: 'Economy', society: 'Society', governance: 'Governance', universality: 'Universality', environment: 'Environment', expansion: 'Expansion' };
+    const axisNames = { economy: t('economy'), society: t('society'), governance: t('governance'), universality: t('universality'), environment: t('environment'), expansion: t('expansion') };
 
     let html = '';
     qs.forEach((q, i) => {
@@ -1578,7 +1932,7 @@ function toggleAnswers() {
             <div class="review-q-text">${q.text}</div>
             <div class="review-q-meta">
               <span class="review-axis-tag" style="border-color:${color};color:${color}">${axisNames[q.axis]}</span>
-              <span class="review-answer ${answer === null ? 'skipped' : ''}">${answer ? labels[answer] : 'Skipped'}</span>
+              <span class="review-answer ${answer === null ? 'skipped' : ''}">${answer ? labels[answer] : t('skipped')}</span>
             </div>
           </div>
         </div>
@@ -2148,8 +2502,8 @@ function renderIdeologyBreakdown(scores) {
     universality: '🌐', environment: '🌿', expansion: '🚀'
   };
   const axisNames = {
-    economy: 'Economy', society: 'Society', governance: 'Governance',
-    universality: 'Universality', environment: 'Environment', expansion: 'Expansion'
+    economy: t('economy'), society: t('society'), governance: t('governance'),
+    universality: t('universality'), environment: t('environment'), expansion: t('expansion')
   };
 
   let html = '';
@@ -2186,7 +2540,7 @@ function renderFigures(scores) {
   // Restore heading if it was replaced by presidential mode
   const figSection = document.getElementById('figuresSection');
   figSection.innerHTML = `
-    <h3 class="section-heading">Closest Figures</h3>
+    <h3 class="section-heading">${t('closestFigures')}</h3>
     <div class="figures-grid" id="closestFigures"></div>
   `;
 
@@ -2283,7 +2637,7 @@ function buildFigureCard(fig, scores, isTopMatch, cardIndex) {
     <div class="figure-card ${isTopMatch ? 'top-match' : ''}" style="animation-delay: ${cardIndex * 100}ms">
       <div class="figure-card-header">
         <div class="figure-name-wrap">
-          ${isTopMatch ? '<span class="top-match-badge">CLOSEST</span>' : ''}
+          ${isTopMatch ? `<span class="top-match-badge">${t('closest')}</span>` : ''}
           <span class="figure-name">${fig.name}</span>
         </div>
         <div class="figure-gauge">
@@ -2296,14 +2650,14 @@ function buildFigureCard(fig, scores, isTopMatch, cardIndex) {
           <span class="figure-pct" data-target="${pct}">0%</span>
         </div>
       </div>
-      <span class="figure-expand-hint">Tap for breakdown <span class="expand-chevron">▾</span></span>
+      <span class="figure-expand-hint">${t('tapBreakdown')} <span class="expand-chevron">▾</span></span>
       <div class="figure-breakdown">
         <div class="figure-bar-legend">
-          <span class="leg-you">You</span>
+          <span class="leg-you">${t('you')}</span>
           <span class="leg-fig">${fig.name}</span>
         </div>
         ${barsHtml}
-        <div class="figure-diverge-note">Agree most on ${minDivAxis}, disagree most on ${maxDivAxis}</div>
+        <div class="figure-diverge-note">${t('agreeMost')} ${minDivAxis}, ${t('disagreeMost')} ${maxDivAxis}</div>
       </div>
     </div>
   `;
@@ -2700,6 +3054,15 @@ function applySavedTheme() {
 document.addEventListener('DOMContentLoaded', () => {
   // Apply saved theme before anything else
   applySavedTheme();
+
+  // Apply saved language
+  const savedLang = safeStorage.getItem('wdys_lang');
+  if (savedLang && TRANSLATIONS[savedLang]) {
+    currentLang = savedLang;
+    document.documentElement.lang = savedLang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === savedLang));
+  }
+  applyTranslations();
 
   // Init global particle background
   initParticles();
