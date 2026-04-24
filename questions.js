@@ -20,235 +20,235 @@ const QUESTIONS = [
 
   // ── ECONOMY (9 questions) ──────────────────────────────────
   {
-    text: "The government should set a maximum limit on how much rent landlords can charge.",
+    text: "Rent control keeps housing affordable better than letting the market decide.",
     axis: "economy",
     pole: "left" // agree → State
   },
   {
-    text: "Public hospitals should be fully funded through taxes so patients pay nothing at the point of care.",
+    text: "Healthcare works better as a public utility than as a market.",
     axis: "economy",
     pole: "left"
   },
   {
-    text: "A business owner should be free to set their own employee wages without a government-mandated minimum.",
+    text: "Markets set wages more accurately than politicians do.",
     axis: "economy",
     pole: "right" // agree → Market
   },
   {
-    text: "Opening a new business should require no government permits — just register online and start trading.",
+    text: "Licensing requirements for new businesses protect incumbents more than they protect the public.",
     axis: "economy",
     pole: "right"
   },
   {
-    text: "The national electricity grid should be owned and operated by the government rather than private companies.",
+    text: "Natural monopolies like electricity grids should be publicly owned, not privately run.",
     axis: "economy",
     pole: "left"
   },
   {
-    text: "Every adult citizen should receive a guaranteed basic income from the government, whether or not they work.",
+    text: "A guaranteed basic income is more efficient than the patchwork of welfare programs it would replace.",
     axis: "economy",
     pole: "left"
   },
   {
-    text: "Companies perform better and create more jobs when the government taxes them less.",
+    text: "Lower corporate taxes produce more investment and jobs than the spending they would fund.",
     axis: "economy",
     pole: "right"
   },
   {
-    text: "International trade works best when countries can import and export goods without tariffs.",
+    text: "Tariffs protect a small number of jobs at the expense of everyone who buys the goods.",
     axis: "economy",
     pole: "right"
   },
   {
-    text: "Banks and financial institutions should face stricter government regulations than they currently do.",
+    text: "Financial markets left to self-regulate will periodically blow up and require public bailouts.",
     axis: "economy",
     pole: "left"
   },
 
   // ── SOCIETY (9 questions) ──────────────────────────────────
   {
-    text: "Marriage should be legally available to any two consenting adults, regardless of gender.",
+    text: "What consenting adults do with each other is not the government's concern.",
     axis: "society",
     pole: "left" // agree → Progress
   },
   {
-    text: "Public schools should teach students about different family structures and relationship types.",
+    text: "Schools should present all family structures factually, without privileging one as the norm.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "Government policy should actively encourage the traditional two-parent family structure.",
+    text: "Stable two-parent families are a better predictor of good outcomes than any government program.",
     axis: "society",
     pole: "right" // agree → Tradition
   },
   {
-    text: "Religious institutions should have a formal role in advising the government on laws about ethics.",
+    text: "Religious communities encode hard-won social knowledge that secular policy often ignores.",
     axis: "society",
     pole: "right"
   },
   {
-    text: "Adults should be free to purchase and use cannabis from licensed sellers.",
+    text: "Adults should be free to use substances that harm only themselves.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "A woman should be able to access an abortion in the early stages of pregnancy without restrictions.",
+    text: "Decisions about pregnancy belong to the person who is pregnant, not to the state.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "Public schools should begin each day with a moment of silent reflection or prayer.",
+    text: "Shared rituals and civic practices are how societies hold together — schools should reinforce them.",
     axis: "society",
     pole: "right"
   },
   {
-    text: "Scientific research should take priority over religious teachings when setting public health policy.",
+    text: "Empirical evidence should determine public health policy, not inherited belief.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "Schools should dedicate regular time to teaching students traditional national customs and cultural practices.",
+    text: "Cultural continuity is a real good — it doesn't preserve itself without deliberate effort.",
     axis: "society",
     pole: "right"
   },
 
   // ── GOVERNANCE (9 questions) ────────────────────────────────
   {
-    text: "Intelligence agencies should be able to monitor private communications without a court warrant if national security is at risk.",
+    text: "When safety and privacy conflict, safety wins — this is just math.",
     axis: "governance",
     pole: "right" // agree → Authority
   },
   {
-    text: "People should never be fined or imprisoned for expressing an opinion, no matter how offensive it is.",
+    text: "The cure for bad speech is more speech, not less.",
     axis: "governance",
     pole: "left" // agree → Liberty
   },
   {
-    text: "Major policy decisions on health and education should be made by the national government, not by local councils.",
+    text: "Uniform national standards beat a patchwork of local rules for health and education.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Police should be allowed to stop and search anyone in a high-crime area without needing a specific reason.",
+    text: "Giving police broad stop-and-search powers in high-crime areas reduces crime more than it harms civil liberties.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Any adult without a criminal record should be allowed to own a firearm without needing a special licence.",
+    text: "A clean criminal record should be sufficient qualification for firearm ownership.",
     axis: "governance",
     pole: "left"
   },
   {
-    text: "A government employee who leaks secret documents exposing illegal government activity should be protected from prosecution.",
+    text: "Exposing illegal government activity is a public service, not a crime.",
     axis: "governance",
     pole: "left"
   },
   {
-    text: "Social media companies should be legally required to remove content that the government classifies as misinformation.",
+    text: "Governments, not platforms, should determine what counts as misinformation online.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Every citizen aged 18 to 25 should be required to complete one year of military or national service.",
+    text: "Mandatory national service builds civic cohesion that voluntary institutions cannot replicate.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Police should never be given access to encrypted private messages, not even with a court order.",
+    text: "Encryption backdoors make everyone less secure — they cannot be limited to good actors.",
     axis: "governance",
     pole: "left"
   },
 
   // ── UNIVERSALITY (9 questions) ──────────────────────────────
   {
-    text: "A country should be free to withdraw from any international agreement that limits how it makes its own laws.",
+    text: "A country that cannot exit international agreements has surrendered meaningful sovereignty.",
     axis: "universality",
     pole: "right" // agree → Nationalism
   },
   {
-    text: "People should be free to move to and work in any country they choose without needing a visa.",
+    text: "Nation-states are a fading technology — the future is global citizenship.",
     axis: "universality",
     pole: "left" // agree → Internationalism
   },
   {
-    text: "An international body should have the power to override a country's laws if they violate basic human rights.",
+    text: "Human rights are universal or they are nothing — external enforcement is the logical consequence.",
     axis: "universality",
     pole: "left"
   },
   {
-    text: "A country's foreign aid budget should be reduced and that money spent on domestic needs instead.",
+    text: "A government's primary obligation is to its own citizens.",
     axis: "universality",
     pole: "right"
   },
   {
-    text: "A society with people from many different cultural backgrounds is stronger than a culturally uniform one.",
+    text: "Diverse societies consistently outperform homogeneous ones on innovation and adaptability.",
     axis: "universality",
     pole: "left"
   },
   {
-    text: "The government should set a strict annual cap on how many immigrants the country accepts.",
+    text: "Immigration at a rate faster than integration capacity degrades social trust.",
     axis: "universality",
     pole: "right"
   },
   {
-    text: "Countries that break international climate agreements should face automatic trade penalties.",
+    text: "Climate change is the kind of problem that only coordinated international enforcement can solve.",
     axis: "universality",
     pole: "left"
   },
   {
-    text: "Schools should be required to teach students the national anthem and key moments in national history.",
+    text: "Shared national history and symbols are the foundations of civic identity — schools should teach them.",
     axis: "universality",
     pole: "right"
   },
   {
-    text: "Wealthy nations have a moral obligation to accept a minimum number of refugees each year.",
+    text: "Rich countries bear a disproportionate responsibility for displacement — accepting refugees is part of the bill.",
     axis: "universality",
     pole: "left"
   },
 
   // ── ENVIRONMENT (9 questions) ───────────────────────────────
   {
-    text: "The sale of new petrol and diesel cars should be phased out by 2035.",
+    text: "Climate change is a serious enough problem to justify forcing changes on industry.",
     axis: "environment",
     pole: "left" // agree → Ecology
   },
   {
-    text: "Old-growth forests should be permanently protected from logging, regardless of the economic value of the timber.",
+    text: "Some ecosystems are irreplaceable — their economic value is unknowable and therefore incalculable.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Environmental regulations that are proven to cost a large number of jobs should be reconsidered.",
+    text: "Most environmental problems will be solved by better technology, not by restrictions.",
     axis: "environment",
     pole: "right" // agree → Productivism
   },
   {
-    text: "Single-use plastics like bags and straws should be banned by law.",
+    text: "Banning single-use plastics is a concrete and proportionate response to measurable environmental harm.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "A developing country should be allowed to use fossil fuels for energy if it cannot yet afford renewable alternatives.",
+    text: "Demanding poor countries skip fossil fuels is asking them to accept permanent disadvantage.",
     axis: "environment",
     pole: "right"
   },
   {
-    text: "A tax on carbon emissions is an effective way to reduce pollution.",
+    text: "Pricing carbon is the most economically honest way to account for pollution costs.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Meat products should carry a higher tax to reflect their environmental footprint.",
+    text: "Taxing meat to reflect its environmental cost is no different in principle from taxing petrol.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Advances in technology will eventually solve most environmental problems without the need for strict regulations today.",
+    text: "Restricting today's growth to solve future environmental problems assumes we know more than we do.",
     axis: "environment",
     pole: "right"
   },
   {
-    text: "A mining project that would destroy a rare natural habitat should be blocked, regardless of its economic value.",
+    text: "Irreversible ecological destruction is a category of harm that economic compensation cannot undo.",
     axis: "environment",
     pole: "left"
   },
@@ -257,55 +257,55 @@ const QUESTIONS = [
   // sub: "space" | "technology" | "bioethics" | "growth"
   // The 5th pentagon corner ("Expansion") is the average of these four.
   {
-    text: "Governments should dedicate a significant portion of their budget to space exploration programs.",
+    text: "Becoming multi-planetary is existential insurance for humanity.",
     axis: "expansion",
     sub: "space",
     pole: "left" // agree → Expansionism
   },
   {
-    text: "Money spent on space exploration would be better used solving problems here on Earth.",
+    text: "Space exploration is premature while we have unsolved problems on the surface of this planet.",
     axis: "expansion",
     sub: "space",
     pole: "right" // agree → Restraint
   },
   {
-    text: "A private company should be free to develop an AI system more intelligent than any human without needing government approval.",
+    text: "The risks of slowing artificial intelligence progress are greater than the risks of pushing forward.",
     axis: "expansion",
     sub: "technology",
     pole: "left"
   },
   {
-    text: "AI systems that make decisions about people's lives (hiring, loans, sentencing) should be banned until proven safe.",
+    text: "Artificial intelligence systems making decisions about people's lives should be proven safe before deployment, not after.",
     axis: "expansion",
     sub: "technology",
     pole: "right"
   },
   {
-    text: "Parents should be allowed to use genetic editing to remove hereditary diseases from their unborn children.",
+    text: "Editing genes to prevent hereditary disease is no different in principle from vaccination.",
     axis: "expansion",
     sub: "bioethics",
     pole: "left"
   },
   {
-    text: "There are natural limits to human lifespan and capability that we should accept rather than try to engineer past.",
+    text: "The history of interventions in complex systems should make us cautious about re-engineering human biology.",
     axis: "expansion",
     sub: "bioethics",
     pole: "right"
   },
   {
-    text: "Scientists should begin large-scale climate engineering projects like reflecting sunlight to cool the planet.",
+    text: "Planetary-scale climate engineering is worth the risk if the alternative is runaway warming.",
     axis: "expansion",
     sub: "growth",
     pole: "left"
   },
   {
-    text: "There should be a legal limit on how fast a country's economy can grow each year to prevent overconsumption.",
+    text: "Growth isn't the problem — most sustainability concerns will be solved by better engineering.",
     axis: "expansion",
     sub: "growth",
     pole: "right"
   },
   {
-    text: "Establishing a permanent human settlement on Mars should be a top international priority.",
+    text: "A permanent human presence on Mars is worth prioritising now, not in some distant future.",
     axis: "expansion",
     sub: "space",
     pole: "left"
@@ -323,290 +323,290 @@ const QUESTIONS_BROAD = [
 
   // ── ECONOMY (9 questions) ──────────────────────────────────
   {
-    text: "The government should control prices when it helps ordinary people afford essentials.",
+    text: "Leaving essential prices to the market produces outcomes that are efficient but not acceptable.",
     axis: "economy",
     pole: "left"
   },
   {
-    text: "Healthcare should be a guaranteed right, not something you buy.",
+    text: "Essential services like healthcare should not depend on ability to pay.",
     axis: "economy",
     pole: "left"
   },
   {
-    text: "Businesses run better when the government stays out of their decisions.",
+    text: "Every regulation has a cost — most of them aren't worth it.",
     axis: "economy",
     pole: "right"
   },
   {
-    text: "People should be free to start and run businesses with as little red tape as possible.",
+    text: "The freedom to start a business without permission is a basic economic right.",
     axis: "economy",
     pole: "right"
   },
   {
-    text: "Essential services that everyone depends on are better run by the public than left to private profit.",
+    text: "When an industry is a natural monopoly, private ownership extracts rent rather than creating value.",
     axis: "economy",
     pole: "left"
   },
   {
-    text: "Society should make sure everyone has a basic income to live on, whether or not they work.",
+    text: "Unconditional basic income is a cleaner solution to poverty than bureaucratic means-testing.",
     axis: "economy",
     pole: "left"
   },
   {
-    text: "A society grows stronger when the government takes less from businesses and individuals in taxes.",
+    text: "Taxing wealth destroys the incentives that generate it in the first place.",
     axis: "economy",
     pole: "right"
   },
   {
-    text: "Open, free trade between countries benefits everyone in the long run.",
+    text: "Comparative advantage is real — protectionism makes everyone poorer in aggregate.",
     axis: "economy",
     pole: "right"
   },
   {
-    text: "Powerful industries like finance need strong government oversight to protect ordinary people.",
+    text: "Industries with systemic risk to the public economy should be regulated in the public interest.",
     axis: "economy",
     pole: "left"
   },
 
   // ── SOCIETY (9 questions) ──────────────────────────────────
   {
-    text: "Society works better when people are free to live how they want.",
+    text: "Personal lifestyle choices that don't harm others are none of the state's business.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "Children should be taught to understand and respect many different ways of living.",
+    text: "Exposure to diverse ways of living makes children more capable adults.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "The traditional family is the foundation of a healthy society and should be protected.",
+    text: "Most social rules exist for reasons — changing them often has costs we don't anticipate.",
     axis: "society",
     pole: "right"
   },
   {
-    text: "Traditional values and religion should shape public life.",
+    text: "Secular governance is more stable, but religious traditions carry moral knowledge worth keeping.",
     axis: "society",
     pole: "right"
   },
   {
-    text: "Adults should be free to make their own choices about what they put into their own bodies.",
+    text: "Prohibition reliably creates black markets — personal drug use should be decriminalised.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "People should have control over their own bodies and personal life decisions.",
+    text: "Bodily autonomy is the most basic right — it cannot be overridden by majority preference.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "Religion has a positive role to play in public institutions like schools.",
+    text: "Civic rituals feel arbitrary until they're gone — then you notice what held things together.",
     axis: "society",
     pole: "right"
   },
   {
-    text: "When science and tradition disagree, society should generally follow the science.",
+    text: "Where evidence and tradition conflict, evidence should win.",
     axis: "society",
     pole: "left"
   },
   {
-    text: "Preserving our cultural heritage and customs should be a priority for the next generation.",
+    text: "Culture is a living inheritance — each generation has a duty to pass it on, not just consume it.",
     axis: "society",
     pole: "right"
   },
 
   // ── GOVERNANCE (9 questions) ────────────────────────────────
   {
-    text: "Keeping the country safe is more important than personal privacy.",
+    text: "The right to privacy shouldn't be absolute when stakes are catastrophic.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Free speech must be protected even when what people say is offensive or wrong.",
+    text: "Allowing governments to suppress offensive speech gives them a tool they will inevitably abuse.",
     axis: "governance",
     pole: "left"
   },
   {
-    text: "Big decisions that affect the whole country are best made by strong central leadership.",
+    text: "Decentralised decision-making produces better outcomes than central direction, except when it doesn't.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Police should have broad powers to keep order, even if it means fewer individual freedoms.",
+    text: "Order is a prerequisite for freedom — without security, rights are theoretical.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Ordinary people should be trusted to handle things the state usually controls, like owning weapons.",
+    text: "The state should trust citizens with more responsibility, not less.",
     axis: "governance",
     pole: "left"
   },
   {
-    text: "People who expose government wrongdoing are doing the public a service, not committing a crime.",
+    text: "Governments that punish leaks are protecting themselves, not the public.",
     axis: "governance",
     pole: "left"
   },
   {
-    text: "The government has a duty to control harmful or misleading information in public life.",
+    text: "The state is structurally ill-equipped to adjudicate truth — it shouldn't try.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Citizens have a duty to serve their country, even if it means giving up some personal freedom.",
+    text: "Shared civic obligation creates something voluntary service cannot — collective skin in the game.",
     axis: "governance",
     pole: "right"
   },
   {
-    text: "Privacy is a fundamental right the state should never be allowed to break, no matter the reason.",
+    text: "Any surveillance power granted for legitimate use will eventually be used for illegitimate use.",
     axis: "governance",
     pole: "left"
   },
 
   // ── UNIVERSALITY (9 questions) ──────────────────────────────
   {
-    text: "A nation should always put its own sovereignty above international rules and agreements.",
+    text: "Global institutions without enforcement are theater — real sovereignty stays at the national level.",
     axis: "universality",
     pole: "right"
   },
   {
-    text: "Borders should be open — people should be free to live where they want.",
+    text: "Borders are an accident of history — they shouldn't determine the ceiling of your life.",
     axis: "universality",
     pole: "left"
   },
   {
-    text: "Some human rights are universal, and the world has a duty to uphold them everywhere.",
+    text: "Human rights that only apply when convenient aren't rights — they're preferences.",
     axis: "universality",
     pole: "left"
   },
   {
-    text: "A country should take care of its own people first before helping those abroad.",
+    text: "Charity starts at home — a government that cannot deliver for its own citizens has no business abroad.",
     axis: "universality",
     pole: "right"
   },
   {
-    text: "A nation is stronger when it welcomes people from many different cultures.",
+    text: "Mixing people from different backgrounds produces better ideas and stronger institutions.",
     axis: "universality",
     pole: "left"
   },
   {
-    text: "Immigration should be tightly controlled to protect the country's identity and jobs.",
+    text: "Rapid demographic change strains the social infrastructure that makes integration possible.",
     axis: "universality",
     pole: "right"
   },
   {
-    text: "Countries should be willing to cooperate — and sacrifice some self-interest — to solve global problems.",
+    text: "Problems that cross borders require solutions that cross borders.",
     axis: "universality",
     pole: "left"
   },
   {
-    text: "Children should grow up with a strong sense of pride in their nation's history and identity.",
+    text: "Without a shared story, a nation is just people living near each other.",
     axis: "universality",
     pole: "right"
   },
   {
-    text: "Wealthy countries have a moral duty to help people fleeing war and persecution.",
+    text: "When people flee persecution, their destination country matters less than finding safety.",
     axis: "universality",
     pole: "left"
   },
 
   // ── ENVIRONMENT (9 questions) ───────────────────────────────
   {
-    text: "Protecting the environment matters more than economic growth.",
+    text: "Long-term environmental costs matter more than short-term economic gains.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Nature has value in itself, beyond what we can get out of it economically.",
+    text: "Extinction is permanent — that asymmetry should change how we weigh economic versus ecological tradeoffs.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Environmental rules should be balanced against the jobs and livelihoods they affect.",
+    text: "Environmental regulations designed by people who don't bear their costs tend to be too strict.",
     axis: "environment",
     pole: "right"
   },
   {
-    text: "Society should be willing to ban everyday conveniences that harm the environment.",
+    text: "Banning harmful products is more reliable than trusting consumers to choose differently.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Poorer countries shouldn't be held to the same environmental standards as rich ones.",
+    text: "Development timelines should not be identical for rich and poor countries just because the problems are global.",
     axis: "environment",
     pole: "right"
   },
   {
-    text: "Polluters should pay for the damage their emissions cause.",
+    text: "Making polluters pay for harm is more efficient than regulating how they operate.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Everyday choices like what we eat should take the environment into account.",
+    text: "Personal consumption choices aggregate into environmental outcomes — individuals are not off the hook.",
     axis: "environment",
     pole: "left"
   },
   {
-    text: "Human ingenuity and technology will solve environmental problems without needing to limit growth.",
+    text: "Scarcity drives innovation — energy constraints will be solved the same way every prior constraint was.",
     axis: "environment",
     pole: "right"
   },
   {
-    text: "Protecting wild nature should come before the profits of any single project.",
+    text: "Some losses cannot be compensated — we shouldn't pretend every tradeoff is reversible.",
     axis: "environment",
     pole: "left"
   },
 
   // ── EXPANSION (9 questions, sub-categorised) ─────────────────────────
   {
-    text: "Exploring beyond Earth is part of humanity's purpose and worth investing in.",
+    text: "A species that exists on only one planet is one disaster away from extinction.",
     axis: "expansion",
     sub: "space",
     pole: "left"
   },
   {
-    text: "We should focus on problems here on Earth before looking to the stars.",
+    text: "Space colonisation is a distraction from problems that are solvable now.",
     axis: "expansion",
     sub: "space",
     pole: "right"
   },
   {
-    text: "We should push the boundaries of technology without too many restrictions.",
+    text: "Slowing down transformative technology doesn't make it safer — it just shifts the advantage to those with fewer scruples.",
     axis: "expansion",
     sub: "technology",
     pole: "left"
   },
   {
-    text: "Powerful new technologies should be held back until we're sure they're safe.",
+    text: "We consistently underestimate how badly things can go wrong with powerful new tools.",
     axis: "expansion",
     sub: "technology",
     pole: "right"
   },
   {
-    text: "Humans should use science to improve our biology and overcome natural limits.",
+    text: "Using science to reduce suffering — including genetic suffering — is the logical continuation of medicine.",
     axis: "expansion",
     sub: "bioethics",
     pole: "left"
   },
   {
-    text: "There are natural limits we shouldn't try to cross, even if we could.",
+    text: "Reengineering human biology is the kind of thing that looks obvious and beneficial right up until it isn't.",
     axis: "expansion",
     sub: "bioethics",
     pole: "right"
   },
   {
-    text: "Humanity should be bold about using technology to reshape the planet if it helps us.",
+    text: "Deliberately reshaping planetary systems is a reasonable response to the scale of the problem we've already created.",
     axis: "expansion",
     sub: "growth",
     pole: "left"
   },
   {
-    text: "Endless economic growth isn't sustainable — we need to learn to live with less.",
+    text: "Degrowth assumes we've reached the limit of human ingenuity — that assumption has been wrong every time before.",
     axis: "expansion",
     sub: "growth",
     pole: "right"
   },
   {
-    text: "Becoming a spacefaring species and settling other worlds is a worthy goal for humanity.",
+    text: "Settling other worlds isn't escapism — it's the most serious long-term project our species could undertake.",
     axis: "expansion",
     sub: "space",
     pole: "left"
