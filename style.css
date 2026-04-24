@@ -331,6 +331,12 @@ html[data-theme="neon"] .lang-btn.active {
   background: rgba(0, 255, 136, 0.10);
   border-color: rgba(0, 255, 136, 0.45);
 }
+.settings-hint {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+  line-height: 1.4;
+}
 
 /* ═══════════════════════════════════════════════
    THEME: BLACK (OLED)

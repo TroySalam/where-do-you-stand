@@ -107,6 +107,10 @@ const TRANSLATIONS = {
     productivism: "Productivism",
     expansionism: "Expansionism",
     restraint: "Restraint",
+    questionStyle: "Question Style",
+    specific: "Specific",
+    broad: "Broad",
+    questionStyleHint: "Specific uses detailed policy questions. Broad uses general values questions.",
   },
   id: {
     siteTitle: "di mana kamu berdiri?",
@@ -200,6 +204,10 @@ const TRANSLATIONS = {
     productivism: "Produktivisme",
     expansionism: "Ekspansionisme",
     restraint: "Pengekangan",
+    questionStyle: "Gaya Pertanyaan",
+    specific: "Spesifik",
+    broad: "Umum",
+    questionStyleHint: "Spesifik menggunakan pertanyaan kebijakan terperinci. Umum menggunakan pertanyaan nilai yang lebih luas.",
   },
   el: {
     siteTitle: "πού στέκεσαι;",
@@ -293,6 +301,10 @@ const TRANSLATIONS = {
     productivism: "Παραγωγισμός",
     expansionism: "Επεκτατισμός",
     restraint: "Αυτοσυγκράτηση",
+    questionStyle: "Στυλ Ερωτήσεων",
+    specific: "Συγκεκριμένο",
+    broad: "Γενικό",
+    questionStyleHint: "Το Συγκεκριμένο χρησιμοποιεί λεπτομερείς ερωτήσεις πολιτικής. Το Γενικό χρησιμοποιεί ευρύτερες ερωτήσεις αξιών.",
   }
 };
 
@@ -367,6 +379,16 @@ let quizMode = 'compass'; // 'compass' or 'matchup'
 let currentQ = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
 
+// Question style for compass mode: 'specific' (detailed policy) or 'broad' (values-based)
+let questionStyle = safeStorage.getItem('wdys_qstyle') || 'specific';
+
+function setQuestionStyle(style) {
+  if (style !== 'specific' && style !== 'broad') return;
+  questionStyle = style;
+  safeStorage.setItem('wdys_qstyle', style);
+  document.querySelectorAll('[data-qstyle]').forEach(b => b.classList.toggle('active', b.dataset.qstyle === style));
+}
+
 // Head-to-head matchup state
 let matchupA = null;        // first president key
 let matchupB = null;        // second president key
@@ -375,6 +397,12 @@ let matchupPicks = [];      // array of 'a' | 'b' | 'tie' (index aligned to issu
 let matchupIdx = 0;         // current matchup question index
 
 function getActiveQuestions() {
+  // Compass mode supports a broad/specific toggle. Matchup mode uses its own
+  // issue list (matchupIssues) and never calls this, so returning the compass
+  // set here is safe either way.
+  if (quizMode === 'compass' && questionStyle === 'broad' && typeof QUESTIONS_BROAD !== 'undefined') {
+    return QUESTIONS_BROAD;
+  }
   return QUESTIONS;
 }
 
@@ -3062,6 +3090,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.lang = savedLang;
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === savedLang));
   }
+
+  // Apply saved question style
+  const savedStyle = safeStorage.getItem('wdys_qstyle');
+  if (savedStyle === 'broad' || savedStyle === 'specific') {
+    questionStyle = savedStyle;
+    document.querySelectorAll('[data-qstyle]').forEach(b => b.classList.toggle('active', b.dataset.qstyle === savedStyle));
+  }
+
   applyTranslations();
 
   // Init global particle background

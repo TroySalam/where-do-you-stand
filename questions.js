@@ -311,3 +311,304 @@ const QUESTIONS = [
     pole: "left"
   }
 ];
+
+// ============================================================
+// 54 BROAD QUESTIONS — values-based versions of the above
+// Same order, axis, pole, and sub as QUESTIONS. Index N here
+// maps to index N in QUESTIONS. Used when the user picks the
+// "Broad" question style in settings.
+// ============================================================
+
+const QUESTIONS_BROAD = [
+
+  // ── ECONOMY (9 questions) ──────────────────────────────────
+  {
+    text: "The government should control prices when it helps ordinary people afford essentials.",
+    axis: "economy",
+    pole: "left"
+  },
+  {
+    text: "Healthcare should be a guaranteed right, not something you buy.",
+    axis: "economy",
+    pole: "left"
+  },
+  {
+    text: "Businesses run better when the government stays out of their decisions.",
+    axis: "economy",
+    pole: "right"
+  },
+  {
+    text: "People should be free to start and run businesses with as little red tape as possible.",
+    axis: "economy",
+    pole: "right"
+  },
+  {
+    text: "Essential services that everyone depends on are better run by the public than left to private profit.",
+    axis: "economy",
+    pole: "left"
+  },
+  {
+    text: "Society should make sure everyone has a basic income to live on, whether or not they work.",
+    axis: "economy",
+    pole: "left"
+  },
+  {
+    text: "A society grows stronger when the government takes less from businesses and individuals in taxes.",
+    axis: "economy",
+    pole: "right"
+  },
+  {
+    text: "Open, free trade between countries benefits everyone in the long run.",
+    axis: "economy",
+    pole: "right"
+  },
+  {
+    text: "Powerful industries like finance need strong government oversight to protect ordinary people.",
+    axis: "economy",
+    pole: "left"
+  },
+
+  // ── SOCIETY (9 questions) ──────────────────────────────────
+  {
+    text: "Society works better when people are free to live how they want.",
+    axis: "society",
+    pole: "left"
+  },
+  {
+    text: "Children should be taught to understand and respect many different ways of living.",
+    axis: "society",
+    pole: "left"
+  },
+  {
+    text: "The traditional family is the foundation of a healthy society and should be protected.",
+    axis: "society",
+    pole: "right"
+  },
+  {
+    text: "Traditional values and religion should shape public life.",
+    axis: "society",
+    pole: "right"
+  },
+  {
+    text: "Adults should be free to make their own choices about what they put into their own bodies.",
+    axis: "society",
+    pole: "left"
+  },
+  {
+    text: "People should have control over their own bodies and personal life decisions.",
+    axis: "society",
+    pole: "left"
+  },
+  {
+    text: "Religion has a positive role to play in public institutions like schools.",
+    axis: "society",
+    pole: "right"
+  },
+  {
+    text: "When science and tradition disagree, society should generally follow the science.",
+    axis: "society",
+    pole: "left"
+  },
+  {
+    text: "Preserving our cultural heritage and customs should be a priority for the next generation.",
+    axis: "society",
+    pole: "right"
+  },
+
+  // ── GOVERNANCE (9 questions) ────────────────────────────────
+  {
+    text: "Keeping the country safe is more important than personal privacy.",
+    axis: "governance",
+    pole: "right"
+  },
+  {
+    text: "Free speech must be protected even when what people say is offensive or wrong.",
+    axis: "governance",
+    pole: "left"
+  },
+  {
+    text: "Big decisions that affect the whole country are best made by strong central leadership.",
+    axis: "governance",
+    pole: "right"
+  },
+  {
+    text: "Police should have broad powers to keep order, even if it means fewer individual freedoms.",
+    axis: "governance",
+    pole: "right"
+  },
+  {
+    text: "Ordinary people should be trusted to handle things the state usually controls, like owning weapons.",
+    axis: "governance",
+    pole: "left"
+  },
+  {
+    text: "People who expose government wrongdoing are doing the public a service, not committing a crime.",
+    axis: "governance",
+    pole: "left"
+  },
+  {
+    text: "The government has a duty to control harmful or misleading information in public life.",
+    axis: "governance",
+    pole: "right"
+  },
+  {
+    text: "Citizens have a duty to serve their country, even if it means giving up some personal freedom.",
+    axis: "governance",
+    pole: "right"
+  },
+  {
+    text: "Privacy is a fundamental right the state should never be allowed to break, no matter the reason.",
+    axis: "governance",
+    pole: "left"
+  },
+
+  // ── UNIVERSALITY (9 questions) ──────────────────────────────
+  {
+    text: "A nation should always put its own sovereignty above international rules and agreements.",
+    axis: "universality",
+    pole: "right"
+  },
+  {
+    text: "Borders should be open — people should be free to live where they want.",
+    axis: "universality",
+    pole: "left"
+  },
+  {
+    text: "Some human rights are universal, and the world has a duty to uphold them everywhere.",
+    axis: "universality",
+    pole: "left"
+  },
+  {
+    text: "A country should take care of its own people first before helping those abroad.",
+    axis: "universality",
+    pole: "right"
+  },
+  {
+    text: "A nation is stronger when it welcomes people from many different cultures.",
+    axis: "universality",
+    pole: "left"
+  },
+  {
+    text: "Immigration should be tightly controlled to protect the country's identity and jobs.",
+    axis: "universality",
+    pole: "right"
+  },
+  {
+    text: "Countries should be willing to cooperate — and sacrifice some self-interest — to solve global problems.",
+    axis: "universality",
+    pole: "left"
+  },
+  {
+    text: "Children should grow up with a strong sense of pride in their nation's history and identity.",
+    axis: "universality",
+    pole: "right"
+  },
+  {
+    text: "Wealthy countries have a moral duty to help people fleeing war and persecution.",
+    axis: "universality",
+    pole: "left"
+  },
+
+  // ── ENVIRONMENT (9 questions) ───────────────────────────────
+  {
+    text: "Protecting the environment matters more than economic growth.",
+    axis: "environment",
+    pole: "left"
+  },
+  {
+    text: "Nature has value in itself, beyond what we can get out of it economically.",
+    axis: "environment",
+    pole: "left"
+  },
+  {
+    text: "Environmental rules should be balanced against the jobs and livelihoods they affect.",
+    axis: "environment",
+    pole: "right"
+  },
+  {
+    text: "Society should be willing to ban everyday conveniences that harm the environment.",
+    axis: "environment",
+    pole: "left"
+  },
+  {
+    text: "Poorer countries shouldn't be held to the same environmental standards as rich ones.",
+    axis: "environment",
+    pole: "right"
+  },
+  {
+    text: "Polluters should pay for the damage their emissions cause.",
+    axis: "environment",
+    pole: "left"
+  },
+  {
+    text: "Everyday choices like what we eat should take the environment into account.",
+    axis: "environment",
+    pole: "left"
+  },
+  {
+    text: "Human ingenuity and technology will solve environmental problems without needing to limit growth.",
+    axis: "environment",
+    pole: "right"
+  },
+  {
+    text: "Protecting wild nature should come before the profits of any single project.",
+    axis: "environment",
+    pole: "left"
+  },
+
+  // ── EXPANSION (9 questions, sub-categorised) ─────────────────────────
+  {
+    text: "Exploring beyond Earth is part of humanity's purpose and worth investing in.",
+    axis: "expansion",
+    sub: "space",
+    pole: "left"
+  },
+  {
+    text: "We should focus on problems here on Earth before looking to the stars.",
+    axis: "expansion",
+    sub: "space",
+    pole: "right"
+  },
+  {
+    text: "We should push the boundaries of technology without too many restrictions.",
+    axis: "expansion",
+    sub: "technology",
+    pole: "left"
+  },
+  {
+    text: "Powerful new technologies should be held back until we're sure they're safe.",
+    axis: "expansion",
+    sub: "technology",
+    pole: "right"
+  },
+  {
+    text: "Humans should use science to improve our biology and overcome natural limits.",
+    axis: "expansion",
+    sub: "bioethics",
+    pole: "left"
+  },
+  {
+    text: "There are natural limits we shouldn't try to cross, even if we could.",
+    axis: "expansion",
+    sub: "bioethics",
+    pole: "right"
+  },
+  {
+    text: "Humanity should be bold about using technology to reshape the planet if it helps us.",
+    axis: "expansion",
+    sub: "growth",
+    pole: "left"
+  },
+  {
+    text: "Endless economic growth isn't sustainable — we need to learn to live with less.",
+    axis: "expansion",
+    sub: "growth",
+    pole: "right"
+  },
+  {
+    text: "Becoming a spacefaring species and settling other worlds is a worthy goal for humanity.",
+    axis: "expansion",
+    sub: "space",
+    pole: "left"
+  }
+];
