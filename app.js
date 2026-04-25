@@ -95,18 +95,18 @@ const TRANSLATIONS = {
     universality: "Universality",
     environment: "Environment",
     expansion: "Expansion",
-    statism: "Left",
-    freeMarket: "Right",
-    progressivism: "Progressive",
-    conservatism: "Traditional",
+    statism: "Statism",
+    freeMarket: "Free-market",
+    progressivism: "Progressivism",
+    conservatism: "Conservatism",
     liberty: "Liberty",
     authority: "Authority",
-    internationalism: "Globalism",
+    internationalism: "Internationalism",
     nationalism: "Nationalism",
     ecology: "Ecology",
-    productivism: "Growth",
-    expansionism: "Expand",
-    restraint: "Stay the Same",
+    productivism: "Productivism",
+    expansionism: "Expansionism",
+    restraint: "Restraint",
   },
   id: {
     siteTitle: "di mana kamu berdiri?",
@@ -188,18 +188,18 @@ const TRANSLATIONS = {
     universality: "Universalitas",
     environment: "Lingkungan",
     expansion: "Ekspansi",
-    statism: "Kiri",
-    freeMarket: "Kanan",
-    progressivism: "Progresif",
-    conservatism: "Tradisional",
+    statism: "Etatisme",
+    freeMarket: "Pasar bebas",
+    progressivism: "Progresivisme",
+    conservatism: "Konservatisme",
     liberty: "Kebebasan",
     authority: "Otoritas",
-    internationalism: "Globalisme",
+    internationalism: "Internasionalisme",
     nationalism: "Nasionalisme",
     ecology: "Ekologi",
-    productivism: "Pertumbuhan",
-    expansionism: "Ekspansi",
-    restraint: "Tetap",
+    productivism: "Produktivisme",
+    expansionism: "Ekspansionisme",
+    restraint: "Pengekangan",
   },
   el: {
     siteTitle: "πού στέκεσαι;",
@@ -281,18 +281,18 @@ const TRANSLATIONS = {
     universality: "Καθολικότητα",
     environment: "Περιβάλλον",
     expansion: "Επέκταση",
-    statism: "Αριστερά",
-    freeMarket: "Δεξιά",
-    progressivism: "Προοδευτικό",
-    conservatism: "Παραδοσιακό",
+    statism: "Κρατισμός",
+    freeMarket: "Ελεύθερη αγορά",
+    progressivism: "Προοδευτισμός",
+    conservatism: "Συντηρητισμός",
     liberty: "Ελευθερία",
     authority: "Εξουσία",
-    internationalism: "Παγκοσμιοποίηση",
+    internationalism: "Διεθνισμός",
     nationalism: "Εθνικισμός",
     ecology: "Οικολογία",
-    productivism: "Ανάπτυξη",
-    expansionism: "Επέκταση",
-    restraint: "Παραμονή",
+    productivism: "Παραγωγισμός",
+    expansionism: "Επεκτατισμός",
+    restraint: "Αυτοσυγκράτηση",
   }
 };
 
@@ -486,11 +486,11 @@ function resetMatchupPicks() {
 
 const AXES = ['economy', 'society', 'governance', 'universality', 'environment'];
 const AXIS_LABELS = {
-  economy:       { left: 'Left',         right: 'Right' },
-  society:       { left: 'Progressive',  right: 'Traditional' },
-  governance:    { left: 'Liberty',      right: 'Authority' },
-  universality:  { left: 'Globalism',    right: 'Nationalism' },
-  environment:   { left: 'Ecology',      right: 'Growth' }
+  economy:       { left: 'Statism',        right: 'Free-market' },
+  society:       { left: 'Progressivism',  right: 'Conservatism' },
+  governance:    { left: 'Liberty',        right: 'Authority' },
+  universality:  { left: 'Internationalism', right: 'Nationalism' },
+  environment:   { left: 'Ecology',        right: 'Productivism' }
 };
 
 const AXIS_COLORS = {
@@ -1569,8 +1569,8 @@ function drawRadar(canvasId, scores, side) {
   const maxR = size / 2 - padding;
 
   const labels = side === 'left'
-    ? ['Progressive', 'Ecology', 'Globalism', 'Left', 'Civil liberties']
-    : ['Traditional', 'Growth', 'Nationalism', 'Right', 'Authority'];
+    ? ['Progressivism', 'Ecology', 'Internationalism', 'Statism', 'Liberty']
+    : ['Conservatism', 'Productivism', 'Nationalism', 'Free-market', 'Authority'];
 
   const axisOrder = ['society', 'environment', 'universality', 'economy', 'governance'];
   const values = axisOrder.map(axis => {
@@ -1806,8 +1806,8 @@ function renderAxisBars(scores) {
   container.innerHTML = '';
 
   // Mapping from English canonical labels in AXIS_LABELS to translation keys
-  const LEFT_KEY_MAP  = { 'Left': 'statism', 'Progressive': 'progressivism', 'Liberty': 'liberty', 'Globalism': 'internationalism', 'Ecology': 'ecology' };
-  const RIGHT_KEY_MAP = { 'Right': 'freeMarket', 'Traditional': 'conservatism', 'Authority': 'authority', 'Nationalism': 'nationalism', 'Growth': 'productivism' };
+  const LEFT_KEY_MAP  = { 'Statism': 'statism', 'Progressivism': 'progressivism', 'Liberty': 'liberty', 'Internationalism': 'internationalism', 'Ecology': 'ecology' };
+  const RIGHT_KEY_MAP = { 'Free-market': 'freeMarket', 'Conservatism': 'conservatism', 'Authority': 'authority', 'Nationalism': 'nationalism', 'Productivism': 'productivism' };
 
   AXES.forEach((axis, idx) => {
     const leftPct = 100 - scores[axis];
@@ -1982,7 +1982,7 @@ function generateShareCard() {
 
   // Axis bars
   const allAxes = [...AXES, 'expansion'];
-  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expand', right: 'Stay the Same' } };
+  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
   const barColors = [...BAR_COLORS, '#F472B6'];
 
   allAxes.forEach((axis, i) => {
@@ -2194,7 +2194,7 @@ function downloadPDF() {
   doc.text('AXIS BREAKDOWN', margin, y);
   y += 8;
 
-  const AXIS_LABELS_PDF = { ...AXIS_LABELS, expansion: { left: 'Expand', right: 'Stay the Same' } };
+  const AXIS_LABELS_PDF = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
   allAxes.forEach((axis, i) => {
     const score = scores[axis];
     const labels = AXIS_LABELS_PDF[axis];
@@ -2321,7 +2321,7 @@ function renderCompare(myScores, theirScores) {
   overlay.classList.remove('hidden');
 
   const allDims = [...AXES, 'expansion'];
-  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expand', right: 'Stay the Same' } };
+  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
 
   let html = `<h3 class="compare-heading gradient-heading-sm">You vs Friend</h3>`;
   html += `<div class="figure-bar-legend" style="margin-bottom:12px;">
@@ -2772,8 +2772,8 @@ function renderQuestionReview() {
 
       const directionForExpansion = q.axis === 'expansion' ?
         (q.pole === 'left' ?
-          (val > 3 ? 'Expand' : val < 3 ? 'Stay the Same' : 'Neutral') :
-          (val > 3 ? 'Stay the Same' : val < 3 ? 'Expand' : 'Neutral'))
+          (val > 3 ? 'Expansionist' : val < 3 ? 'Restraint' : 'Neutral') :
+          (val > 3 ? 'Restraint' : val < 3 ? 'Expansionist' : 'Neutral'))
         : direction;
 
       html += `
