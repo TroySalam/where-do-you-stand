@@ -95,22 +95,18 @@ const TRANSLATIONS = {
     universality: "Universality",
     environment: "Environment",
     expansion: "Expansion",
-    statism: "Statism",
-    freeMarket: "Free-market",
-    progressivism: "Progressivism",
-    conservatism: "Conservatism",
+    statism: "Left",
+    freeMarket: "Right",
+    progressivism: "Progressive",
+    conservatism: "Traditional",
     liberty: "Liberty",
     authority: "Authority",
-    internationalism: "Internationalism",
+    internationalism: "Globalism",
     nationalism: "Nationalism",
     ecology: "Ecology",
-    productivism: "Productivism",
-    expansionism: "Expansionism",
-    restraint: "Restraint",
-    questionStyle: "Question Style",
-    specific: "Specific",
-    broad: "Broad",
-    questionStyleHint: "Specific uses detailed policy questions. Broad uses general values questions.",
+    productivism: "Growth",
+    expansionism: "Expand",
+    restraint: "Stay the Same",
   },
   id: {
     siteTitle: "di mana kamu berdiri?",
@@ -192,22 +188,18 @@ const TRANSLATIONS = {
     universality: "Universalitas",
     environment: "Lingkungan",
     expansion: "Ekspansi",
-    statism: "Etatisme",
-    freeMarket: "Pasar bebas",
-    progressivism: "Progresivisme",
-    conservatism: "Konservatisme",
+    statism: "Kiri",
+    freeMarket: "Kanan",
+    progressivism: "Progresif",
+    conservatism: "Tradisional",
     liberty: "Kebebasan",
     authority: "Otoritas",
-    internationalism: "Internasionalisme",
+    internationalism: "Globalisme",
     nationalism: "Nasionalisme",
     ecology: "Ekologi",
-    productivism: "Produktivisme",
-    expansionism: "Ekspansionisme",
-    restraint: "Pengekangan",
-    questionStyle: "Gaya Pertanyaan",
-    specific: "Spesifik",
-    broad: "Umum",
-    questionStyleHint: "Spesifik menggunakan pertanyaan kebijakan terperinci. Umum menggunakan pertanyaan nilai yang lebih luas.",
+    productivism: "Pertumbuhan",
+    expansionism: "Ekspansi",
+    restraint: "Tetap",
   },
   el: {
     siteTitle: "πού στέκεσαι;",
@@ -289,22 +281,18 @@ const TRANSLATIONS = {
     universality: "Καθολικότητα",
     environment: "Περιβάλλον",
     expansion: "Επέκταση",
-    statism: "Κρατισμός",
-    freeMarket: "Ελεύθερη αγορά",
-    progressivism: "Προοδευτισμός",
-    conservatism: "Συντηρητισμός",
+    statism: "Αριστερά",
+    freeMarket: "Δεξιά",
+    progressivism: "Προοδευτικό",
+    conservatism: "Παραδοσιακό",
     liberty: "Ελευθερία",
     authority: "Εξουσία",
-    internationalism: "Διεθνισμός",
+    internationalism: "Παγκοσμιοποίηση",
     nationalism: "Εθνικισμός",
     ecology: "Οικολογία",
-    productivism: "Παραγωγισμός",
-    expansionism: "Επεκτατισμός",
-    restraint: "Αυτοσυγκράτηση",
-    questionStyle: "Στυλ Ερωτήσεων",
-    specific: "Συγκεκριμένο",
-    broad: "Γενικό",
-    questionStyleHint: "Το Συγκεκριμένο χρησιμοποιεί λεπτομερείς ερωτήσεις πολιτικής. Το Γενικό χρησιμοποιεί ευρύτερες ερωτήσεις αξιών.",
+    productivism: "Ανάπτυξη",
+    expansionism: "Επέκταση",
+    restraint: "Παραμονή",
   }
 };
 
@@ -379,16 +367,6 @@ let quizMode = 'compass'; // 'compass' or 'matchup'
 let currentQ = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
 
-// Question style for compass mode: 'specific' (detailed policy) or 'broad' (values-based)
-let questionStyle = safeStorage.getItem('wdys_qstyle') || 'specific';
-
-function setQuestionStyle(style) {
-  if (style !== 'specific' && style !== 'broad') return;
-  questionStyle = style;
-  safeStorage.setItem('wdys_qstyle', style);
-  document.querySelectorAll('[data-qstyle]').forEach(b => b.classList.toggle('active', b.dataset.qstyle === style));
-}
-
 // Head-to-head matchup state
 let matchupA = null;        // first president key
 let matchupB = null;        // second president key
@@ -397,12 +375,8 @@ let matchupPicks = [];      // array of 'a' | 'b' | 'tie' (index aligned to issu
 let matchupIdx = 0;         // current matchup question index
 
 function getActiveQuestions() {
-  // Compass mode supports a broad/specific toggle. Matchup mode uses its own
-  // issue list (matchupIssues) and never calls this, so returning the compass
-  // set here is safe either way.
-  if (quizMode === 'compass' && questionStyle === 'broad' && typeof QUESTIONS_BROAD !== 'undefined') {
-    return QUESTIONS_BROAD;
-  }
+  // Matchup mode uses its own issue list (matchupIssues) and never calls this,
+  // so returning the compass set here is safe either way.
   return QUESTIONS;
 }
 
@@ -512,11 +486,11 @@ function resetMatchupPicks() {
 
 const AXES = ['economy', 'society', 'governance', 'universality', 'environment'];
 const AXIS_LABELS = {
-  economy:       { left: 'Statism',           right: 'Free-market' },
-  society:       { left: 'Progressivism',     right: 'Conservatism' },
-  governance:    { left: 'Liberty',           right: 'Authority' },
-  universality:  { left: 'Internationalism',  right: 'Nationalism' },
-  environment:   { left: 'Ecology',           right: 'Productivism' }
+  economy:       { left: 'Left',         right: 'Right' },
+  society:       { left: 'Progressive',  right: 'Traditional' },
+  governance:    { left: 'Liberty',      right: 'Authority' },
+  universality:  { left: 'Globalism',    right: 'Nationalism' },
+  environment:   { left: 'Ecology',      right: 'Growth' }
 };
 
 const AXIS_COLORS = {
@@ -1595,8 +1569,8 @@ function drawRadar(canvasId, scores, side) {
   const maxR = size / 2 - padding;
 
   const labels = side === 'left'
-    ? ['Progressivism', 'Ecology', 'Internationalism', 'Statism', 'Civil liberties']
-    : ['Conservatism', 'Productivism', 'Nationalism', 'Free market', 'Authority'];
+    ? ['Progressive', 'Ecology', 'Globalism', 'Left', 'Civil liberties']
+    : ['Traditional', 'Growth', 'Nationalism', 'Right', 'Authority'];
 
   const axisOrder = ['society', 'environment', 'universality', 'economy', 'governance'];
   const values = axisOrder.map(axis => {
@@ -1832,8 +1806,8 @@ function renderAxisBars(scores) {
   container.innerHTML = '';
 
   // Mapping from English canonical labels in AXIS_LABELS to translation keys
-  const LEFT_KEY_MAP  = { 'Statism': 'statism', 'Progressivism': 'progressivism', 'Liberty': 'liberty', 'Internationalism': 'internationalism', 'Ecology': 'ecology' };
-  const RIGHT_KEY_MAP = { 'Free-market': 'freeMarket', 'Conservatism': 'conservatism', 'Authority': 'authority', 'Nationalism': 'nationalism', 'Productivism': 'productivism' };
+  const LEFT_KEY_MAP  = { 'Left': 'statism', 'Progressive': 'progressivism', 'Liberty': 'liberty', 'Globalism': 'internationalism', 'Ecology': 'ecology' };
+  const RIGHT_KEY_MAP = { 'Right': 'freeMarket', 'Traditional': 'conservatism', 'Authority': 'authority', 'Nationalism': 'nationalism', 'Growth': 'productivism' };
 
   AXES.forEach((axis, idx) => {
     const leftPct = 100 - scores[axis];
@@ -2008,7 +1982,7 @@ function generateShareCard() {
 
   // Axis bars
   const allAxes = [...AXES, 'expansion'];
-  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
+  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expand', right: 'Stay the Same' } };
   const barColors = [...BAR_COLORS, '#F472B6'];
 
   allAxes.forEach((axis, i) => {
@@ -2220,7 +2194,7 @@ function downloadPDF() {
   doc.text('AXIS BREAKDOWN', margin, y);
   y += 8;
 
-  const AXIS_LABELS_PDF = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
+  const AXIS_LABELS_PDF = { ...AXIS_LABELS, expansion: { left: 'Expand', right: 'Stay the Same' } };
   allAxes.forEach((axis, i) => {
     const score = scores[axis];
     const labels = AXIS_LABELS_PDF[axis];
@@ -2347,7 +2321,7 @@ function renderCompare(myScores, theirScores) {
   overlay.classList.remove('hidden');
 
   const allDims = [...AXES, 'expansion'];
-  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expansionism', right: 'Restraint' } };
+  const allLabels = { ...AXIS_LABELS, expansion: { left: 'Expand', right: 'Stay the Same' } };
 
   let html = `<h3 class="compare-heading gradient-heading-sm">You vs Friend</h3>`;
   html += `<div class="figure-bar-legend" style="margin-bottom:12px;">
@@ -2798,8 +2772,8 @@ function renderQuestionReview() {
 
       const directionForExpansion = q.axis === 'expansion' ?
         (q.pole === 'left' ?
-          (val > 3 ? 'Expansionist' : val < 3 ? 'Restraint' : 'Neutral') :
-          (val > 3 ? 'Restraint' : val < 3 ? 'Expansionist' : 'Neutral'))
+          (val > 3 ? 'Expand' : val < 3 ? 'Stay the Same' : 'Neutral') :
+          (val > 3 ? 'Stay the Same' : val < 3 ? 'Expand' : 'Neutral'))
         : direction;
 
       html += `
@@ -3089,13 +3063,6 @@ document.addEventListener('DOMContentLoaded', () => {
     currentLang = savedLang;
     document.documentElement.lang = savedLang;
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === savedLang));
-  }
-
-  // Apply saved question style
-  const savedStyle = safeStorage.getItem('wdys_qstyle');
-  if (savedStyle === 'broad' || savedStyle === 'specific') {
-    questionStyle = savedStyle;
-    document.querySelectorAll('[data-qstyle]').forEach(b => b.classList.toggle('active', b.dataset.qstyle === savedStyle));
   }
 
   applyTranslations();
