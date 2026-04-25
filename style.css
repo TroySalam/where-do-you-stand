@@ -2595,6 +2595,18 @@ html[data-theme="neon"] .settings-btn:hover {
 .matchup-card.party-rep {
   border-top: 3px solid #EF4444;
 }
+.matchup-card.blind-card {
+  border-top: 3px solid var(--accent);
+}
+.matchup-card.blind-card .matchup-pres-name {
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.95em;
+}
+.matchup-card.blind-card .matchup-pres-years {
+  display: none;
+}
 .matchup-card:hover { transform: translateY(-2px); }
 .matchup-card.picked {
   border-color: var(--accent);

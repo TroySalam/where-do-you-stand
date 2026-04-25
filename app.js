@@ -68,6 +68,9 @@ const TRANSLATIONS = {
     pick2Presidents: "Pick 2 presidents. See how their approaches stack up.",
     choosePresident: "Choose a president to evaluate:",
     vs: "vs",
+    presidentA: "President A",
+    presidentB: "President B",
+    blindMatchup: "Blind matchup — names hidden",
     resetPicks: "↻ Reset picks",
     first: "First",
     opponent: "Opponent",
@@ -161,6 +164,9 @@ const TRANSLATIONS = {
     pick2Presidents: "Pilih 2 presiden. Lihat bagaimana pendekatan mereka dibandingkan.",
     choosePresident: "Pilih presiden untuk dievaluasi:",
     vs: "vs",
+    presidentA: "Presiden A",
+    presidentB: "Presiden B",
+    blindMatchup: "Pertandingan buta — nama disembunyikan",
     resetPicks: "↻ Atur ulang",
     first: "Pertama",
     opponent: "Lawan",
@@ -254,6 +260,9 @@ const TRANSLATIONS = {
     pick2Presidents: "Διάλεξε 2 προέδρους. Δες πώς συγκρίνονται.",
     choosePresident: "Επέλεξε πρόεδρο:",
     vs: "εν.",
+    presidentA: "Πρόεδρος Α",
+    presidentB: "Πρόεδρος Β",
+    blindMatchup: "Τυφλή αναμέτρηση — ονόματα κρυμμένα",
     resetPicks: "↻ Επαναφορά",
     first: "Πρώτος",
     opponent: "Αντίπαλος",
@@ -368,8 +377,12 @@ let currentQ = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
 
 // Head-to-head matchup state
-let matchupA = null;        // first president key
-let matchupB = null;        // second president key
+let matchupA = null;        // first president key (as picked by user)
+let matchupB = null;        // second president key (as picked by user)
+// Blind quiz slot mapping — randomized at quiz start so picker order doesn't reveal
+// who is in slot A vs slot B during the actual head-to-head.
+let quizSlotA = null;       // president key shown in card slot A during quiz
+let quizSlotB = null;       // president key shown in card slot B during quiz
 let matchupIssues = [];     // array of issue objects both share
 let matchupPicks = [];      // array of 'a' | 'b' | 'tie' (index aligned to issues)
 let matchupIdx = 0;         // current matchup question index
@@ -1129,11 +1142,21 @@ function startMatchup() {
     return;
   }
 
+  // Randomize which picked president shows up as President A vs President B in
+  // the live quiz so the picker's first/second order doesn't bias the test.
+  if (Math.random() < 0.5) {
+    quizSlotA = matchupA;
+    quizSlotB = matchupB;
+  } else {
+    quizSlotA = matchupB;
+    quizSlotB = matchupA;
+  }
+
   matchupPicks = new Array(matchupIssues.length).fill(null);
   matchupIdx = 0;
 
   const header = document.getElementById('matchupHeader');
-  if (header) header.textContent = `${PRESIDENT_META[matchupA].name} vs ${PRESIDENT_META[matchupB].name}`;
+  if (header) header.textContent = `${t('presidentA')} ${t('vs')} ${t('presidentB')}`;
 
   renderMatchupQuestion();
   show('matchup');
@@ -1142,10 +1165,8 @@ function startMatchup() {
 
 function renderMatchupQuestion() {
   const issue = matchupIssues[matchupIdx];
-  const aMeta = PRESIDENT_META[matchupA];
-  const bMeta = PRESIDENT_META[matchupB];
-  const aPos = issue.positions[matchupA];
-  const bPos = issue.positions[matchupB];
+  const aPos = issue.positions[quizSlotA];
+  const bPos = issue.positions[quizSlotB];
 
   document.getElementById('matchupCounter').textContent =
     `${String(matchupIdx + 1).padStart(2, '0')} / ${String(matchupIssues.length).padStart(2, '0')}`;
@@ -1153,27 +1174,30 @@ function renderMatchupQuestion() {
   document.getElementById('matchupTopic').textContent = issue.topic;
   document.getElementById('matchupQuestion').textContent = issue.question;
 
-  document.getElementById('matchupNameA').textContent = aMeta.name;
-  document.getElementById('matchupYearsA').textContent = aMeta.years;
+  // Blind mode: hide real names, years, and party colors during the live quiz
+  // so the test taker judges approaches on merit, not on identity.
+  document.getElementById('matchupNameA').textContent = t('presidentA');
+  document.getElementById('matchupYearsA').textContent = '';
   document.getElementById('matchupApproachA').textContent = aPos.approach;
   document.getElementById('matchupGoodA').textContent = aPos.good;
   document.getElementById('matchupBadA').textContent = aPos.bad;
-  document.getElementById('matchupPickNameA').textContent = aMeta.name.split(' ').slice(-1)[0];
+  document.getElementById('matchupPickNameA').textContent = t('presidentA');
 
-  document.getElementById('matchupNameB').textContent = bMeta.name;
-  document.getElementById('matchupYearsB').textContent = bMeta.years;
+  document.getElementById('matchupNameB').textContent = t('presidentB');
+  document.getElementById('matchupYearsB').textContent = '';
   document.getElementById('matchupApproachB').textContent = bPos.approach;
   document.getElementById('matchupGoodB').textContent = bPos.good;
   document.getElementById('matchupBadB').textContent = bPos.bad;
-  document.getElementById('matchupPickNameB').textContent = bMeta.name.split(' ').slice(-1)[0];
+  document.getElementById('matchupPickNameB').textContent = t('presidentB');
 
-  // Party styling for card accents.
+  // Strip party styling so colors don't reveal party affiliation. Use a
+  // neutral 'blind' class for both cards.
   const cardA = document.getElementById('matchupCardA');
   const cardB = document.getElementById('matchupCardB');
   cardA.classList.remove('party-dem', 'party-rep', 'picked');
   cardB.classList.remove('party-dem', 'party-rep', 'picked');
-  cardA.classList.add(aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep');
-  cardB.classList.add(bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep');
+  cardA.classList.add('blind-card');
+  cardB.classList.add('blind-card');
 
   const existing = matchupPicks[matchupIdx];
   if (existing === 'a') cardA.classList.add('picked');
@@ -1231,13 +1255,19 @@ function matchupSkip() {
 }
 
 function finishMatchup() {
+  // Display results using the originally picked order (matchupA / matchupB),
+  // but translate quiz slot picks ('a'/'b') back to the real president via
+  // the randomized quizSlotA / quizSlotB mapping.
   const aMeta = PRESIDENT_META[matchupA];
   const bMeta = PRESIDENT_META[matchupB];
 
   let countA = 0, countB = 0, countTie = 0;
   matchupPicks.forEach(p => {
-    if (p === 'a') countA++;
-    else if (p === 'b') countB++;
+    let pickedKey = null;
+    if (p === 'a') pickedKey = quizSlotA;
+    else if (p === 'b') pickedKey = quizSlotB;
+    if (pickedKey === matchupA) countA++;
+    else if (pickedKey === matchupB) countB++;
     else countTie++;
   });
   const total = matchupIssues.length;
@@ -1278,9 +1308,12 @@ function finishMatchup() {
   let html = '';
   matchupIssues.forEach((issue, i) => {
     const pick = matchupPicks[i];
+    let pickedKey = null;
+    if (pick === 'a') pickedKey = quizSlotA;
+    else if (pick === 'b') pickedKey = quizSlotB;
     let pickedName = t('noPreference'), pickedClass = 'picked-tie';
-    if (pick === 'a') { pickedName = aMeta.name; pickedClass = 'picked-a ' + (aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
-    else if (pick === 'b') { pickedName = bMeta.name; pickedClass = 'picked-b ' + (bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
+    if (pickedKey === matchupA) { pickedName = aMeta.name; pickedClass = 'picked-a ' + (aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
+    else if (pickedKey === matchupB) { pickedName = bMeta.name; pickedClass = 'picked-b ' + (bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
     html += `
       <div class="matchup-issue-row ${pickedClass}">
         <span class="matchup-issue-topic">${issue.topic}</span>
