@@ -55,10 +55,10 @@ const MATCHUP_ISSUES = [
       jfk: {
         approach: "Proposed cutting the top income tax rate from 91% to 65% to stimulate growth — the cuts passed after his death.",
         good: "The economy grew strongly through the 1960s and income tax revenue actually rose after rates were cut.",
-        bad: "Liberals argued the cuts disproportionately benefited high earners and weakened New Deal revenue."
+        bad: "Liberals argued the cuts disproportionately benefited high earners and weakened expanded federal programs revenue."
       },
       lbj: {
-        approach: "Pushed through a 10% income tax surcharge in 1968 — a temporary raise on what every American owed — to pay for Vietnam and Great Society programs.",
+        approach: "Pushed through a 10% income tax surcharge in 1968 — a temporary raise on what every American owed — to pay for the Vietnam War and anti-poverty programs.",
         good: "Helped keep the federal deficit from exploding while funding Medicare and anti-poverty programs.",
         bad: "The surcharge was deeply unpopular and contributed to the economic stagflation of the 1970s."
       },
@@ -83,7 +83,7 @@ const MATCHUP_ISSUES = [
         bad: "The national debt tripled from $1 trillion to $2.7 trillion during his presidency."
       },
       ghwbush: {
-        approach: "Broke his famous 'Read my lips: no new taxes' pledge and raised the top income tax rate in 1990 to reduce the deficit.",
+        approach: "Broke his famous his campaign 'no new taxes' pledge and raised the top income tax rate in 1990 to reduce the deficit.",
         good: "The deal helped put the federal budget on a path that produced surpluses by the end of the decade.",
         bad: "Breaking the pledge cost him conservative support and likely his re-election in 1992."
       },
@@ -95,10 +95,10 @@ const MATCHUP_ISSUES = [
       gwbush: {
         approach: "Cut individual income tax rates across every bracket in 2001 and 2003, lowering what nearly every American owed.",
         good: "Most households paid less in income taxes and the economy kept growing through the mid-2000s.",
-        bad: "The cuts turned Clinton-era surpluses into trillion-dollar deficits and delivered the biggest savings to the highest earners."
+        bad: "The cuts turned previous-era surpluses into trillion-dollar deficits and delivered the biggest savings to the highest earners."
       },
       obama: {
-        approach: "Let the Bush-era income tax cuts expire for households earning over $400,000, raising the top rate back to 39.6%.",
+        approach: "Let the previous-era income tax cuts expire for households earning over $400,000, raising the top rate back to 39.6%.",
         good: "Helped shrink the deficit from $1.4 trillion to under $500 billion by the end of his presidency.",
         bad: "Critics said higher income tax rates on top earners slowed the recovery and hurt business formation."
       },
@@ -108,7 +108,7 @@ const MATCHUP_ISSUES = [
         bad: "The individual rate cuts added nearly $2 trillion to the national debt and delivered the largest dollar savings to top earners."
       },
       biden: {
-        approach: "Kept individual income tax rates the same as Trump left them but proposed raising the top rate back to 39.6% on anyone earning over $400,000 a year.",
+        approach: "Kept individual income tax rates the same as the previous administration left them but proposed raising the top rate back to 39.6% on anyone earning over $400,000 a year.",
         good: "Promised that no one earning under $400,000 would see their income taxes go up by a single cent.",
         bad: "The proposed rate increase on high earners never passed Congress, leaving his income-tax agenda largely unfulfilled."
       }
@@ -150,18 +150,18 @@ const MATCHUP_ISSUES = [
       },
       nixon: {
         approach: "Proposed a national health plan in 1974 that would have required every employer to provide workers with health insurance.",
-        good: "Would have covered nearly every American decades before the Affordable Care Act if Watergate hadn't derailed him.",
+        good: "Would have covered nearly every American decades before the major 2010 health insurance law if a major political scandal hadn't derailed him.",
         bad: "Liberals rejected it as too modest and the plan collapsed, leaving millions uninsured."
       },
       ford: {
-        approach: "Supported a scaled-back version of Nixon's employer-mandate health plan but prioritized fighting inflation over healthcare expansion.",
+        approach: "Supported a scaled-back version of the previous administration's employer-mandate health plan but prioritized fighting inflation over healthcare expansion.",
         good: "Kept the idea of employer-provided coverage as the backbone of American healthcare from collapsing during a difficult economic period.",
         bad: "No significant healthcare legislation passed during his brief term and the number of uninsured Americans continued to grow."
       },
       carter: {
         approach: "Proposed a phased-in national health insurance plan but delayed it to fight inflation first.",
         good: "Expanded Medicaid coverage and rural health clinics for underserved Americans.",
-        bad: "His national health plan never passed and he lost the support of Ted Kennedy and progressive Democrats."
+        bad: "His national health plan never passed and he lost the support of a leading senator and progressive Democrats."
       },
       reagan: {
         approach: "Opposed expanding government health programs, cut Medicaid funding in his first budget, and vetoed bills that would have added new benefits to Medicare.",
@@ -184,17 +184,17 @@ const MATCHUP_ISSUES = [
         bad: "The law explicitly barred the government from negotiating drug prices, costing taxpayers hundreds of billions of dollars more than necessary."
       },
       obama: {
-        approach: "Signed the Affordable Care Act in 2010, requiring most Americans to have health insurance and expanding Medicaid to cover more low-income adults.",
+        approach: "Signed the major 2010 health insurance law in 2010, requiring most Americans to have health insurance and expanding Medicaid to cover more low-income adults.",
         good: "About 20 million more Americans gained health coverage, and insurers can no longer reject people with pre-existing conditions.",
         bad: "Many people lost plans they liked, premiums rose sharply, and the individual mandate was deeply unpopular."
       },
       trump: {
-        approach: "Repeatedly tried to repeal the Affordable Care Act and eliminated the penalty for not having health insurance.",
+        approach: "Repeatedly tried to repeal the major 2010 health insurance law and eliminated the penalty for not having health insurance.",
         good: "Ended an unpopular mandate that forced people to buy insurance they didn't want.",
         bad: "The repeal attempts failed, uninsured rates rose, and he never produced the promised replacement plan."
       },
       biden: {
-        approach: "Expanded government subsidies for Affordable Care Act plans and let Medicare negotiate drug prices for the first time, reducing what the government pays for medications.",
+        approach: "Expanded government subsidies for the major 2010 health insurance law plans and let Medicare negotiate drug prices for the first time, reducing what the government pays for medications.",
         good: "A record 21 million Americans enrolled in government-subsidized coverage and insulin was capped at $35 a month for Medicare patients.",
         bad: "Premiums for middle-class families who don't qualify for subsidies kept climbing during his term."
       }
@@ -271,7 +271,7 @@ const MATCHUP_ISSUES = [
       },
       obama: {
         approach: "Refused to send large-scale ground forces to new conflicts, relying instead on drone strikes and special-operations raids, including the mission that killed Osama bin Laden.",
-        good: "Killed the 9/11 mastermind and ended the Iraq War without repeating the large-scale deployments of the Bush era.",
+        good: "Killed the 9/11 mastermind and ended the Iraq War without repeating the large-scale deployments of an earlier era.",
         bad: "Drone strikes killed hundreds of civilians and the limited intervention in Libya left the country in chaos."
       },
       trump: {
@@ -318,7 +318,7 @@ const MATCHUP_ISSUES = [
       lbj: {
         approach: "Signed the 1965 Immigration Act, abolishing the race-based quota system that had deliberately favored European immigrants since 1924 and opened entry to people from all countries.",
         good: "Opened the door to immigrants from Asia, Africa, and Latin America and made America far more diverse.",
-        bad: "Dramatically changed the demographic makeup of the country in ways Johnson himself had said wouldn't happen."
+        bad: "Dramatically changed the demographic makeup of the country in ways he himself had said wouldn't happen."
       },
       nixon: {
         approach: "Maintained existing immigration levels and enforcement without major reforms, but used immigration status in some cases as a tool against political opponents.",
@@ -398,11 +398,11 @@ const MATCHUP_ISSUES = [
       },
       jfk: {
         approach: "Proposed the first major civil rights bill in 1963 to ban discrimination in public places and employment based on race.",
-        good: "His televised address on civil rights helped shift the national conscience on racial equality and the bill became the Civil Rights Act after his death.",
+        good: "His televised address on civil rights helped shift the national conscience on racial equality and the bill became the landmark civil-rights legislation after his death.",
         bad: "He was reluctant to push the bill for most of his term, only acting after televised violence against protesters in Birmingham."
       },
       lbj: {
-        approach: "Signed the Civil Rights Act of 1964 banning racial discrimination in jobs and public places, and the Voting Rights Act of 1965 protecting Black Americans' right to vote.",
+        approach: "Signed the landmark civil-rights legislation of 1964 banning racial discrimination in jobs and public places, and the landmark voting-rights legislation of 1965 protecting Black Americans' right to vote.",
         good: "Ended legal segregation, transformed the American South, and registered millions of Black voters who had been systematically excluded.",
         bad: "He himself predicted this would hand the South to Republicans for a generation — which it did."
       },
@@ -413,7 +413,7 @@ const MATCHUP_ISSUES = [
       },
       ford: {
         approach: "Continued enforcement of existing civil rights laws but opposed busing students to achieve school integration, saying it caused more problems than it solved.",
-        good: "Maintained federal enforcement of the Civil Rights Act and Voting Rights Act through a difficult political period.",
+        good: "Maintained federal enforcement of the landmark civil-rights legislation and landmark voting-rights legislation through a difficult political period.",
         bad: "His opposition to busing — the main tool courts were using to desegregate schools — was seen as undermining the spirit of Brown v. Board."
       },
       carter: {
@@ -422,18 +422,18 @@ const MATCHUP_ISSUES = [
         bad: "The Equal Rights Amendment fell three states short of ratification during his term and never became part of the Constitution."
       },
       reagan: {
-        approach: "Opposed race-based affirmative action, signed a 20-year extension of the Voting Rights Act only after significant political pressure, and initially opposed making Martin Luther King Jr.'s birthday a national holiday.",
-        good: "Did ultimately sign the King holiday into law and the Voting Rights Act extension after Congress passed both with overwhelming majorities.",
+        approach: "Opposed race-based affirmative action, signed a 20-year extension of the landmark voting-rights legislation only after significant political pressure, and initially opposed making Martin Luther King Jr.'s birthday a national holiday.",
+        good: "Did ultimately sign the King holiday into law and the landmark voting-rights legislation extension after Congress passed both with overwhelming majorities.",
         bad: "His administration argued in court against affirmative action programs, signaling retreat from decades of progress on racial equality."
       },
       ghwbush: {
         approach: "Signed the Americans with Disabilities Act in 1990, banning discrimination against people with disabilities in employment and public life.",
         good: "The Americans with Disabilities Act extended civil rights protections to 43 million Americans with disabilities for the first time.",
-        bad: "Initially vetoed the Civil Rights Act of 1991 and only signed it after Congress made changes, drawing criticism from civil rights groups."
+        bad: "Initially vetoed the landmark civil-rights legislation of 1991 and only signed it after Congress made changes, drawing criticism from civil rights groups."
       },
       clinton: {
         approach: "Signed the Defense of Marriage Act in 1996 defining marriage as between a man and a woman for all federal purposes, denying gay and lesbian couples federal benefits.",
-        good: "Appointed more minorities and women to the federal bench than any previous president and signed the Family and Medical Leave Act.",
+        good: "Appointed more minorities and women to the federal bench than any previous president and signed a major family-leave law.",
         bad: "Also signed 'Don't Ask, Don't Tell,' banning openly gay people from the military — a policy condemned as discriminatory that took decades to reverse."
       },
       gwbush: {
@@ -508,7 +508,7 @@ const MATCHUP_ISSUES = [
         bad: "Asking Americans to lower their thermostats and sacrifice convenience was mocked and hurt him politically."
       },
       reagan: {
-        approach: "Removed Carter's solar panels from the White House, slashed renewable-energy research funding by over 80%, and weakened enforcement of clean-air rules to prioritize economic growth.",
+        approach: "Removed the previous administration's solar panels from the White House, slashed renewable-energy research funding by over 80%, and weakened enforcement of clean-air rules to prioritize economic growth.",
         good: "Unleashed oil and gas production and brought energy costs down to historic lows for American families and businesses.",
         bad: "Set back US solar and wind development by roughly a decade and pollution levels that had been falling stalled out."
       },
@@ -528,17 +528,17 @@ const MATCHUP_ISSUES = [
         bad: "Set back global climate negotiations by years and his administration was caught editing government climate science reports."
       },
       obama: {
-        approach: "Signed the Paris Climate Agreement committing the US to cutting carbon emissions, blocked the Keystone XL pipeline on environmental grounds, and tightened emissions rules on power plants.",
+        approach: "Signed the global climate accord committing the US to cutting carbon emissions, blocked a major oil pipeline project on environmental grounds, and tightened emissions rules on power plants.",
         good: "US carbon emissions fell to 25-year lows and solar installations grew thirtyfold during his presidency.",
         bad: "The power-plant emissions rules were tied up in courts and cheap natural gas did more to cut emissions than his regulations."
       },
       trump: {
-        approach: "Withdrew the US from the Paris Climate Agreement, reversed Obama's power-plant emissions rules, and opened more federal land and offshore areas to oil and gas drilling.",
+        approach: "Withdrew the US from the global climate accord, reversed the previous administration's power-plant emissions rules, and opened more federal land and offshore areas to oil and gas drilling.",
         good: "The US became the world's biggest oil and gas producer and energy costs for families dropped.",
         bad: "He rolled back over 100 environmental rules and US commitments to cut carbon emissions evaporated overnight."
       },
       biden: {
-        approach: "Rejoined the Paris Climate Agreement on his first day and signed the Inflation Reduction Act, investing $370 billion in subsidies and incentives for clean energy while restricting new oil and gas permits on federal land.",
+        approach: "Rejoined the global climate accord on his first day and signed a major 2022 climate-and-spending law, investing $370 billion in subsidies and incentives for clean energy while restricting new oil and gas permits on federal land.",
         good: "The largest climate investment in US history and it spurred hundreds of new clean-energy factories and jobs.",
         bad: "Gasoline hit $5 a gallon under his watch, and critics said restricting domestic drilling raised costs for working families."
       }
@@ -566,7 +566,7 @@ const MATCHUP_ISSUES = [
       eisenhower: {
         approach: "Oversaw massive expansion of government surveillance through the National Security Agency and authorized secret reconnaissance flights over the Soviet Union.",
         good: "The surveillance programs provided critical intelligence on Soviet military capabilities that helped the US avoid miscalculations in the Cold War.",
-        bad: "When a spy plane was shot down over the Soviet Union in 1960, Eisenhower was caught lying about it, causing a diplomatic crisis."
+        bad: "When a spy plane was shot down over the Soviet Union in 1960, the administration was caught lying about it, causing a diplomatic crisis."
       },
       jfk: {
         approach: "Authorized the FBI to wiretap civil rights leader Martin Luther King Jr. without a warrant, and secretly taped many of his own White House conversations.",
@@ -581,7 +581,7 @@ const MATCHUP_ISSUES = [
       nixon: {
         approach: "Wiretapped journalists and political rivals without court orders, ordered a break-in at Democratic headquarters, and claimed 'executive privilege' to block Congress and investigators from seeing White House documents.",
         good: "His team argued aggressive presidential intelligence-gathering was needed to handle Cold War threats and political opponents.",
-        bad: "Watergate forced him to resign — the only president ever to do so — and shattered public trust in government for a generation."
+        bad: "a major political scandal forced him to resign — the only president ever to do so — and shattered public trust in government for a generation."
       },
       ford: {
         approach: "Signed an executive order banning political assassinations by US intelligence agencies and cooperated with congressional investigations into past government surveillance abuses.",
@@ -660,7 +660,7 @@ const MATCHUP_ISSUES = [
         bad: "Import competition began to erode some American manufacturing industries even as overall trade grew."
       },
       lbj: {
-        approach: "Completed the major multilateral tariff-cutting talks that Kennedy had started, reducing tariffs on industrial goods by an average of 35% among the world's major economies.",
+        approach: "Completed the major multilateral tariff-cutting talks his predecessor had started, reducing tariffs on industrial goods by an average of 35% among the world's major economies.",
         good: "Opened large new markets for American farm and industrial products and strengthened economic ties with Western allies.",
         bad: "Growing imports of steel, textiles, and other goods began squeezing American workers in those industries."
       },
@@ -681,7 +681,7 @@ const MATCHUP_ISSUES = [
       },
       reagan: {
         approach: "Generally favored free trade but imposed selective protections on steel, semiconductors, and motorcycles, arguing they were needed to keep strategic industries alive.",
-        good: "Harley-Davidson credited Reagan's temporary motorcycle tariff with saving the company, which later became profitable without ongoing protection.",
+        good: "Harley-Davidson credited the previous administration's temporary motorcycle tariff with saving the company, which later became profitable without ongoing protection.",
         bad: "Steel and semiconductor protections raised costs for American manufacturers who used those materials and failed to make the industries globally competitive."
       },
       ghwbush: {
@@ -702,7 +702,7 @@ const MATCHUP_ISSUES = [
       obama: {
         approach: "Negotiated the Trans-Pacific Partnership, a 12-nation free-trade deal designed to open markets across the Asia-Pacific region and set common rules to prevent China from dominating regional trade.",
         good: "Would have set high labor and environmental standards across Asia-Pacific trade and given US exporters access to fast-growing markets.",
-        bad: "The deal became so unpopular with American workers that both major-party presidential candidates opposed it, and Trump withdrew the US in his first week."
+        bad: "The deal became so unpopular with American workers that both major-party presidential candidates opposed it, and a successor withdrew the US in his first week."
       },
       trump: {
         approach: "Imposed steep tariffs on hundreds of billions of dollars worth of Chinese imports and steel and aluminum from all countries, trying to force foreign producers to compete less aggressively in the US market.",
@@ -710,7 +710,7 @@ const MATCHUP_ISSUES = [
         bad: "American consumers and farmers paid billions in higher costs passed on from the tariffs, and the overall US trade deficit actually grew during his term."
       },
       biden: {
-        approach: "Kept most of Trump's tariffs on Chinese goods and added new restrictions on foreign competitors, while pouring hundreds of billions in government subsidies into American semiconductor and electric-vehicle manufacturing.",
+        approach: "Kept most of the previous administration's tariffs on Chinese goods and added new restrictions on foreign competitors, while pouring hundreds of billions in government subsidies into American semiconductor and electric-vehicle manufacturing.",
         good: "Major chipmakers like TSMC and Intel announced over $200 billion in new US factory investments.",
         bad: "European and Asian allies complained that the 'Buy American' provisions in his laws unfairly shut out foreign companies from US clean-energy subsidies."
       }
@@ -736,19 +736,19 @@ const MATCHUP_ISSUES = [
         bad: "Most of the Fair Deal's expansion of government assistance was blocked by a conservative coalition in Congress."
       },
       eisenhower: {
-        approach: "Expanded Social Security to cover 10 million more workers — including farmers and domestic workers — and raised benefits, accepting the New Deal safety net as permanent.",
+        approach: "Expanded Social Security to cover 10 million more workers — including farmers and domestic workers — and raised benefits, accepting the expanded federal programs safety net as permanent.",
         good: "Added the largest single group of new workers to Social Security since its creation, extending the safety net to millions who had been excluded.",
         bad: "Did not expand the safety net further and opposed new government assistance programs, leaving gaps in coverage for the poorest Americans."
       },
       jfk: {
-        approach: "Raised the minimum wage, expanded unemployment benefits, and pushed for a broad anti-poverty initiative that laid the groundwork for Lyndon Johnson's Great Society programs.",
+        approach: "Raised the minimum wage, expanded unemployment benefits, and pushed for a broad anti-poverty initiative that laid the groundwork for Lyndon the previous administration's anti-poverty programs.",
         good: "Raised the federal minimum wage and extended unemployment coverage to 3 million additional workers.",
         bad: "His broader anti-poverty proposals moved slowly in Congress and did not become law during his lifetime."
       },
       lbj: {
         approach: "Launched a formal War on Poverty in 1964, creating food stamps, Head Start preschool for poor children, and Medicaid health coverage for low-income Americans.",
         good: "The US poverty rate fell from 19% to 12% in under a decade — the fastest sustained drop ever recorded.",
-        bad: "Some programs created long-term dependency on government aid, and costs grew far beyond Johnson's original promises."
+        bad: "Some programs created long-term dependency on government aid, and costs grew far beyond the previous administration's original promises."
       },
       nixon: {
         approach: "Proposed a guaranteed minimum income — the Family Assistance Plan — that would have sent a direct government check to every poor American family to ensure a floor below which no one could fall.",
@@ -839,7 +839,7 @@ const MATCHUP_ISSUES = [
       nixon: {
         approach: "Declared a 'War on Drugs' in 1971, classifying marijuana as a dangerous drug with no medical use and pushing heavy prison sentences for drug offenses.",
         good: "Created the first significant federal funding for drug treatment programs alongside tougher enforcement.",
-        bad: "A Nixon aide later admitted the war on drugs was partly designed to target Black communities and anti-war activists rather than address addiction."
+        bad: "A senior aide later admitted the war on drugs was partly designed to target Black communities and anti-war activists rather than address addiction."
       },
       ford: {
         approach: "Focused drug policy on treatment and prevention alongside enforcement, increasing funding for drug rehabilitation centers and education programs.",
@@ -873,7 +873,7 @@ const MATCHUP_ISSUES = [
       },
       obama: {
         approach: "Signed the Fair Sentencing Act reducing the sentence gap between crack and powder cocaine offenses, and used his pardon power to release 1,715 people serving long sentences for nonviolent drug crimes.",
-        good: "The biggest single clemency effort since Franklin Roosevelt, freeing hundreds of nonviolent drug offenders who had served years under mandatory minimums.",
+        good: "The biggest single clemency effort since an earlier president, freeing hundreds of nonviolent drug offenders who had served years under mandatory minimums.",
         bad: "The underlying mandatory minimum sentences remained largely in place and drug overdose deaths kept climbing throughout his term."
       },
       trump: {
@@ -919,7 +919,7 @@ const MATCHUP_ISSUES = [
       },
       lbj: {
         approach: "Championed NASA funding and managed the Apollo program through most of its development, making the Moon mission a national priority second only to the Vietnam War.",
-        good: "NASA's budget reached its all-time peak under Johnson and the first humans orbited the Moon during his final weeks in office.",
+        good: "NASA's budget reached its all-time peak during that era and the first humans orbited the Moon during his final weeks in office.",
         bad: "Pressure to keep spending down while funding Vietnam led to schedule pressures that contributed to the Apollo 1 tragedy."
       },
       nixon: {
@@ -930,7 +930,7 @@ const MATCHUP_ISSUES = [
       ford: {
         approach: "Maintained NASA funding and oversaw the Apollo–Soyuz mission — the first joint US-Soviet spaceflight — as a symbol of diplomatic engagement during the Cold War.",
         good: "The joint mission showed that space cooperation was possible between rivals and helped reduce Cold War tensions.",
-        bad: "NASA's budget shrank in real terms under Ford as economic pressures forced cuts across all government programs."
+        bad: "NASA's budget shrank in real terms during that era as economic pressures forced cuts across all government programs."
       },
       carter: {
         approach: "Kept the Space Shuttle program on track but reduced NASA's overall budget, shifting priorities toward practical Earth-observation satellites over deep-space exploration.",
@@ -1075,8 +1075,8 @@ const MATCHUP_ISSUES = [
     question: "Should the president push the limits of their power to get things done?",
     positions: {
       fdr: {
-        approach: "Broke the two-term tradition by winning four elections and tried to pack the Supreme Court with up to six new justices to remove the judges blocking his New Deal programs.",
-        good: "Provided stable leadership through the Depression and World War II, and the Court-packing threat caused the justices to stop blocking New Deal legislation.",
+        approach: "Broke the two-term tradition by winning multiple elections and tried to pack the Supreme Court with up to six new justices to remove the judges blocking his expanded federal programs programs.",
+        good: "Provided stable leadership through the Depression and World War II, and the Court-packing threat caused the justices to stop blocking expanded federal programs legislation.",
         bad: "Congress responded by passing the 22nd Amendment, constitutionally limiting all future presidents to two terms."
       },
       truman: {
@@ -1086,7 +1086,7 @@ const MATCHUP_ISSUES = [
       },
       eisenhower: {
         approach: "Generally respected constitutional limits on presidential power and declined to assert sweeping executive authority, working with Congress rather than around it on most domestic matters.",
-        good: "His restrained approach to executive power helped restore public confidence in the presidency after the tumult of the FDR and Truman years.",
+        good: "His restrained approach to executive power helped restore public confidence in the presidency after the tumult of earlier decades.",
         bad: "Critics argued his caution meant he missed opportunities to advance civil rights and other pressing issues where bold presidential action could have made a difference."
       },
       jfk: {
@@ -1095,23 +1095,23 @@ const MATCHUP_ISSUES = [
         bad: "His use of executive orders on civil rights without legislation left the changes fragile and dependent on future presidents' goodwill."
       },
       lbj: {
-        approach: "Used sweeping legislative arm-twisting and political pressure rather than unilateral executive action to push the Civil Rights Act, Voting Rights Act, and Great Society programs through Congress.",
+        approach: "Used sweeping legislative arm-twisting and political pressure rather than unilateral executive action to push the landmark civil-rights legislation, landmark voting-rights legislation, and anti-poverty programs through Congress.",
         good: "By working through Congress rather than around it, he produced landmark legislation that has proven durable for 60 years.",
         bad: "Used deceptive Gulf of Tonkin claims to get Congress to authorize the Vietnam War — a massive escalation built on misleading evidence."
       },
       nixon: {
-        approach: "Claimed 'executive privilege' to block Congress and Watergate investigators from accessing White House documents, and secretly bombed Cambodia without informing Congress.",
+        approach: "Claimed 'executive privilege' to block Congress and a major political scandal investigators from accessing White House documents, and secretly bombed Cambodia without informing Congress.",
         good: "Pushed back against what he saw as congressional overreach on foreign policy and presidential communications.",
         bad: "The Supreme Court ruled against him 8–0 on executive privilege and he became the only president ever to resign from office."
       },
       ford: {
-        approach: "Pardoned Richard Nixon in 1974 for all federal crimes committed while president, using his constitutional pardon power to end the possibility of prosecution before any charges were filed.",
-        good: "Argued it was necessary for the country to move past Watergate rather than endure years of criminal proceedings against a former president.",
+        approach: "Pardoned his predecessor in 1974 for all federal crimes committed while president, using his constitutional pardon power to end the possibility of prosecution before any charges were filed.",
+        good: "Argued it was necessary for the country to move past a major political scandal rather than endure years of criminal proceedings against a former president.",
         bad: "The pardon outraged Americans who wanted accountability and is widely believed to have cost him the 1976 election."
       },
       carter: {
         approach: "Deliberately styled himself as a president who respected constitutional limits, refusing to exploit executive authority and trying to govern through persuasion and transparency.",
-        good: "Restored some faith in the integrity of the presidency after the Watergate and Vietnam disasters.",
+        good: "Restored some faith in the integrity of the presidency after a major political scandal and Vietnam disasters.",
         bad: "His unwillingness to play political hardball made him appear ineffective and cost him crucial legislative battles."
       },
       reagan: {
@@ -1177,7 +1177,7 @@ const MATCHUP_ISSUES = [
       },
       jfk: {
         approach: "Pushed hard for broad federal aid to public schools but was blocked by disputes over funding for Catholic schools and racially segregated districts.",
-        good: "Built political momentum that helped Lyndon Johnson eventually pass the first major federal school-funding law.",
+        good: "Built political momentum that helped a successor eventually pass the first major federal school-funding law.",
         bad: "No major education legislation passed during his term and funding inequality between rich and poor districts remained extreme."
       },
       lbj: {
@@ -1254,7 +1254,7 @@ const MATCHUP_ISSUES = [
       truman: {
         approach: "Proposed requiring all firearms to be federally registered and licensed, an idea well ahead of its time that Congress flatly refused to consider.",
         good: "Was among the first presidents to articulate that gun ownership came with public safety responsibilities.",
-        bad: "The proposal went nowhere in Congress and Truman's gun-control ambitions had no lasting legislative impact."
+        bad: "The proposal went nowhere in Congress and the previous administration's gun-control ambitions had no lasting legislative impact."
       },
       eisenhower: {
         approach: "Took no significant action on gun regulation, leaving existing laws in place while gun ownership expanded rapidly in postwar America.",
@@ -1263,11 +1263,11 @@ const MATCHUP_ISSUES = [
       },
       jfk: {
         approach: "Proposed requiring mail-order gun dealers to verify buyers' identities and ban the sale of military surplus weapons through the mail, after a surge in cheap imported firearms.",
-        good: "Identified a real loophole — Lee Harvey Oswald bought the rifle used to kill Kennedy through a mail-order catalog — that later became a focus of reform.",
+        good: "Identified a real loophole — the rifle used in a presidential assassination was bought through a mail-order catalog — that later became a focus of reform.",
         bad: "His proposals were modest and faced fierce opposition from gun interests; none passed before his assassination."
       },
       lbj: {
-        approach: "Signed the Gun Control Act of 1968 after the assassinations of Robert Kennedy and Martin Luther King Jr., banning mail-order gun sales, creating licensed gun dealers, and restricting who could buy firearms.",
+        approach: "Signed a major 1968 gun-control law after the assassinations of two prominent national figures, banning mail-order gun sales, creating licensed gun dealers, and restricting who could buy firearms.",
         good: "Created the basic regulatory framework still in place today, including federal licensing of gun dealers and prohibitions on sales to criminals and the mentally ill.",
         bad: "The law had significant gaps — no background check system existed yet — and gun violence continued to rise in American cities."
       },
@@ -1343,18 +1343,18 @@ const MATCHUP_ISSUES = [
         bad: "The illegal status of abortion meant that wealthy women could obtain safe procedures abroad while poor women risked their lives with dangerous illegal procedures."
       },
       eisenhower: {
-        approach: "Served before Roe v. Wade when abortion was illegal in most states and took no public position, treating it as a state and private matter.",
+        approach: "Served before the federal abortion right when abortion was illegal in most states and took no public position, treating it as a state and private matter.",
         good: "Avoided federal intrusion into a deeply personal matter that was left to individual states.",
         bad: "Women in most states had no safe legal option, and an estimated one million illegal abortions occurred annually during his presidency."
       },
       jfk: {
-        approach: "Served before Roe v. Wade and took no public position on abortion, as it was considered a private and state matter outside the federal political debate.",
+        approach: "Served before the federal abortion right and took no public position on abortion, as it was considered a private and state matter outside the federal political debate.",
         good: "Did not use the presidency to push federal restrictions into an issue where states had historically had authority.",
         bad: "The absence of federal leadership left millions of women subject to dangerous illegal procedures with no path to legal reform."
       },
       lbj: {
         approach: "Served as abortion was becoming a growing social issue but never took a clear public position, leaving the matter entirely to states as legal reform debates began.",
-        good: "His Great Society focus on poverty and women's health indirectly supported access to family planning services.",
+        good: "His anti-poverty focus on poverty and women's health indirectly supported access to family planning services.",
         bad: "Took no leadership role as women in most states continued to face illegal and often dangerous abortion procedures."
       },
       nixon: {
@@ -1363,18 +1363,18 @@ const MATCHUP_ISSUES = [
         bad: "His private anti-abortion views, later revealed in White House tapes, showed a president whose public silence masked personal bias on a major issue."
       },
       ford: {
-        approach: "Personally opposed abortion but respected Roe v. Wade as settled law, taking a moderate position while his wife Betty publicly declared herself strongly pro-choice.",
+        approach: "Personally opposed abortion but respected the federal abortion right as settled law, taking a moderate position while his wife Betty publicly declared herself strongly pro-choice.",
         good: "Modeled a nuanced approach — personal opposition but legal acceptance — that reflected many Americans' complex views.",
         bad: "His ambiguity frustrated both sides and he offered no clear direction on the emerging abortion debate."
       },
       carter: {
-        approach: "Personally opposed abortion as a matter of religious belief but accepted Roe v. Wade as the law of the land, while supporting the Hyde Amendment that blocked federal Medicaid funding for abortions.",
+        approach: "Personally opposed abortion as a matter of religious belief but accepted the federal abortion right as the law of the land, while supporting the Hyde Amendment that blocked federal Medicaid funding for abortions.",
         good: "Distinguished between personal moral views and legal rights, accepting the Supreme Court's ruling while being transparent about his own faith-based opposition.",
         bad: "His support for the Hyde Amendment meant that poor women on Medicaid lost access to abortion funding, creating a two-tier system based on income."
       },
       reagan: {
-        approach: "Strongly opposed abortion and called for a constitutional amendment to ban it, appointing conservative judges in hopes of eventually overturning Roe v. Wade.",
-        good: "Gave voice to millions of Americans who believed abortion was morally wrong and began the judicial strategy that eventually led to Roe being overturned decades later.",
+        approach: "Strongly opposed abortion and called for a constitutional amendment to ban it, appointing conservative judges in hopes of eventually overturning the federal abortion right.",
+        good: "Gave voice to millions of Americans who believed abortion was morally wrong and began the judicial strategy that eventually led to the federal abortion right being overturned decades later.",
         bad: "No constitutional amendment was achieved and abortion access remained unchanged during his term, leaving both sides frustrated."
       },
       ghwbush: {
@@ -1384,27 +1384,27 @@ const MATCHUP_ISSUES = [
       },
       clinton: {
         approach: "Strongly supported abortion rights, vetoed the partial-birth abortion ban twice, and framed the issue as keeping abortion 'safe, legal, and rare.'",
-        good: "Defended Roe v. Wade through two terms and vetoed restrictions that would have limited access for women in difficult circumstances.",
+        good: "Defended the federal abortion right through two terms and vetoed restrictions that would have limited access for women in difficult circumstances.",
         bad: "His 'rare' framing was criticized by abortion rights advocates for treating abortion as inherently shameful rather than a legitimate medical decision."
       },
       gwbush: {
-        approach: "Signed the federal Partial-Birth Abortion Ban Act in 2003, the first federal law banning a specific abortion procedure, and reinstated the global gag rule restricting US funding to foreign health organizations that discussed abortion.",
+        approach: "Signed the federal a federal abortion procedure ban in 2003, the first federal law banning a specific abortion procedure, and reinstated the global gag rule restricting US funding to foreign health organizations that discussed abortion.",
         good: "Signed the first successful federal abortion restriction in decades and it was upheld by the Supreme Court in 2007.",
         bad: "The global gag rule restricted reproductive health funding to organizations in developing countries, limiting women's access to contraception and other health services."
       },
       obama: {
-        approach: "Strongly supported abortion rights, repealed the global gag rule, ensured abortion coverage in the Affordable Care Act, and opposed state-level abortion restrictions.",
+        approach: "Strongly supported abortion rights, repealed the global gag rule, ensured abortion coverage in the major 2010 health insurance law, and opposed state-level abortion restrictions.",
         good: "Restored US funding to international organizations providing reproductive health services and protected contraception coverage for millions of American women.",
         bad: "Abortion access became more restricted in practice during his term as dozens of states passed laws limiting abortion providers, which his administration could not override."
       },
       trump: {
-        approach: "Reinstated the global gag rule, appointed three Supreme Court justices whose confirmation gave the court a majority that ultimately overturned Roe v. Wade in 2022.",
+        approach: "Reinstated the global gag rule, appointed three Supreme Court justices whose confirmation gave the court a majority that ultimately overturned the federal abortion right in 2022.",
         good: "Delivered on his promise to appoint justices who would overturn Roe, returning abortion policy to the states as many conservatives had sought for 50 years.",
-        bad: "The overturning of Roe eliminated a constitutional right that a majority of Americans supported, triggering immediate bans in over a dozen states."
+        bad: "The overturning of the federal abortion right eliminated a constitutional right that a majority of Americans supported, triggering immediate bans in over a dozen states."
       },
       biden: {
-        approach: "Strongly supported abortion rights, repealed the global gag rule again, tried to protect abortion access by executive order after Roe was overturned, and pushed Congress to codify abortion rights into federal law.",
-        good: "Used every available executive tool to protect abortion access after Roe was overturned and kept reproductive rights at the center of national elections.",
+        approach: "Strongly supported abortion rights, repealed the global gag rule again, tried to protect abortion access by executive order after the federal abortion right was overturned, and pushed Congress to codify abortion rights into federal law.",
+        good: "Used every available executive tool to protect abortion access after the federal abortion right was overturned and kept reproductive rights at the center of national elections.",
         bad: "He lacked the votes in the Senate to codify abortion rights into law and could not override state bans through executive action alone."
       }
     }
@@ -1425,11 +1425,11 @@ const MATCHUP_ISSUES = [
       },
       truman: {
         approach: "Vetoed the Taft-Hartley Act that restricted unions' power, calling it a 'slave-labor bill,' though Congress overrode his veto and the law passed anyway.",
-        good: "His veto made clear that he stood with workers and unions at a time when business interests were trying to roll back New Deal labor protections.",
+        good: "His veto made clear that he stood with workers and unions at a time when business interests were trying to roll back expanded federal programs labor protections.",
         bad: "Congress overrode him and the law passed, restricting union tactics and giving states the right to pass laws that made it harder for unions to organize."
       },
       eisenhower: {
-        approach: "Accepted unions as a legitimate part of American economic life and did not try to weaken the major labor laws of the New Deal era, taking a moderate approach that neither expanded nor restricted union rights.",
+        approach: "Accepted unions as a legitimate part of American economic life and did not try to weaken the major labor laws of the expanded federal programs era, taking a moderate approach that neither expanded nor restricted union rights.",
         good: "Labor peace during most of the 1950s contributed to broad prosperity and rising wages for working-class Americans.",
         bad: "Signed the Landrum-Griffin Act in 1959 adding new regulations on unions' internal affairs that unions saw as government overreach into their organizations."
       },
@@ -1439,7 +1439,7 @@ const MATCHUP_ISSUES = [
         bad: "Federal workers still could not strike for higher wages, limiting the practical power of the new collective bargaining rights."
       },
       lbj: {
-        approach: "Raised the federal minimum wage multiple times and expanded overtime protections, while supporting labor unions as part of his Great Society coalition.",
+        approach: "Raised the federal minimum wage multiple times and expanded overtime protections, while supporting labor unions as part of his anti-poverty coalition.",
         good: "Raised the minimum wage by 25% and extended its coverage to millions of previously excluded workers in retail and service industries.",
         bad: "His administration's focus on civil rights sometimes created tension with some unions that resisted integrating their membership."
       },
@@ -1464,12 +1464,12 @@ const MATCHUP_ISSUES = [
         bad: "His firing of the controllers is widely seen as the single event that most accelerated the decline of American union membership and worker bargaining power."
       },
       ghwbush: {
-        approach: "Signed the Family and Medical Leave Act — then vetoed it, and it was later passed and signed by Clinton — and raised the minimum wage, taking a moderate position on workers' rights.",
+        approach: "Vetoed an early family-leave bill but raised the minimum wage, taking a moderate position on workers' rights.",
         good: "Signed a minimum wage increase that gave the lowest-paid American workers their first pay raise in nearly a decade.",
         bad: "Vetoed family leave legislation twice, leaving American workers without job-protected leave for illness or newborn care for years longer than necessary."
       },
       clinton: {
-        approach: "Signed the Family and Medical Leave Act giving workers up to 12 weeks of unpaid leave for family emergencies, while also signing the North American Free Trade Agreement that unions blamed for costing manufacturing jobs.",
+        approach: "Signed a major family-leave law giving workers up to 12 weeks of unpaid leave for family emergencies, while also signing the North American Free Trade Agreement that unions blamed for costing manufacturing jobs.",
         good: "The family leave law has been used more than 100 million times by workers who needed to care for a newborn or sick family member without losing their job.",
         bad: "Unions opposed the trade deal so fiercely that it remains a symbol of how Democratic presidents' free-trade policies worked against American workers."
       },
@@ -1484,7 +1484,7 @@ const MATCHUP_ISSUES = [
         bad: "The national minimum wage stayed at $7.25 an hour throughout his entire eight years — the same level as when he took office — because Congress would not act."
       },
       trump: {
-        approach: "Expressed sympathy for workers in rallies and rhetoric but rolled back several Obama-era worker protections and did not push for a minimum wage increase while opposing union organizing efforts.",
+        approach: "Expressed sympathy for workers in rallies and rhetoric but rolled back several previous-era worker protections and did not push for a minimum wage increase while opposing union organizing efforts.",
         good: "Wages for the bottom quarter of workers rose faster under his presidency than they had in years, driven partly by the tight labor market his policies helped create.",
         bad: "Rolled back overtime pay rules that would have benefited millions of workers and appointed labor board members who ruled against workers in key organizing cases."
       },
@@ -1505,7 +1505,7 @@ const MATCHUP_ISSUES = [
     question: "How much should the government spend on roads, bridges, and public works?",
     positions: {
       fdr: {
-        approach: "Launched the Works Progress Administration and other New Deal programs that directly hired millions of Americans to build roads, bridges, schools, libraries, and public buildings across the country.",
+        approach: "Launched the a federal jobs agency and other expanded federal programs programs that directly hired millions of Americans to build roads, bridges, schools, libraries, and public buildings across the country.",
         good: "Built over 650,000 miles of roads, 125,000 public buildings, and 75,000 bridges, many of which are still in use today, while putting millions back to work.",
         bad: "The programs added significantly to the national debt and some critics argued that make-work projects were less efficient than letting the private sector drive recovery."
       },
@@ -1525,7 +1525,7 @@ const MATCHUP_ISSUES = [
         bad: "Most of his transit and infrastructure proposals were still working through Congress when he was assassinated."
       },
       lbj: {
-        approach: "Created the Department of Housing and Urban Development and signed major transportation and urban development laws, investing in city infrastructure as part of the Great Society.",
+        approach: "Created the a new federal housing department and signed major transportation and urban development laws, investing in city infrastructure as part of the anti-poverty.",
         good: "Federal funding for mass transit began in earnest under his administration, laying the groundwork for subway systems in cities like Washington and Atlanta.",
         bad: "Urban renewal programs demolished many existing neighborhoods and displaced hundreds of thousands of low-income residents, often replacing their homes with highways or government buildings."
       },
@@ -1611,7 +1611,7 @@ const MATCHUP_ISSUES = [
         bad: "Set a precedent for accepting deficits as normal that later administrations used to justify far less disciplined borrowing."
       },
       lbj: {
-        approach: "Ran deficits as spending on the Vietnam War and the Great Society programs grew simultaneously, resisting calls to choose between guns and butter.",
+        approach: "Ran deficits as spending on the Vietnam War and the anti-poverty programs grew simultaneously, resisting calls to choose between guns and butter.",
         good: "Funded both the war effort and landmark social programs that reduced poverty and provided healthcare to tens of millions of Americans.",
         bad: "The simultaneous spending surge contributed to the inflation of the late 1960s and 1970s that caused years of economic pain."
       },
@@ -1637,7 +1637,7 @@ const MATCHUP_ISSUES = [
       },
       ghwbush: {
         approach: "Broke his 'no new taxes' pledge and reached a deficit-reduction deal with Congress in 1990 that raised taxes and cut spending, prioritizing the country's fiscal health over his political promises.",
-        good: "The 1990 budget deal was later credited as a key step toward the budget surpluses of the Clinton years.",
+        good: "The 1990 budget deal was later credited as a key step toward the budget surpluses of the following decade.",
         bad: "The tax increase violated his most memorable campaign promise and likely cost him re-election in 1992."
       },
       clinton: {
@@ -1646,7 +1646,7 @@ const MATCHUP_ISSUES = [
         bad: "Republicans argued his tax increases slowed growth and that the surpluses were partly the result of the dot-com boom rather than policy choices."
       },
       gwbush: {
-        approach: "Turned the Clinton-era surpluses into deficits by cutting taxes, launching two wars, and adding a prescription drug benefit to Medicare without paying for any of them.",
+        approach: "Turned the previous-era surpluses into deficits by cutting taxes, launching two wars, and adding a prescription drug benefit to Medicare without paying for any of them.",
         good: "Prioritized tax relief for Americans and defense spending after the September 11 attacks at a moment when many economists agreed stimulus was needed.",
         bad: "Turned a projected $5.6 trillion surplus into a $2 trillion deficit over a decade, essentially transferring the cost of his tax cuts and wars to future generations."
       },
@@ -1679,7 +1679,7 @@ const MATCHUP_ISSUES = [
       fdr: {
         approach: "Authorized the Manhattan Project in 1942, secretly directing the two-billion-dollar program that built the world's first atomic bomb before Germany or Japan could do so.",
         good: "The project succeeded, giving the United States a decisive military advantage that helped end World War II and establish American dominance in the postwar era.",
-        bad: "By building the bomb first, Roosevelt started the nuclear age without any international framework to control the weapons, making an arms race with the Soviet Union nearly inevitable."
+        bad: "By building the bomb first, the administration started the nuclear age without any international framework to control the weapons, making an arms race with the Soviet Union nearly inevitable."
       },
       truman: {
         approach: "Made the decision to use atomic bombs on Japan in 1945, then oversaw a rapid buildup of the US nuclear arsenal and the creation of the Atomic Energy Commission to manage it.",

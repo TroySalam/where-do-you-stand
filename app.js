@@ -85,7 +85,7 @@ const TRANSLATIONS = {
     tryAnother: "⚔️ Try another matchup",
     upside: "Upside",
     downside: "Downside",
-    pick: "Pick",
+    pick: "Choose this",
     sectionComplete: "Complete",
     keepGoing: "Keep Going →",
     sectionsOf: "of",
@@ -181,7 +181,7 @@ const TRANSLATIONS = {
     tryAnother: "⚔️ Coba duel lain",
     upside: "Sisi baik",
     downside: "Sisi buruk",
-    pick: "Pilih",
+    pick: "Pilih ini",
     sectionComplete: "Selesai",
     keepGoing: "Lanjutkan →",
     sectionsOf: "dari",
@@ -277,7 +277,7 @@ const TRANSLATIONS = {
     tryAnother: "⚔️ Δοκίμασε άλλη αναμέτρηση",
     upside: "Θετικό",
     downside: "Αρνητικό",
-    pick: "Διάλεξε",
+    pick: "Διάλεξε αυτό",
     sectionComplete: "Ολοκληρώθηκε",
     keepGoing: "Συνέχισε →",
     sectionsOf: "από",
@@ -379,10 +379,11 @@ let answers = new Array(QUESTIONS.length).fill(null);
 // Head-to-head matchup state
 let matchupA = null;        // first president key (as picked by user)
 let matchupB = null;        // second president key (as picked by user)
-// Blind quiz slot mapping — randomized at quiz start so picker order doesn't reveal
-// who is in slot A vs slot B during the actual head-to-head.
-let quizSlotA = null;       // president key shown in card slot A during quiz
-let quizSlotB = null;       // president key shown in card slot B during quiz
+// Blind quiz slot mapping — randomized PER QUESTION so the same president never
+// stays pinned to the same card position. Picks are recorded as president keys,
+// not card slots, so the swap doesn't break tallying.
+let quizSlotA = null;       // president key shown in card slot A for current question
+let quizSlotB = null;       // president key shown in card slot B for current question
 let matchupIssues = [];     // array of issue objects both share
 let matchupPicks = [];      // array of 'a' | 'b' | 'tie' (index aligned to issues)
 let matchupIdx = 0;         // current matchup question index
@@ -1142,21 +1143,13 @@ function startMatchup() {
     return;
   }
 
-  // Randomize which picked president shows up as President A vs President B in
-  // the live quiz so the picker's first/second order doesn't bias the test.
-  if (Math.random() < 0.5) {
-    quizSlotA = matchupA;
-    quizSlotB = matchupB;
-  } else {
-    quizSlotA = matchupB;
-    quizSlotB = matchupA;
-  }
-
+  // Picks now store the president key directly (not 'a'/'b'), since the
+  // card-to-president mapping is reshuffled every question.
   matchupPicks = new Array(matchupIssues.length).fill(null);
   matchupIdx = 0;
 
   const header = document.getElementById('matchupHeader');
-  if (header) header.textContent = `${t('presidentA')} ${t('vs')} ${t('presidentB')}`;
+  if (header) header.textContent = t('blindMatchup');
 
   renderMatchupQuestion();
   show('matchup');
@@ -1165,6 +1158,18 @@ function startMatchup() {
 
 function renderMatchupQuestion() {
   const issue = matchupIssues[matchupIdx];
+
+  // Re-shuffle which president sits in card slot A vs slot B for THIS question.
+  // No consistent left/right (or top/bottom) bias, so the player can't tell
+  // "the president on top is always so-and-so".
+  if (Math.random() < 0.5) {
+    quizSlotA = matchupA;
+    quizSlotB = matchupB;
+  } else {
+    quizSlotA = matchupB;
+    quizSlotB = matchupA;
+  }
+
   const aPos = issue.positions[quizSlotA];
   const bPos = issue.positions[quizSlotB];
 
@@ -1174,21 +1179,21 @@ function renderMatchupQuestion() {
   document.getElementById('matchupTopic').textContent = issue.topic;
   document.getElementById('matchupQuestion').textContent = issue.question;
 
-  // Blind mode: hide real names, years, and party colors during the live quiz
-  // so the test taker judges approaches on merit, not on identity.
-  document.getElementById('matchupNameA').textContent = t('presidentA');
+  // Blind mode: NO labels at all, no years, no party colors. Just the approach
+  // text and its consequences — player judges on substance only.
+  document.getElementById('matchupNameA').textContent = '';
   document.getElementById('matchupYearsA').textContent = '';
   document.getElementById('matchupApproachA').textContent = aPos.approach;
   document.getElementById('matchupGoodA').textContent = aPos.good;
   document.getElementById('matchupBadA').textContent = aPos.bad;
-  document.getElementById('matchupPickNameA').textContent = t('presidentA');
+  document.getElementById('matchupPickNameA').textContent = '';
 
-  document.getElementById('matchupNameB').textContent = t('presidentB');
+  document.getElementById('matchupNameB').textContent = '';
   document.getElementById('matchupYearsB').textContent = '';
   document.getElementById('matchupApproachB').textContent = bPos.approach;
   document.getElementById('matchupGoodB').textContent = bPos.good;
   document.getElementById('matchupBadB').textContent = bPos.bad;
-  document.getElementById('matchupPickNameB').textContent = t('presidentB');
+  document.getElementById('matchupPickNameB').textContent = '';
 
   // Strip party styling so colors don't reveal party affiliation. Use a
   // neutral 'blind' class for both cards.
@@ -1199,9 +1204,11 @@ function renderMatchupQuestion() {
   cardA.classList.add('blind-card');
   cardB.classList.add('blind-card');
 
+  // Highlight a previously-saved pick by matching the president key to whichever
+  // slot now holds them.
   const existing = matchupPicks[matchupIdx];
-  if (existing === 'a') cardA.classList.add('picked');
-  if (existing === 'b') cardB.classList.add('picked');
+  if (existing && existing === quizSlotA) cardA.classList.add('picked');
+  if (existing && existing === quizSlotB) cardB.classList.add('picked');
   const neutralBtn = document.getElementById('matchupNeutralBtn');
   neutralBtn.classList.toggle('picked', existing === 'tie');
 
@@ -1219,7 +1226,13 @@ function renderMatchupQuestion() {
 }
 
 function handleMatchupPick(choice) {
-  matchupPicks[matchupIdx] = choice;
+  // Translate the card-slot pick ('a'/'b') into the actual president key,
+  // since the slot mapping is reshuffled every question.
+  let pickValue;
+  if (choice === 'a') pickValue = quizSlotA;
+  else if (choice === 'b') pickValue = quizSlotB;
+  else pickValue = 'tie';
+  matchupPicks[matchupIdx] = pickValue;
   const cardA = document.getElementById('matchupCardA');
   const cardB = document.getElementById('matchupCardB');
   const neutralBtn = document.getElementById('matchupNeutralBtn');
@@ -1245,7 +1258,7 @@ function matchupPrev() {
 }
 
 function matchupSkip() {
-  if (matchupPicks[matchupIdx] === null) matchupPicks[matchupIdx] = 'tie';
+  if (matchupPicks[matchupIdx] == null) matchupPicks[matchupIdx] = 'tie';
   if (matchupIdx >= matchupIssues.length - 1) {
     finishMatchup();
   } else {
@@ -1263,11 +1276,8 @@ function finishMatchup() {
 
   let countA = 0, countB = 0, countTie = 0;
   matchupPicks.forEach(p => {
-    let pickedKey = null;
-    if (p === 'a') pickedKey = quizSlotA;
-    else if (p === 'b') pickedKey = quizSlotB;
-    if (pickedKey === matchupA) countA++;
-    else if (pickedKey === matchupB) countB++;
+    if (p === matchupA) countA++;
+    else if (p === matchupB) countB++;
     else countTie++;
   });
   const total = matchupIssues.length;
@@ -1307,10 +1317,7 @@ function finishMatchup() {
   const listEl = document.getElementById('matchupIssueList');
   let html = '';
   matchupIssues.forEach((issue, i) => {
-    const pick = matchupPicks[i];
-    let pickedKey = null;
-    if (pick === 'a') pickedKey = quizSlotA;
-    else if (pick === 'b') pickedKey = quizSlotB;
+    const pickedKey = matchupPicks[i];
     let pickedName = t('noPreference'), pickedClass = 'picked-tie';
     if (pickedKey === matchupA) { pickedName = aMeta.name; pickedClass = 'picked-a ' + (aMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
     else if (pickedKey === matchupB) { pickedName = bMeta.name; pickedClass = 'picked-b ' + (bMeta.party === 'Democrat' ? 'party-dem' : 'party-rep'); }
